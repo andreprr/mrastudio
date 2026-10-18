@@ -102,12 +102,12 @@ export default function CekBookingPage() {
     return (
         <div className="min-h-screen bg-brand-cream">
             <Navbar />
-            <main className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-xl mx-auto">
+            <main className="pt-32 pb-14 px-4 sm:px-6 lg:px-8 max-w-xl mx-auto">
                 <div className="text-center mb-8">
                     <span className="text-xs font-semibold uppercase tracking-widest text-brand-espresso">
                         Status Reservasi
                     </span>
-                    <h1 className="font-display text-3xl sm:text-4xl font-bold mt-2">
+                    <h1 className="font-display text-2xl sm:text-3xl font-bold mt-2">
                         Cek Booking Anda
                     </h1>
                     <p className="text-sm text-brand-gray mt-2">
@@ -118,7 +118,7 @@ export default function CekBookingPage() {
 
                 <form
                     onSubmit={handleLookup}
-                    className="rounded-3xl bg-brand-beige/70 border border-brand-charcoal/10 p-6 sm:p-8 space-y-4"
+                    className="rounded-xl bg-brand-beige/70 border border-brand-charcoal/10 p-5 sm:p-6 space-y-4"
                 >
                     <div>
                         <label className="block text-xs font-semibold uppercase tracking-wider mb-2">
@@ -130,7 +130,7 @@ export default function CekBookingPage() {
                             value={bookingCode}
                             onChange={(e) => setBookingCode(e.target.value.toUpperCase())}
                             placeholder="Contoh: MRA-8F92K1L0"
-                            className="w-full px-4 py-3.5 rounded-2xl bg-brand-cream border border-brand-charcoal/15 text-sm uppercase font-mono"
+                            className="w-full px-4 py-3.5 rounded-lg bg-brand-cream border border-brand-charcoal/15 text-sm uppercase font-mono"
                         />
                     </div>
 
@@ -144,7 +144,7 @@ export default function CekBookingPage() {
                             value={customerPhone}
                             onChange={(e) => setCustomerPhone(e.target.value)}
                             placeholder="Contoh: 081234567890"
-                            className="w-full px-4 py-3.5 rounded-2xl bg-brand-cream border border-brand-charcoal/15 text-sm"
+                            className="w-full px-4 py-3.5 rounded-lg bg-brand-cream border border-brand-charcoal/15 text-sm"
                         />
                     </div>
 
@@ -163,7 +163,7 @@ export default function CekBookingPage() {
                 </form>
 
                 {result && statusMeta && (
-                    <div className="mt-8 rounded-3xl bg-brand-beige border border-brand-charcoal/15 p-6 sm:p-8 space-y-4">
+                    <div className="mt-8 rounded-xl bg-brand-beige border border-brand-charcoal/15 p-5 sm:p-6 space-y-4">
                         <div className="flex items-center justify-between border-b border-brand-charcoal/10 pb-4">
                             <div>
                                 <span className="text-xs text-brand-gray block">Kode Tiket</span>
@@ -206,7 +206,7 @@ export default function CekBookingPage() {
                             </div>
                         </div>
 
-                        <div className="p-4 rounded-2xl bg-brand-cream text-xs text-brand-charcoal leading-relaxed">
+                        <div className="p-4 rounded-lg bg-brand-cream text-xs text-brand-charcoal leading-relaxed">
                             <strong>Petunjuk Selanjutnya:</strong> {statusMeta.guide}
                         </div>
                     </div>

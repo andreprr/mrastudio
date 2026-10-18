@@ -150,112 +150,101 @@ export default function AdminBookingDetailPage() {
     if (!booking) {
         return (
             <AdminShell>
-                <p className="text-sm text-[#706D65]">Memuat detail reservasi...</p>
+                <p className="text-xs text-[#6E6D68]">Memuat detail reservasi...</p>
             </AdminShell>
         );
     }
 
     return (
         <AdminShell>
-            <div className="mb-8">
+            <div className="mb-6">
                 <Link
                     href="/admin/bookings"
-                    className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#3B281E] hover:underline mb-4"
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-[#6E6D68] hover:text-[#111110] mb-3 transition-colors"
                 >
-                    <ArrowLeft className="w-4 h-4" />
-                    <span>Kembali ke Daftar Booking</span>
+                    <ArrowLeft className="w-3.5 h-3.5" />
+                    <span>Daftar Booking</span>
                 </Link>
 
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#141413]/10">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#E4E2DD]">
                     <div>
-                        <span className="font-mono text-xs font-extrabold px-3 py-1 rounded-full bg-[#141413] text-[#DFC3B0]">
-                            {booking.booking_code}
-                        </span>
-                        <h1 className="font-display text-3xl sm:text-4xl font-extrabold mt-2">
+                        <div className="flex items-center gap-2">
+                            <span className="font-mono text-xs font-semibold text-[#111110]">
+                                {booking.booking_code}
+                            </span>
+                            <span className="text-xs text-[#6E6D68]">•</span>
+                            <span className="text-xs text-[#6E6D68]">Dibuat {new Date(booking.created_at).toLocaleDateString("id-ID")}</span>
+                        </div>
+                        <h1 className="font-display text-xl sm:text-2xl font-bold text-[#111110] mt-1">
                             {booking.customer_name}
                         </h1>
                     </div>
-                    <span className="px-5 py-2 rounded-full bg-[#DFC3B0] text-[#141413] text-xs font-extrabold uppercase tracking-widest self-start sm:self-auto">
-                        Status: {booking.status}
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-white border border-[#E4E2DD] text-xs font-medium text-[#111110] self-start sm:self-auto">
+                        <span className={`w-1.5 h-1.5 rounded-full ${
+                            booking.status === "confirmed" ? "bg-emerald-500" :
+                            booking.status === "pending" ? "bg-amber-500" :
+                            booking.status === "completed" ? "bg-zinc-500" : "bg-red-500"
+                        }`} />
+                        Status: <span className="font-semibold uppercase">{booking.status}</span>
                     </span>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 <div className="lg:col-span-7 space-y-6">
-                    {/* Kartu Informasi Snapshot */}
-                    <div className="rounded-[2rem] bg-[#EAE4DC]/70 border border-[#141413]/10 p-7 space-y-4 text-sm">
-                        <h2 className="font-display text-lg font-extrabold text-[#141413]">
+                    {/* Key-Value Description List */}
+                    <div className="bg-white border border-[#E4E2DD] rounded-md p-5">
+                        <h2 className="text-xs uppercase tracking-wider font-semibold text-[#6E6D68] mb-4">
                             Rincian Tiket Reservasi
                         </h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                            <div className="p-4 rounded-2xl bg-[#F8F6F1]">
-                                <span className="text-[11px] uppercase tracking-wider text-[#706D65] flex items-center gap-1.5">
-                                    <Phone className="w-3.5 h-3.5" /> Nomor WhatsApp
-                                </span>
-                                <p className="font-bold text-base mt-1">
-                                    {booking.customer_phone}
-                                </p>
+                        <dl className="divide-y divide-[#E4E2DD] text-xs">
+                            <div className="py-2.5 flex justify-between gap-4">
+                                <dt className="text-[#6E6D68]">WhatsApp</dt>
+                                <dd className="font-mono font-medium text-[#111110]">{booking.customer_phone}</dd>
                             </div>
-                            <div className="p-4 rounded-2xl bg-[#F8F6F1]">
-                                <span className="text-[11px] uppercase tracking-wider text-[#706D65] flex items-center gap-1.5">
-                                    <User className="w-3.5 h-3.5" /> Barber Bertugas
-                                </span>
-                                <p className="font-bold text-base mt-1">
-                                    {booking.barber_name_snapshot}
-                                </p>
+                            <div className="py-2.5 flex justify-between gap-4">
+                                <dt className="text-[#6E6D68]">Barber Bertugas</dt>
+                                <dd className="font-medium text-[#111110]">{booking.barber_name_snapshot}</dd>
                             </div>
-                            <div className="p-4 rounded-2xl bg-[#F8F6F1]">
-                                <span className="text-[11px] uppercase tracking-wider text-[#706D65] flex items-center gap-1.5">
-                                    <Calendar className="w-3.5 h-3.5" /> Tanggal & Jam
-                                </span>
-                                <p className="font-bold text-base mt-1">
-                                    {booking.booking_date} • {booking.start_time.slice(0, 5)} WIB
-                                </p>
+                            <div className="py-2.5 flex justify-between gap-4">
+                                <dt className="text-[#6E6D68]">Jadwal Layanan</dt>
+                                <dd className="font-mono tabular-nums font-medium text-[#111110]">{booking.booking_date} pukul {booking.start_time.slice(0, 5)} WIB</dd>
                             </div>
-                            <div className="p-4 rounded-2xl bg-[#F8F6F1]">
-                                <span className="text-[11px] uppercase tracking-wider text-[#706D65] flex items-center gap-1.5">
-                                    <Clock className="w-3.5 h-3.5" /> Layanan & Harga Snapshot
-                                </span>
-                                <p className="font-bold text-base mt-1">
-                                    {booking.service_name_snapshot} —{" "}
-                                    {formatRupiah(Number(booking.price_snapshot))}
-                                </p>
+                            <div className="py-2.5 flex justify-between gap-4">
+                                <dt className="text-[#6E6D68]">Layanan Dipilih</dt>
+                                <dd className="font-medium text-[#111110]">{booking.service_name_snapshot}</dd>
                             </div>
-                        </div>
-                        {booking.customer_note && (
-                            <div className="p-4 rounded-2xl bg-[#F8F6F1] text-xs">
-                                <span className="font-bold uppercase text-[#3B281E] block mb-1">
-                                    Catatan Pelanggan:
-                                </span>
-                                <p className="text-[#706D65]">{booking.customer_note}</p>
+                            <div className="py-2.5 flex justify-between gap-4">
+                                <dt className="text-[#6E6D68]">Total Biaya</dt>
+                                <dd className="font-mono tabular-nums font-bold text-[#111110]">{formatRupiah(Number(booking.price_snapshot))}</dd>
                             </div>
-                        )}
+                            {booking.customer_note && (
+                                <div className="py-2.5 flex flex-col gap-1">
+                                    <dt className="text-[#6E6D68]">Catatan Pelanggan</dt>
+                                    <dd className="text-[#111110] bg-[#F6F5F2] p-2.5 rounded-md border border-[#E4E2DD] mt-1">{booking.customer_note}</dd>
+                                </div>
+                            )}
+                        </dl>
                     </div>
 
-                    {/* Panel Aksi Status (Membuka Modal Dialog Modern) */}
-                    <div className="rounded-[2rem] bg-[#141413] text-[#F8F6F1] p-7 space-y-4">
-                        <h2 className="font-display text-lg font-extrabold text-[#DFC3B0]">
-                            Tindakan Cepat Status Reservasi
+                    {/* Tindakan Cepat Status */}
+                    <div className="bg-white border border-[#E4E2DD] rounded-md p-5 space-y-3">
+                        <h2 className="text-xs uppercase tracking-wider font-semibold text-[#6E6D68]">
+                            Perubahan Status Reservasi
                         </h2>
-                        <p className="text-xs text-[#EAE4DC]/70">
-                            Pilih tindakan di bawah untuk membuka dialog konfirmasi perubahan
-                            status.
-                        </p>
-                        <div className="flex flex-wrap gap-3 pt-2">
+                        <div className="flex flex-wrap gap-2 pt-1">
                             <button
                                 type="button"
                                 onClick={() =>
                                     setModalAction({
                                         status: "confirmed",
                                         title: "Konfirmasi Jadwal Booking",
-                                        description:
-                                            "Slot akan dikunci secara permanen untuk pelanggan ini.",
+                                        description: "Slot akan dikunci secara permanen untuk pelanggan ini.",
                                     })
                                 }
-                                className="px-5 py-3 rounded-full bg-[#DFC3B0] text-[#141413] text-xs font-extrabold uppercase tracking-wider hover:bg-white transition-colors flex items-center gap-1.5"
+                                className="px-3.5 py-2 rounded-md bg-[#111110] text-white text-xs font-medium hover:bg-[#2A2A28] transition-colors flex items-center gap-1.5"
                             >
-                                <CheckCircle2 className="w-4 h-4" />
+                                <CheckCircle2 className="w-3.5 h-3.5" />
                                 <span>Konfirmasi</span>
                             </button>
 
@@ -265,11 +254,10 @@ export default function AdminBookingDetailPage() {
                                     setModalAction({
                                         status: "completed",
                                         title: "Tandai Sesi Selesai",
-                                        description:
-                                            "Gunakan ini setelah pelanggan selesai mendapatkan layanan di studio.",
+                                        description: "Gunakan ini setelah pelanggan selesai mendapatkan layanan di studio.",
                                     })
                                 }
-                                className="px-5 py-3 rounded-full bg-emerald-700 text-white text-xs font-extrabold uppercase tracking-wider hover:bg-emerald-600 transition-colors"
+                                className="px-3.5 py-2 rounded-md bg-emerald-700 text-white text-xs font-medium hover:bg-emerald-800 transition-colors"
                             >
                                 Tandai Selesai
                             </button>
@@ -280,14 +268,13 @@ export default function AdminBookingDetailPage() {
                                     setModalAction({
                                         status: "cancelled",
                                         title: "Batalkan Reservasi",
-                                        description:
-                                            "Slot waktu akan dibebaskan kembali agar dapat dipesan pelanggan lain.",
+                                        description: "Slot waktu akan dibebaskan kembali agar dapat dipesan pelanggan lain.",
                                         requireReason: true,
                                     })
                                 }
-                                className="px-5 py-3 rounded-full bg-red-600/20 border border-red-400/30 text-red-200 text-xs font-extrabold uppercase tracking-wider hover:bg-red-600 hover:text-white transition-colors flex items-center gap-1.5"
+                                className="px-3.5 py-2 rounded-md bg-white border border-red-200 text-red-700 text-xs font-medium hover:bg-red-50 transition-colors flex items-center gap-1.5"
                             >
-                                <XCircle className="w-4 h-4" />
+                                <XCircle className="w-3.5 h-3.5" />
                                 <span>Batalkan</span>
                             </button>
 
@@ -297,12 +284,11 @@ export default function AdminBookingDetailPage() {
                                     setModalAction({
                                         status: "rejected",
                                         title: "Tolak Permintaan Booking",
-                                        description:
-                                            "Permintaan reservasi akan ditolak dan slot dibebaskan.",
+                                        description: "Permintaan reservasi akan ditolak dan slot dibebaskan.",
                                         requireReason: true,
                                     })
                                 }
-                                className="px-5 py-3 rounded-full bg-white/10 text-[#EAE4DC] text-xs font-bold uppercase tracking-wider hover:bg-white/20 transition-colors"
+                                className="px-3.5 py-2 rounded-md bg-white border border-[#E4E2DD] text-[#6E6D68] text-xs font-medium hover:bg-[#F6F5F2] hover:text-[#111110] transition-colors"
                             >
                                 Tolak
                             </button>
@@ -310,41 +296,41 @@ export default function AdminBookingDetailPage() {
                     </div>
 
                     {/* Form Reschedule & Catatan Internal */}
-                    <div className="rounded-[2rem] bg-[#EAE4DC]/70 border border-[#141413]/10 p-7 space-y-4">
-                        <h2 className="font-display text-lg font-extrabold">
-                            Reschedule Jadwal / Alokasi Barber
+                    <div className="bg-white border border-[#E4E2DD] rounded-md p-5 space-y-4">
+                        <h2 className="text-xs uppercase tracking-wider font-semibold text-[#6E6D68]">
+                            Reschedule Jadwal & Barber
                         </h2>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                             <div>
-                                <label className="text-[10px] font-bold uppercase tracking-widest text-[#706D65]">
+                                <label className="text-[11px] font-medium text-[#6E6D68] block mb-1">
                                     Tanggal Baru
                                 </label>
                                 <input
                                     type="date"
                                     value={rescheduleDate}
                                     onChange={(e) => setRescheduleDate(e.target.value)}
-                                    className="w-full mt-1 px-4 py-3 rounded-xl bg-[#F8F6F1] border border-[#141413]/15 text-sm font-medium"
+                                    className="w-full px-3 py-1.5 rounded-md bg-white border border-[#DCDAD4] text-xs text-[#111110] focus:outline-none focus:border-[#111110]"
                                 />
                             </div>
                             <div>
-                                <label className="text-[10px] font-bold uppercase tracking-widest text-[#706D65]">
+                                <label className="text-[11px] font-medium text-[#6E6D68] block mb-1">
                                     Jam Mulai
                                 </label>
                                 <input
                                     type="time"
                                     value={rescheduleTime}
                                     onChange={(e) => setRescheduleTime(e.target.value)}
-                                    className="w-full mt-1 px-4 py-3 rounded-xl bg-[#F8F6F1] border border-[#141413]/15 text-sm font-medium"
+                                    className="w-full px-3 py-1.5 rounded-md bg-white border border-[#DCDAD4] text-xs text-[#111110] focus:outline-none focus:border-[#111110]"
                                 />
                             </div>
                             <div>
-                                <label className="text-[10px] font-bold uppercase tracking-widest text-[#706D65]">
+                                <label className="text-[11px] font-medium text-[#6E6D68] block mb-1">
                                     Pilih Barber
                                 </label>
                                 <select
                                     value={rescheduleBarber}
                                     onChange={(e) => setRescheduleBarber(e.target.value)}
-                                    className="w-full mt-1 px-4 py-3 rounded-xl bg-[#F8F6F1] border border-[#141413]/15 text-sm font-medium"
+                                    className="w-full px-3 py-1.5 rounded-md bg-white border border-[#DCDAD4] text-xs text-[#111110] focus:outline-none focus:border-[#111110]"
                                 >
                                     {barbers.map((b) => (
                                         <option key={b.id} value={b.id}>
@@ -356,7 +342,7 @@ export default function AdminBookingDetailPage() {
                         </div>
 
                         <div>
-                            <label className="text-[10px] font-bold uppercase tracking-widest text-[#706D65]">
+                            <label className="text-[11px] font-medium text-[#6E6D68] block mb-1">
                                 Catatan Internal Admin
                             </label>
                             <textarea
@@ -364,7 +350,7 @@ export default function AdminBookingDetailPage() {
                                 value={adminNote}
                                 onChange={(e) => setAdminNote(e.target.value)}
                                 placeholder="Tambahkan catatan internal studio..."
-                                className="w-full mt-1 px-4 py-3 rounded-xl bg-[#F8F6F1] border border-[#141413]/15 text-sm"
+                                className="w-full px-3 py-2 rounded-md bg-white border border-[#DCDAD4] text-xs text-[#111110] focus:outline-none focus:border-[#111110]"
                             />
                         </div>
 
@@ -379,7 +365,7 @@ export default function AdminBookingDetailPage() {
                                     admin_note: adminNote,
                                 })
                             }
-                            className="px-7 py-3.5 rounded-full bg-[#141413] text-[#F8F6F1] text-xs font-bold uppercase tracking-wider hover:bg-[#3B281E] transition-colors"
+                            className="px-3.5 py-2 rounded-md bg-[#111110] text-white text-xs font-medium hover:bg-[#2A2A28] transition-colors"
                         >
                             Simpan Jadwal & Catatan
                         </button>
@@ -387,65 +373,65 @@ export default function AdminBookingDetailPage() {
                 </div>
 
                 {/* Kolom Kanan: Audit Log Riwayat Status */}
-                <div className="lg:col-span-5 rounded-[2rem] bg-[#EAE4DC]/50 border border-[#141413]/10 p-7 h-fit">
-                    <h2 className="font-display text-lg font-extrabold mb-5">
+                <div className="lg:col-span-5 bg-white border border-[#E4E2DD] rounded-md p-5 h-fit">
+                    <h2 className="text-xs uppercase tracking-wider font-semibold text-[#6E6D68] mb-4">
                         Riwayat Perubahan Status
                     </h2>
-                    <div className="space-y-3">
-                        {history.map((h) => (
-                            <div
-                                key={h.id}
-                                className="p-4 rounded-2xl bg-[#F8F6F1] border border-[#141413]/5 text-xs space-y-1.5"
-                            >
-                                <div className="flex items-center justify-between font-bold text-[#141413]">
-                                    <span className="uppercase tracking-wider">
-                                        {h.old_status ? `${h.old_status} → ` : ""}
-                                        <span className="text-[#3B281E]">{h.new_status}</span>
-                                    </span>
-                                    <span className="text-[11px] font-normal text-[#706D65]">
-                                        {new Date(h.created_at).toLocaleString("id-ID")}
-                                    </span>
+                    {history.length === 0 ? (
+                        <p className="text-xs text-[#6E6D68]">Belum ada riwayat perubahan.</p>
+                    ) : (
+                        <div className="divide-y divide-[#E4E2DD] text-xs">
+                            {history.map((h) => (
+                                <div key={h.id} className="py-3 space-y-1">
+                                    <div className="flex items-center justify-between font-medium text-[#111110]">
+                                        <span className="uppercase font-mono text-[11px]">
+                                            {h.old_status ? `${h.old_status} → ` : ""}
+                                            <span className="font-bold">{h.new_status}</span>
+                                        </span>
+                                        <span className="text-[10px] text-[#6E6D68] font-mono tabular-nums">
+                                            {new Date(h.created_at).toLocaleString("id-ID")}
+                                        </span>
+                                    </div>
+                                    {h.reason && (
+                                        <p className="text-[#6E6D68] text-xs leading-relaxed">{h.reason}</p>
+                                    )}
                                 </div>
-                                {h.reason && (
-                                    <p className="text-[#706D65] leading-relaxed">{h.reason}</p>
-                                )}
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
 
             {/* MODAL DIALOG KONFIRMASI PERUBAHAN STATUS */}
             {modalAction && (
                 <div
-                    className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+                    className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4"
                     onClick={() => setModalAction(null)}
                 >
                     <div
-                        className="relative max-w-md w-full rounded-[2.5rem] bg-[#F8F6F1] text-[#141413] p-8 shadow-2xl"
+                        className="relative max-w-sm w-full rounded-md bg-white text-[#111110] p-5 shadow-2xl border border-[#E4E2DD]"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <button
                             type="button"
                             onClick={() => setModalAction(null)}
-                            className="absolute top-6 right-6 w-9 h-9 rounded-full bg-[#EAE4DC] flex items-center justify-center"
+                            className="absolute top-4 right-4 text-[#6E6D68] hover:text-[#111110]"
                         >
                             <X className="w-4 h-4" />
                         </button>
 
-                        <div className="w-11 h-11 rounded-2xl bg-[#DFC3B0] text-[#141413] flex items-center justify-center mb-4">
-                            <AlertTriangle className="w-5 h-5" />
+                        <div className="flex items-center gap-2 mb-2">
+                            <AlertTriangle className="w-4 h-4 text-[#C89D7C]" />
+                            <h3 className="text-sm font-bold text-[#111110]">
+                                {modalAction.title}
+                            </h3>
                         </div>
-
-                        <h3 className="font-display text-2xl font-extrabold">
-                            {modalAction.title}
-                        </h3>
-                        <p className="text-xs text-[#706D65] mt-2 leading-relaxed">
+                        <p className="text-xs text-[#6E6D68] leading-relaxed">
                             {modalAction.description}
                         </p>
 
-                        <div className="mt-5">
-                            <label className="block text-[11px] font-bold uppercase tracking-wider text-[#3B281E] mb-2">
+                        <div className="mt-4">
+                            <label className="block text-[11px] font-medium text-[#6E6D68] mb-1">
                                 Catatan / Alasan Perubahan{" "}
                                 {modalAction.requireReason ? "(Wajib)" : "(Opsional)"}
                             </label>
@@ -453,16 +439,16 @@ export default function AdminBookingDetailPage() {
                                 type="text"
                                 value={reason}
                                 onChange={(e) => setReason(e.target.value)}
-                                placeholder="Masukkan alasan perubahan status..."
-                                className="w-full px-4 py-3 rounded-xl bg-[#EAE4DC]/70 border border-[#141413]/15 text-sm"
+                                placeholder="Masukkan alasan..."
+                                className="w-full px-3 py-1.5 rounded-md bg-white border border-[#DCDAD4] text-xs text-[#111110] focus:outline-none focus:border-[#111110]"
                             />
                         </div>
 
-                        <div className="mt-7 flex items-center justify-end gap-3">
+                        <div className="mt-5 flex items-center justify-end gap-2">
                             <button
                                 type="button"
                                 onClick={() => setModalAction(null)}
-                                className="px-5 py-3 rounded-full border border-[#141413]/20 text-xs font-bold uppercase tracking-wider"
+                                className="px-3 py-1.5 rounded-md bg-white border border-[#E4E2DD] text-xs font-medium text-[#111110] hover:bg-[#F6F5F2]"
                             >
                                 Batal
                             </button>
@@ -481,9 +467,9 @@ export default function AdminBookingDetailPage() {
                                             `Status diubah menjadi ${modalAction.status}`,
                                     });
                                 }}
-                                className="px-6 py-3 rounded-full bg-[#141413] text-[#F8F6F1] text-xs font-bold uppercase tracking-wider hover:bg-[#3B281E]"
+                                className="px-3.5 py-1.5 rounded-md bg-[#111110] text-white text-xs font-medium hover:bg-[#2A2A28]"
                             >
-                                {submitting ? "Memproses..." : "Ya, Lanjutkan"}
+                                {submitting ? "Memproses..." : "Lanjutkan"}
                             </button>
                         </div>
                     </div>

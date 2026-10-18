@@ -39,20 +39,20 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     }
 
     return (
-        <div className="min-h-screen bg-[#141413] text-[#F8F6F1] flex flex-col lg:flex-row">
-            {/* Sidebar Editorial Gelap */}
-            <aside className="lg:w-72 bg-[#1C1B19] border-b lg:border-b-0 lg:border-r border-white/10 shrink-0 flex flex-col justify-between p-5 lg:p-7">
+        <div className="min-h-screen bg-[#F6F5F2] text-[#111110] flex flex-col lg:flex-row font-sans">
+            {/* Sidebar Ramping Swiss Architectural */}
+            <aside className="lg:w-56 bg-[#111110] text-[#F6F5F2] border-b lg:border-b-0 lg:border-r border-white/10 shrink-0 flex flex-col justify-between p-4 lg:p-5">
                 <div>
-                    <div className="flex items-center justify-between lg:block mb-5 lg:mb-10">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-2xl bg-[#DFC3B0] text-[#141413] flex items-center justify-center font-display font-extrabold text-lg">
+                    <div className="flex items-center justify-between lg:block mb-6">
+                        <div className="flex items-center gap-2.5">
+                            <div className="w-8 h-8 rounded-md bg-[#C89D7C] text-[#111110] flex items-center justify-center font-display font-extrabold text-sm">
                                 M
                             </div>
                             <div>
-                                <span className="text-[10px] uppercase tracking-widest text-[#DFC3B0] font-semibold block">
-                                    Executive Portal
+                                <span className="text-[9px] uppercase tracking-widest text-[#C89D7C] font-semibold block">
+                                    Backoffice
                                 </span>
-                                <h2 className="font-display text-xl font-extrabold tracking-tight text-[#F8F6F1]">
+                                <h2 className="font-display text-base font-bold tracking-tight text-white">
                                     MR A Studio
                                 </h2>
                             </div>
@@ -61,13 +61,13 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                         <button
                             type="button"
                             onClick={handleLogout}
-                            className="lg:hidden px-4 py-2 rounded-full bg-red-500/10 text-red-300 border border-red-500/20 text-xs font-semibold"
+                            className="lg:hidden px-2.5 py-1.5 rounded-md bg-white/10 text-white/80 hover:bg-white/20 text-xs font-medium"
                         >
                             Keluar
                         </button>
                     </div>
 
-                    <nav className="flex lg:flex-col gap-2 overflow-x-auto pb-2 lg:pb-0">
+                    <nav className="flex lg:flex-col gap-1 overflow-x-auto pb-2 lg:pb-0">
                         {ADMIN_MENU.map((item) => {
                             const Icon = item.icon;
                             const active =
@@ -79,10 +79,11 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                                 <Link
                                     key={item.href}
                                     href={item.href}
-                                    className={`flex items-center gap-3.5 px-4 py-3 rounded-2xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all ${active
-                                            ? "bg-[#DFC3B0] text-[#141413] shadow-lg"
-                                            : "text-[#EAE4DC]/70 hover:bg-white/5 hover:text-[#F8F6F1]"
-                                        }`}
+                                    className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-xs font-medium whitespace-nowrap transition-colors ${
+                                        active
+                                            ? "bg-white/10 text-white border-l-2 border-[#C89D7C]"
+                                            : "text-[#6E6D68] hover:bg-white/5 hover:text-white"
+                                    }`}
                                 >
                                     <Icon className="w-4 h-4 shrink-0" />
                                     <span>{item.label}</span>
@@ -92,29 +93,29 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                     </nav>
                 </div>
 
-                <div className="hidden lg:flex flex-col gap-2 pt-6 border-t border-white/10">
+                <div className="hidden lg:flex flex-col gap-1 pt-4 border-t border-white/10">
                     <Link
                         href="/"
                         target="_blank"
-                        className="flex items-center justify-between px-4 py-3 rounded-2xl text-xs font-semibold text-[#EAE4DC]/80 bg-white/5 hover:bg-white/10 transition-colors"
+                        className="flex items-center justify-between px-3 py-2 rounded-md text-xs font-medium text-[#6E6D68] hover:bg-white/5 hover:text-white transition-colors"
                     >
-                        <span>Lihat Website Publik</span>
+                        <span>Website Publik</span>
                         <ExternalLink className="w-3.5 h-3.5" />
                     </Link>
                     <button
                         type="button"
                         onClick={handleLogout}
-                        className="flex items-center gap-3 px-4 py-3 rounded-2xl text-xs font-semibold text-red-300 hover:bg-red-500/10 transition-colors w-full text-left"
+                        className="flex items-center gap-2 px-3 py-2 rounded-md text-xs font-medium text-red-400 hover:bg-red-500/10 transition-colors w-full text-left"
                     >
-                        <LogOut className="w-4 h-4" />
-                        <span>Keluar Sesi Admin</span>
+                        <LogOut className="w-3.5 h-3.5" />
+                        <span>Keluar Sesi</span>
                     </button>
                 </div>
             </aside>
 
-            {/* Area Konten Utama dengan Container Krem Hangat */}
-            <main className="flex-1 p-4 sm:p-6 lg:p-10 overflow-y-auto">
-                <div className="max-w-6xl mx-auto rounded-[2.5rem] bg-[#F8F6F1] text-[#141413] p-6 sm:p-10 shadow-2xl min-h-[calc(100vh-5rem)]">
+            {/* Area Konten Utama Bersih Tanpa Wrapper Kapsul */}
+            <main className="flex-1 bg-[#F6F5F2] text-[#111110] min-h-screen">
+                <div className="max-w-6xl mx-auto px-6 py-8">
                     {children}
                 </div>
             </main>

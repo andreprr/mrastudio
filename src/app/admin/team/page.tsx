@@ -128,7 +128,7 @@ export default function AdminTeamPage() {
                     specialty: editingBarber.specialty,
                     bio: editingBarber.bio || null,
                     photo_url: editingBarber.photo_url || null,
-                    card_theme: editingBarber.card_theme || "beige",
+                    card_theme: editingBarber.card_theme || "charcoal",
                     is_active: editingBarber.is_active ?? true,
                     updated_at: new Date().toISOString(),
                 })
@@ -146,7 +146,7 @@ export default function AdminTeamPage() {
                 specialty: editingBarber.specialty,
                 bio: editingBarber.bio || null,
                 photo_url: editingBarber.photo_url || null,
-                card_theme: editingBarber.card_theme || "beige",
+                card_theme: editingBarber.card_theme || "charcoal",
                 is_active: editingBarber.is_active ?? true,
             });
 
@@ -184,17 +184,13 @@ export default function AdminTeamPage() {
     return (
         <AdminShell>
             {/* Header & Tombol Tambah Barber */}
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-8 border-b border-[#141413]/10 mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-[#E4E2DD] mb-6">
                 <div>
-                    <span className="text-xs font-bold uppercase tracking-widest text-[#3B281E]">
-                        Manajemen Stylist
-                    </span>
-                    <h1 className="font-display text-3xl sm:text-4xl font-extrabold mt-1">
-                        Tim Barber MR A Studio
+                    <h1 className="font-display text-xl sm:text-2xl font-bold text-[#111110]">
+                        Tim Stylist & Barber
                     </h1>
-                    <p className="text-xs sm:text-sm text-[#706D65] mt-1">
-                        Kelola foto potret, spesialisasi potongan, dan status ketersediaan
-                        barber untuk sistem booking.
+                    <p className="text-xs text-[#6E6D68] mt-0.5">
+                        Kelola foto profil, spesialisasi, dan status ketersediaan barber studio.
                     </p>
                 </div>
 
@@ -206,57 +202,35 @@ export default function AdminTeamPage() {
                             specialty: "Classic Taper & Fade",
                             bio: "",
                             photo_url: "",
-                            card_theme: "beige",
+                            card_theme: "charcoal",
                             is_active: true,
                         })
                     }
-                    className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#141413] text-[#F8F6F1] text-xs font-bold uppercase tracking-wider hover:bg-[#3B281E] transition-colors shadow-md shrink-0"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md bg-[#111110] text-white text-xs font-medium hover:bg-[#2A2A28] transition-colors shrink-0"
                 >
                     <Plus className="w-4 h-4" />
-                    <span>Tambah Barber Baru</span>
+                    <span>Tambah Barber</span>
                 </button>
             </div>
 
-            {/* Daftar Kartu Barber (Gaya Gambar 2) */}
+            {/* Daftar Kartu Barber */}
             {loading ? (
-                <p className="text-sm text-[#706D65]">Memuat data tim barber...</p>
+                <div className="py-16 text-center text-xs text-[#6E6D68] bg-white border border-[#E4E2DD] rounded-md">
+                    Memuat data tim barber...
+                </div>
             ) : barbers.length === 0 ? (
-                <div className="rounded-[2rem] bg-[#EAE4DC]/50 p-12 text-center">
-                    <p className="font-display text-lg font-bold">
-                        Belum ada data barber.
-                    </p>
-                    <p className="text-xs text-[#706D65] mt-1">
-                        Klik tombol &ldquo;Tambah Barber Baru&rdquo; di kanan atas untuk
-                        mengunggah foto dan profil barber.
-                    </p>
+                <div className="bg-white border border-[#E4E2DD] rounded-md p-8 text-center">
+                    <p className="text-sm font-semibold text-[#111110]">Belum ada data barber.</p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {barbers.map((barber) => (
                         <div
                             key={barber.id}
-                            className="rounded-[2.4rem] bg-white p-4 shadow-md border border-[#141413]/10 flex flex-col justify-between"
+                            className="bg-white border border-[#E4E2DD] rounded-md overflow-hidden flex flex-col justify-between shadow-sm"
                         >
-                            {/* Area Potret Atas ala Kartu Sienna Brooks */}
-                            <div className="rounded-[1.9rem] bg-[#EAE4DC]/65 pt-7 px-5 pb-0 flex flex-col items-center text-center overflow-hidden">
-                                <div className="flex items-center gap-1.5 mb-1">
-                                    <span
-                                        className={`w-2 h-2 rounded-full ${barber.is_active ? "bg-emerald-500" : "bg-stone-400"
-                                            }`}
-                                    />
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#706D65]">
-                                        {barber.is_active ? "Aktif di Booking" : "Nonaktif"}
-                                    </span>
-                                </div>
-
-                                <h3 className="font-display text-2xl font-extrabold text-[#141413]">
-                                    {barber.name}
-                                </h3>
-                                <p className="text-xs text-[#3B281E] font-semibold mt-0.5 mb-4">
-                                    {barber.specialty}
-                                </p>
-
-                                <div className="w-full aspect-square rounded-t-2xl overflow-hidden bg-[#DFC3B0]/30">
+                            <div>
+                                <div className="w-full aspect-[4/5] bg-[#F6F5F2] overflow-hidden relative border-b border-[#E4E2DD]">
                                     {barber.photo_url ? (
                                         <img
                                             src={barber.photo_url}
@@ -264,30 +238,59 @@ export default function AdminTeamPage() {
                                             className="w-full h-full object-cover object-top"
                                         />
                                     ) : (
-                                        <div className="w-full h-full flex items-center justify-center text-xs text-[#706D65] font-medium">
+                                        <div className="w-full h-full flex items-center justify-center text-xs text-[#6E6D68]">
                                             Belum Ada Foto
                                         </div>
+                                    )}
+                                    <div className="absolute top-2.5 left-2.5">
+                                        <span
+                                            className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium border backdrop-blur-md ${
+                                                barber.is_active
+                                                    ? "bg-white/90 text-emerald-800 border-emerald-200"
+                                                    : "bg-white/90 text-zinc-600 border-zinc-200"
+                                            }`}
+                                        >
+                                            <span
+                                                className={`w-1.5 h-1.5 rounded-full ${
+                                                    barber.is_active ? "bg-emerald-500" : "bg-stone-400"
+                                                }`}
+                                            />
+                                            {barber.is_active ? "Aktif" : "Nonaktif"}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div className="p-3.5">
+                                    <h3 className="font-semibold text-sm text-[#111110] truncate">
+                                        {barber.name}
+                                    </h3>
+                                    <p className="text-xs text-[#6E6D68] truncate mt-0.5">
+                                        {barber.specialty}
+                                    </p>
+                                    {barber.bio && (
+                                        <p className="text-[11px] text-[#6E6D68] line-clamp-2 mt-2 leading-relaxed">
+                                            {barber.bio}
+                                        </p>
                                     )}
                                 </div>
                             </div>
 
-                            {/* Footer Kartu Admin */}
-                            <div className="pt-4 pb-1 px-2 flex items-center justify-between gap-2">
+                            <div className="p-3 pt-0 border-t border-[#E4E2DD] mt-2 flex items-center gap-1.5">
                                 <button
                                     type="button"
                                     onClick={() => setEditingBarber({ ...barber })}
-                                    className="flex-1 inline-flex items-center justify-center gap-1.5 py-3 px-4 rounded-2xl bg-[#141413] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#3B281E] transition-colors"
+                                    className="flex-1 inline-flex items-center justify-center gap-1 py-1.5 px-2 rounded-md bg-white border border-[#E4E2DD] text-xs font-medium text-[#111110] hover:bg-[#F6F5F2] transition-colors"
                                 >
-                                    <Pencil className="w-3.5 h-3.5" />
-                                    <span>Edit / Ganti Foto</span>
+                                    <Pencil className="w-3 h-3" />
+                                    <span>Edit</span>
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => setDeletingBarber(barber)}
                                     aria-label="Hapus barber"
-                                    className="p-3 rounded-2xl bg-red-500/10 text-red-800 hover:bg-red-600 hover:text-white transition-colors"
+                                    className="p-1.5 rounded-md text-[#6E6D68] hover:text-red-700 hover:bg-red-50 transition-colors"
                                 >
-                                    <Trash2 className="w-4 h-4" />
+                                    <Trash2 className="w-3.5 h-3.5" />
                                 </button>
                             </div>
                         </div>
@@ -295,93 +298,92 @@ export default function AdminTeamPage() {
                 </div>
             )}
 
-            {/* MODAL FORM TAMBAH / EDIT BARBER & UPLOAD FOTO */}
+            {/* SLIDE-OVER DRAWER FORM TAMBAH / EDIT BARBER */}
             {editingBarber && (
                 <div
-                    className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+                    className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex justify-end"
                     onClick={() => setEditingBarber(null)}
                 >
                     <div
-                        className="relative max-w-lg w-full max-h-[90vh] overflow-y-auto rounded-[2.5rem] bg-[#F8F6F1] text-[#141413] p-7 sm:p-9 shadow-2xl"
+                        className="w-full max-w-md bg-white border-l border-[#E4E2DD] p-6 shadow-2xl overflow-y-auto flex flex-col justify-between"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <button
-                            type="button"
-                            onClick={() => setEditingBarber(null)}
-                            className="absolute top-6 right-6 w-10 h-10 rounded-full bg-[#EAE4DC] flex items-center justify-center"
-                        >
-                            <X className="w-5 h-5" />
-                        </button>
-
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#DFC3B0]/60 text-[#3B281E] text-[11px] font-bold uppercase tracking-wider">
-                            <Sparkles className="w-3.5 h-3.5" />
-                            <span>
-                                {editingBarber.id ? "Edit Profil Barber" : "Barber Baru"}
-                            </span>
-                        </div>
-
-                        <h2 className="font-display text-2xl sm:text-3xl font-extrabold mt-3">
-                            {editingBarber.id ? editingBarber.name : "Tambah Stylist Studio"}
-                        </h2>
-
-                        <form onSubmit={handleSaveBarber} className="mt-6 space-y-4">
-                            {/* Upload Foto Potret Barber */}
-                            <div className="p-4 rounded-2xl bg-[#EAE4DC]/70 border border-[#141413]/10 flex flex-col sm:flex-row items-center gap-4">
-                                <div className="w-24 h-24 rounded-2xl overflow-hidden bg-[#141413]/10 shrink-0 border border-[#141413]/15">
-                                    {editingBarber.photo_url ? (
-                                        <img
-                                            src={editingBarber.photo_url}
-                                            alt="Preview"
-                                            className="w-full h-full object-cover"
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center text-[10px] text-[#706D65] font-bold text-center p-2">
-                                            Pratinjau Foto
-                                        </div>
-                                    )}
+                        <div>
+                            <div className="flex items-center justify-between pb-4 border-b border-[#E4E2DD]">
+                                <div>
+                                    <span className="text-[10px] font-semibold uppercase tracking-wider text-[#C89D7C] block">
+                                        Team Stylist
+                                    </span>
+                                    <h2 className="text-base font-bold text-[#111110] mt-0.5">
+                                        {editingBarber.id ? "Edit Profil Stylist" : "Tambah Stylist Baru"}
+                                    </h2>
                                 </div>
-
-                                <div className="flex-1 w-full space-y-2">
-                                    <label className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#141413] text-[#F8F6F1] text-xs font-bold uppercase tracking-wider cursor-pointer hover:bg-[#3B281E] transition-colors w-full sm:w-auto">
-                                        {uploadingPhoto ? (
-                                            <>
-                                                <Loader2 className="w-4 h-4 animate-spin" />
-                                                <span>Mengunggah...</span>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <Upload className="w-4 h-4" />
-                                                <span>Upload Foto dari Perangkat</span>
-                                            </>
-                                        )}
-                                        <input
-                                            type="file"
-                                            accept="image/jpeg,image/png,image/webp"
-                                            onChange={handleFileUpload}
-                                            disabled={uploadingPhoto}
-                                            className="hidden"
-                                        />
-                                    </label>
-
-                                    <input
-                                        type="url"
-                                        value={editingBarber.photo_url || ""}
-                                        onChange={(e) =>
-                                            setEditingBarber({
-                                                ...editingBarber,
-                                                photo_url: e.target.value,
-                                            })
-                                        }
-                                        placeholder="Atau tempel URL foto langsung (https://...)"
-                                        className="w-full px-3.5 py-2 rounded-xl bg-[#F8F6F1] border border-[#141413]/15 text-xs"
-                                    />
-                                </div>
+                                <button
+                                    type="button"
+                                    onClick={() => setEditingBarber(null)}
+                                    className="p-1.5 rounded-md hover:bg-[#F6F5F2] text-[#6E6D68] hover:text-[#111110]"
+                                >
+                                    <X className="w-4 h-4" />
+                                </button>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <form id="barber-form" onSubmit={handleSaveBarber} className="mt-5 space-y-4">
+                                {/* Upload Foto Potret Barber */}
+                                <div className="p-3.5 rounded-md bg-[#F6F5F2] border border-[#E4E2DD] flex items-center gap-3.5">
+                                    <div className="w-16 h-16 rounded-md overflow-hidden bg-white border border-[#E4E2DD] shrink-0">
+                                        {editingBarber.photo_url ? (
+                                            <img
+                                                src={editingBarber.photo_url}
+                                                alt="Preview"
+                                                className="w-full h-full object-cover object-top"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center text-[10px] text-[#6E6D68] text-center p-1">
+                                                Foto
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="flex-1 min-w-0 space-y-1.5">
+                                        <label className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md bg-[#111110] text-white text-xs font-medium cursor-pointer hover:bg-[#2A2A28] transition-colors">
+                                            {uploadingPhoto ? (
+                                                <>
+                                                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                                    <span>Upload...</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Upload className="w-3.5 h-3.5" />
+                                                    <span>Pilih File Foto</span>
+                                                </>
+                                            )}
+                                            <input
+                                                type="file"
+                                                accept="image/jpeg,image/png,image/webp"
+                                                onChange={handleFileUpload}
+                                                disabled={uploadingPhoto}
+                                                className="hidden"
+                                            />
+                                        </label>
+
+                                        <input
+                                            type="url"
+                                            value={editingBarber.photo_url || ""}
+                                            onChange={(e) =>
+                                                setEditingBarber({
+                                                    ...editingBarber,
+                                                    photo_url: e.target.value,
+                                                })
+                                            }
+                                            placeholder="Atau tempel URL foto..."
+                                            className="w-full px-2.5 py-1 rounded-md bg-white border border-[#DCDAD4] text-xs text-[#111110]"
+                                        />
+                                    </div>
+                                </div>
+
                                 <div>
-                                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#3B281E] mb-1.5">
-                                        Nama Lengkap / Panggilan *
+                                    <label className="block text-[11px] font-medium text-[#6E6D68] mb-1">
+                                        Nama Stylist *
                                     </label>
                                     <input
                                         type="text"
@@ -393,14 +395,14 @@ export default function AdminTeamPage() {
                                                 name: e.target.value,
                                             })
                                         }
-                                        placeholder="Contoh: Sienna Brooks / Raka"
-                                        className="w-full px-4 py-3 rounded-xl bg-[#EAE4DC]/70 border border-[#141413]/15 text-sm font-semibold"
+                                        placeholder="Contoh: Sienna Brooks"
+                                        className="w-full px-3 py-2 rounded-md bg-white border border-[#DCDAD4] text-xs sm:text-sm text-[#111110] focus:outline-none focus:border-[#111110]"
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#3B281E] mb-1.5">
-                                        Spesialisasi Gaya *
+                                    <label className="block text-[11px] font-medium text-[#6E6D68] mb-1">
+                                        Spesialisasi Potongan *
                                     </label>
                                     <input
                                         type="text"
@@ -413,87 +415,85 @@ export default function AdminTeamPage() {
                                             })
                                         }
                                         placeholder="Contoh: Modern Mullet & Skin Fade"
-                                        className="w-full px-4 py-3 rounded-xl bg-[#EAE4DC]/70 border border-[#141413]/15 text-sm font-semibold"
+                                        className="w-full px-3 py-2 rounded-md bg-white border border-[#DCDAD4] text-xs sm:text-sm text-[#111110] focus:outline-none focus:border-[#111110]"
                                     />
                                 </div>
-                            </div>
 
-                            <div>
-                                <label className="block text-[11px] font-bold uppercase tracking-wider text-[#3B281E] mb-1.5">
-                                    Deskripsi / Bio Singkat
-                                </label>
-                                <textarea
-                                    rows={3}
-                                    value={editingBarber.bio || ""}
-                                    onChange={(e) =>
-                                        setEditingBarber({
-                                            ...editingBarber,
-                                            bio: e.target.value,
-                                        })
-                                    }
-                                    placeholder="Pengalaman, karakter potongan, atau sapaan singkat..."
-                                    className="w-full px-4 py-3 rounded-xl bg-[#EAE4DC]/70 border border-[#141413]/15 text-sm"
-                                />
-                            </div>
-
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center pt-1">
                                 <div>
-                                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#3B281E] mb-1.5">
-                                        Tema Warna Kartu
+                                    <label className="block text-[11px] font-medium text-[#6E6D68] mb-1">
+                                        Bio / Pengalaman
                                     </label>
-                                    <select
-                                        value={editingBarber.card_theme || "beige"}
+                                    <textarea
+                                        rows={3}
+                                        value={editingBarber.bio || ""}
                                         onChange={(e) =>
                                             setEditingBarber({
                                                 ...editingBarber,
-                                                card_theme: e.target.value as BarberItem["card_theme"],
+                                                bio: e.target.value,
                                             })
                                         }
-                                        className="w-full px-4 py-3 rounded-xl bg-[#EAE4DC]/70 border border-[#141413]/15 text-sm font-semibold"
-                                    >
-                                        <option value="beige">Warm Beige</option>
-                                        <option value="peach">Soft Peach</option>
-                                        <option value="charcoal">Charcoal Dark</option>
-                                        <option value="cream">Editorial Cream</option>
-                                    </select>
+                                        placeholder="Keahlian, portofolio singkat..."
+                                        className="w-full px-3 py-2 rounded-md bg-white border border-[#DCDAD4] text-xs text-[#111110] focus:outline-none focus:border-[#111110]"
+                                    />
                                 </div>
 
-                                <label className="flex items-center gap-2.5 text-xs font-bold cursor-pointer mt-5">
-                                    <input
-                                        type="checkbox"
-                                        checked={editingBarber.is_active ?? true}
-                                        onChange={(e) =>
-                                            setEditingBarber({
-                                                ...editingBarber,
-                                                is_active: e.target.checked,
-                                            })
-                                        }
-                                        className="w-4 h-4 accent-[#141413]"
-                                    />
-                                    <span className="flex items-center gap-1">
-                                        <UserCheck className="w-4 h-4" />
-                                        Aktifkan di Sistem Booking
-                                    </span>
-                                </label>
-                            </div>
+                                <div className="grid grid-cols-2 gap-3 items-center pt-1">
+                                    <div>
+                                        <label className="block text-[11px] font-medium text-[#6E6D68] mb-1">
+                                            Tema Kartu
+                                        </label>
+                                        <select
+                                            value={editingBarber.card_theme || "charcoal"}
+                                            onChange={(e) =>
+                                                setEditingBarber({
+                                                    ...editingBarber,
+                                                    card_theme: e.target.value as BarberItem["card_theme"],
+                                                })
+                                            }
+                                            className="w-full px-3 py-1.5 rounded-md bg-white border border-[#DCDAD4] text-xs font-medium text-[#111110] focus:outline-none focus:border-[#111110]"
+                                        >
+                                            <option value="charcoal">Charcoal Dark (Default)</option>
+                                            <option value="beige">Warm Beige</option>
+                                            <option value="peach">Soft Peach</option>
+                                            <option value="cream">Editorial Cream</option>
+                                        </select>
+                                    </div>
 
-                            <div className="pt-4 flex justify-end gap-3">
-                                <button
-                                    type="button"
-                                    onClick={() => setEditingBarber(null)}
-                                    className="px-5 py-3 rounded-full border border-[#141413]/20 text-xs font-bold uppercase tracking-wider"
-                                >
-                                    Batal
-                                </button>
-                                <button
-                                    type="submit"
-                                    disabled={saving || uploadingPhoto}
-                                    className="px-7 py-3 rounded-full bg-[#141413] text-[#F8F6F1] text-xs font-bold uppercase tracking-wider hover:bg-[#3B281E] disabled:opacity-50"
-                                >
-                                    {saving ? "Menyimpan..." : "Simpan Barber"}
-                                </button>
-                            </div>
-                        </form>
+                                    <label className="flex items-center gap-2 text-xs font-medium cursor-pointer mt-5">
+                                        <input
+                                            type="checkbox"
+                                            checked={editingBarber.is_active ?? true}
+                                            onChange={(e) =>
+                                                setEditingBarber({
+                                                    ...editingBarber,
+                                                    is_active: e.target.checked,
+                                                })
+                                            }
+                                            className="w-4 h-4 rounded accent-[#111110]"
+                                        />
+                                        <span>Aktif di Booking</span>
+                                    </label>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div className="pt-6 border-t border-[#E4E2DD] flex items-center justify-end gap-2 mt-6">
+                            <button
+                                type="button"
+                                onClick={() => setEditingBarber(null)}
+                                className="px-3.5 py-2 rounded-md bg-white border border-[#E4E2DD] text-xs font-medium text-[#111110] hover:bg-[#F6F5F2]"
+                            >
+                                Batal
+                            </button>
+                            <button
+                                form="barber-form"
+                                type="submit"
+                                disabled={saving || uploadingPhoto}
+                                className="px-4 py-2 rounded-md bg-[#111110] text-white text-xs font-medium hover:bg-[#2A2A28] disabled:opacity-50"
+                            >
+                                {saving ? "Menyimpan..." : "Simpan Stylist"}
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
@@ -501,25 +501,24 @@ export default function AdminTeamPage() {
             {/* MODAL KONFIRMASI HAPUS BARBER */}
             {deletingBarber && (
                 <div
-                    className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+                    className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4"
                     onClick={() => setDeletingBarber(null)}
                 >
                     <div
-                        className="max-w-md w-full rounded-[2.5rem] bg-[#F8F6F1] text-[#141413] p-8 shadow-2xl"
+                        className="max-w-sm w-full rounded-md bg-white text-[#111110] p-5 shadow-2xl border border-[#E4E2DD]"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <h3 className="font-display text-2xl font-extrabold">
+                        <h3 className="text-sm font-bold text-[#111110]">
                             Hapus Profil &ldquo;{deletingBarber.name}&rdquo;?
                         </h3>
-                        <p className="text-xs text-[#706D65] mt-2 leading-relaxed">
-                            Barber ini tidak akan lagi muncul di halaman utama maupun pilihan
-                            booking baru, tetapi riwayat transaksi lama tetap aman.
+                        <p className="text-xs text-[#6E6D68] mt-1.5 leading-relaxed">
+                            Barber ini tidak akan lagi muncul di halaman utama maupun pilihan booking baru, namun riwayat transaksi tetap aman.
                         </p>
-                        <div className="mt-7 flex justify-end gap-3">
+                        <div className="mt-5 flex justify-end gap-2">
                             <button
                                 type="button"
                                 onClick={() => setDeletingBarber(null)}
-                                className="px-5 py-3 rounded-full border border-[#141413]/20 text-xs font-bold uppercase"
+                                className="px-3 py-1.5 rounded-md bg-white border border-[#E4E2DD] text-xs font-medium text-[#111110] hover:bg-[#F6F5F2]"
                             >
                                 Batal
                             </button>
@@ -527,9 +526,9 @@ export default function AdminTeamPage() {
                                 type="button"
                                 disabled={saving}
                                 onClick={confirmDeleteBarber}
-                                className="px-6 py-3 rounded-full bg-red-700 text-white text-xs font-bold uppercase hover:bg-red-800"
+                                className="px-3.5 py-1.5 rounded-md bg-red-700 text-white text-xs font-medium hover:bg-red-800"
                             >
-                                {saving ? "Menghapus..." : "Ya, Hapus"}
+                                {saving ? "Menghapus..." : "Hapus"}
                             </button>
                         </div>
                     </div>

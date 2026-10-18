@@ -194,7 +194,7 @@ export function BookingWizard({
         );
 
         return (
-            <div className="max-w-xl mx-auto rounded-[2rem] bg-brand-beige border border-brand-charcoal/15 p-6 sm:p-10 shadow-xl">
+            <div className="max-w-xl mx-auto rounded-2xl bg-brand-beige border border-brand-charcoal/15 p-5 sm:p-6 shadow-xl">
                 <div className="flex items-center justify-between border-b border-brand-charcoal/10 pb-6">
                     <div className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded-full bg-brand-charcoal text-brand-cream flex items-center justify-center">
@@ -247,7 +247,7 @@ export function BookingWizard({
                     </div>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-brand-cream text-xs text-brand-gray leading-relaxed mb-6">
+                <div className="p-4 rounded-lg bg-brand-cream text-xs text-brand-gray leading-relaxed mb-6">
                     Simpan Kode Booking <strong>{ticket.booking_code}</strong> Anda. Slot
                     waktu Anda telah ditahan sementara dan menunggu konfirmasi admin.
                 </div>
@@ -313,7 +313,7 @@ export function BookingWizard({
                                     key={srv.id}
                                     type="button"
                                     onClick={() => form.setValue("service_id", srv.id)}
-                                    className={`w-full text-left p-5 sm:p-6 rounded-3xl border transition-all flex items-center justify-between gap-4 ${selected
+                                    className={`w-full text-left p-5 sm:p-6 rounded-xl border transition-all flex items-center justify-between gap-4 ${selected
                                         ? "bg-brand-charcoal text-brand-cream border-brand-charcoal shadow-lg"
                                         : "bg-brand-beige/60 text-brand-charcoal border-brand-charcoal/10 hover:bg-brand-beige"
                                         }`}
@@ -354,7 +354,7 @@ export function BookingWizard({
                             type="button"
                             disabled={!watchedServiceId}
                             onClick={() => setStep(2)}
-                            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-brand-charcoal text-brand-cream text-sm font-medium disabled:opacity-40"
+                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-brand-charcoal text-brand-cream text-xs sm:text-sm font-medium disabled:opacity-40"
                         >
                             <span>Lanjut Pilih Tanggal</span>
                             <ChevronRight className="w-4 h-4" />
@@ -386,7 +386,7 @@ export function BookingWizard({
                                         form.setValue("booking_date", d.dateStr);
                                         form.setValue("start_time", "");
                                     }}
-                                    className={`p-4 rounded-2xl border text-center transition-all ${d.isClosed
+                                    className={`p-4 rounded-lg border text-center transition-all ${d.isClosed
                                         ? "opacity-35 cursor-not-allowed bg-brand-beige/20 border-brand-charcoal/5"
                                         : isSelected
                                             ? "bg-brand-charcoal text-brand-cream border-brand-charcoal shadow-md"
@@ -445,7 +445,7 @@ export function BookingWizard({
                                 form.setValue("barber_id", null);
                                 form.setValue("start_time", "");
                             }}
-                            className={`p-5 rounded-3xl border text-left transition-all flex items-center justify-between ${watchedBarberId === null
+                            className={`p-5 rounded-xl border text-left transition-all flex items-center justify-between ${watchedBarberId === null
                                 ? "bg-brand-charcoal text-brand-cream border-brand-charcoal"
                                 : "bg-brand-beige/60 text-brand-charcoal border-brand-charcoal/10"
                                 }`}
@@ -474,7 +474,7 @@ export function BookingWizard({
                                         form.setValue("barber_id", b.id);
                                         form.setValue("start_time", "");
                                     }}
-                                    className={`p-5 rounded-3xl border text-left transition-all flex items-center gap-4 ${selected
+                                    className={`p-5 rounded-xl border text-left transition-all flex items-center gap-4 ${selected
                                         ? "bg-brand-charcoal text-brand-cream border-brand-charcoal"
                                         : "bg-brand-beige/60 text-brand-charcoal border-brand-charcoal/10"
                                         }`}
@@ -483,7 +483,7 @@ export function BookingWizard({
                                         <img
                                             src={b.photo_url}
                                             alt={b.name}
-                                            className="w-14 h-14 rounded-2xl object-cover shrink-0"
+                                            className="w-14 h-14 rounded-lg object-cover shrink-0"
                                         />
                                     )}
                                     <div className="flex-1">
@@ -531,7 +531,7 @@ export function BookingWizard({
                             <span className="text-sm">Memeriksa slot yang tersedia...</span>
                         </div>
                     ) : slots.length === 0 ? (
-                        <div className="p-8 rounded-3xl bg-brand-beige/50 text-center text-sm text-brand-gray">
+                        <div className="p-5 sm:p-6 rounded-xl bg-brand-beige/50 text-center text-sm text-brand-gray">
                             Tidak ada slot waktu yang tersedia pada tanggal ini. Silakan pilih
                             tanggal atau barber lain.
                         </div>
@@ -545,7 +545,7 @@ export function BookingWizard({
                                         type="button"
                                         disabled={!s.available}
                                         onClick={() => form.setValue("start_time", s.time)}
-                                        className={`py-3.5 px-4 rounded-2xl border text-center transition-all ${!s.available
+                                        className={`py-3.5 px-4 rounded-lg border text-center transition-all ${!s.available
                                             ? "opacity-35 cursor-not-allowed bg-brand-beige/20 border-brand-charcoal/5 line-through"
                                             : isSelected
                                                 ? "bg-brand-charcoal text-brand-cream border-brand-charcoal font-bold shadow-md"
@@ -597,7 +597,7 @@ export function BookingWizard({
                         untuk memeriksa status reservasi Anda.
                     </p>
 
-                    <div className="space-y-4 bg-brand-beige/50 p-6 sm:p-8 rounded-3xl border border-brand-charcoal/10">
+                    <div className="space-y-4 bg-brand-beige/50 p-5 sm:p-6 rounded-xl border border-brand-charcoal/10">
                         <div>
                             <label className="block text-xs font-semibold uppercase tracking-wider mb-2">
                                 Nama Lengkap *
@@ -606,7 +606,7 @@ export function BookingWizard({
                                 type="text"
                                 {...form.register("customer_name")}
                                 placeholder="Masukkan nama lengkap Anda"
-                                className="w-full px-4 py-3.5 rounded-2xl bg-brand-cream border border-brand-charcoal/15 text-sm focus:outline-none focus:border-brand-charcoal"
+                                className="w-full px-4 py-3.5 rounded-lg bg-brand-cream border border-brand-charcoal/15 text-sm focus:outline-none focus:border-brand-charcoal"
                             />
                             {form.formState.errors.customer_name && (
                                 <p className="text-xs text-red-600 mt-1">
@@ -623,7 +623,7 @@ export function BookingWizard({
                                 type="tel"
                                 {...form.register("customer_phone")}
                                 placeholder="Contoh: 081234567890"
-                                className="w-full px-4 py-3.5 rounded-2xl bg-brand-cream border border-brand-charcoal/15 text-sm focus:outline-none focus:border-brand-charcoal"
+                                className="w-full px-4 py-3.5 rounded-lg bg-brand-cream border border-brand-charcoal/15 text-sm focus:outline-none focus:border-brand-charcoal"
                             />
                             {form.formState.errors.customer_phone && (
                                 <p className="text-xs text-red-600 mt-1">
@@ -640,7 +640,7 @@ export function BookingWizard({
                                 rows={3}
                                 {...form.register("customer_note")}
                                 placeholder="Contoh: Ingin diskusi gaya taper fade yang rapi untuk kerja"
-                                className="w-full px-4 py-3 rounded-2xl bg-brand-cream border border-brand-charcoal/15 text-sm focus:outline-none focus:border-brand-charcoal"
+                                className="w-full px-4 py-3 rounded-lg bg-brand-cream border border-brand-charcoal/15 text-sm focus:outline-none focus:border-brand-charcoal"
                             />
                         </div>
 
@@ -698,7 +698,7 @@ export function BookingWizard({
                         6. Konfirmasi Reservasi Anda
                     </h2>
 
-                    <div className="rounded-3xl bg-brand-beige/70 border border-brand-charcoal/15 p-6 sm:p-8 space-y-4 text-sm">
+                    <div className="rounded-xl bg-brand-beige/70 border border-brand-charcoal/15 p-5 sm:p-6 space-y-4 text-sm">
                         <div className="flex justify-between py-2 border-b border-brand-charcoal/10">
                             <span className="text-brand-gray">Layanan</span>
                             <span className="font-semibold">{selectedService?.name}</span>
@@ -760,7 +760,7 @@ export function BookingWizard({
                             type="button"
                             disabled={submitting}
                             onClick={form.handleSubmit(onConfirmBooking)}
-                            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-brand-charcoal text-brand-cream text-sm font-medium hover:bg-brand-espresso disabled:opacity-50"
+                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-brand-charcoal text-brand-cream text-xs sm:text-sm font-medium hover:bg-brand-espresso disabled:opacity-50"
                         >
                             {submitting ? (
                                 <>

@@ -43,12 +43,12 @@ export default async function BookingPage({
     return (
         <div className="min-h-screen bg-brand-cream">
             <Navbar brandName={settings.brand_name} />
-            <main className="pt-28 pb-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+            <main className="pt-28 pb-14 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
                 <div className="mb-10 text-center">
                     <span className="text-xs font-semibold uppercase tracking-widest text-brand-espresso">
                         Reservasi Online
                     </span>
-                    <h1 className="font-display text-3xl sm:text-5xl font-bold text-brand-charcoal mt-2">
+                    <h1 className="font-display text-2xl sm:text-3xl font-bold text-brand-charcoal mt-2">
                         Jadwalkan Sesi Anda
                     </h1>
                 </div>

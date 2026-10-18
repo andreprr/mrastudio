@@ -9,7 +9,7 @@ export function GallerySection({ items }: { items: GalleryItem[] }) {
 
     if (items.length === 0) {
         return (
-            <div className="rounded-3xl border border-brand-charcoal/10 bg-brand-beige/40 p-12 text-center">
+            <div className="rounded-xl border border-brand-charcoal/10 bg-brand-beige/40 p-8 text-center">
                 <p className="text-brand-gray text-sm">
                     Galeri hasil potongan rambut sedang disiapkan oleh tim MR A Studio.
                 </p>
@@ -34,7 +34,7 @@ export function GallerySection({ items }: { items: GalleryItem[] }) {
                             key={item.id}
                             type="button"
                             onClick={() => setSelectedImage(item)}
-                            className={`group relative overflow-hidden rounded-3xl bg-brand-beige text-left ${colSpan}`}
+                            className={`group relative overflow-hidden rounded-xl bg-brand-beige text-left ${colSpan}`}
                         >
                             <img
                                 src={item.image_url}
@@ -65,7 +65,7 @@ export function GallerySection({ items }: { items: GalleryItem[] }) {
                     onClick={() => setSelectedImage(null)}
                 >
                     <div
-                        className="relative max-w-4xl w-full bg-brand-cream rounded-3xl overflow-hidden shadow-2xl"
+                        className="relative max-w-4xl w-full bg-brand-cream rounded-2xl overflow-hidden shadow-2xl"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <button
@@ -84,12 +84,12 @@ export function GallerySection({ items }: { items: GalleryItem[] }) {
                                     className="w-full h-full object-contain max-h-[75vh]"
                                 />
                             </div>
-                            <div className="md:col-span-4 p-6 sm:p-8 flex flex-col justify-between">
+                            <div className="md:col-span-4 p-5 sm:p-6 flex flex-col justify-between">
                                 <div>
                                     <span className="inline-block px-3 py-1 rounded-full bg-brand-peach/40 text-brand-espresso text-xs font-semibold uppercase tracking-wider">
                                         {selectedImage.category}
                                     </span>
-                                    <h3 className="font-display text-2xl font-bold mt-4 text-brand-charcoal">
+                                    <h3 className="font-display text-lg sm:text-xl font-bold mt-4 text-brand-charcoal">
                                         {selectedImage.title}
                                     </h3>
                                     {selectedImage.description && (

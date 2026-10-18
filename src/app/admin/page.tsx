@@ -35,106 +35,141 @@ export default async function AdminDashboardPage() {
 
     return (
         <AdminShell>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <div>
-                    <h1 className="font-display text-2xl sm:text-3xl font-bold">
+                    <h1 className="font-display text-xl sm:text-2xl font-bold text-[#111110]">
                         Ringkasan Operasional
                     </h1>
-                    <p className="text-sm text-brand-gray">
+                    <p className="text-xs text-[#6E6D68] mt-0.5">
                         Data transaksi langsung dari database MR A Studio ({todayJakarta}).
                     </p>
                 </div>
-                <div className="flex gap-3">
+                <div className="flex items-center gap-2">
                     <Link
                         href="/admin/bookings"
-                        className="px-4 py-2.5 rounded-full bg-brand-charcoal text-brand-cream text-xs font-medium"
+                        className="px-3.5 py-2 rounded-md bg-[#111110] text-white text-xs font-medium hover:bg-[#2A2A28] transition-colors"
                     >
                         Kelola Semua Booking
                     </Link>
                     <Link
                         href="/admin/services"
-                        className="px-4 py-2.5 rounded-full border border-brand-charcoal/20 text-xs font-medium"
+                        className="px-3.5 py-2 rounded-md bg-white border border-[#E4E2DD] text-[#111110] text-xs font-medium hover:bg-[#F6F5F2] transition-colors"
                     >
-                        Ubah Pricelist
+                        Pricelist
                     </Link>
                 </div>
             </div>
 
-            {/* Kartu Statistik */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-10">
-                <div className="p-5 rounded-3xl bg-brand-beige/70 border border-brand-charcoal/10">
-                    <span className="text-xs text-brand-gray">Booking Hari Ini</span>
-                    <p className="font-display text-3xl font-bold mt-1">
+            {/* Architectural Metric Strip */}
+            <div className="grid grid-cols-2 lg:grid-cols-5 bg-white border border-[#E4E2DD] rounded-md divide-y lg:divide-y-0 lg:divide-x divide-[#E4E2DD] mb-8">
+                <div className="p-4">
+                    <span className="text-[11px] uppercase tracking-wider text-[#6E6D68] font-medium block">
+                        Hari Ini
+                    </span>
+                    <p className="text-2xl font-bold font-mono tabular-nums text-[#111110] mt-1">
                         {todayBookings.length}
                     </p>
                 </div>
-                <div className="p-5 rounded-3xl bg-amber-100/70 border border-amber-900/10">
-                    <span className="text-xs text-amber-900">Menunggu (Pending)</span>
-                    <p className="font-display text-3xl font-bold mt-1 text-amber-950">
+                <div className="p-4">
+                    <span className="text-[11px] uppercase tracking-wider text-amber-700 font-medium block">
+                        Menunggu (Pending)
+                    </span>
+                    <p className="text-2xl font-bold font-mono tabular-nums text-amber-900 mt-1">
                         {pendingCount}
                     </p>
                 </div>
-                <div className="p-5 rounded-3xl bg-emerald-100/70 border border-emerald-900/10">
-                    <span className="text-xs text-emerald-900">Confirmed</span>
-                    <p className="font-display text-3xl font-bold mt-1 text-emerald-950">
+                <div className="p-4">
+                    <span className="text-[11px] uppercase tracking-wider text-emerald-700 font-medium block">
+                        Confirmed
+                    </span>
+                    <p className="text-2xl font-bold font-mono tabular-nums text-emerald-900 mt-1">
                         {confirmedCount}
                     </p>
                 </div>
-                <div className="p-5 rounded-3xl bg-brand-beige/70 border border-brand-charcoal/10">
-                    <span className="text-xs text-brand-gray">Selesai (Completed)</span>
-                    <p className="font-display text-3xl font-bold mt-1">
+                <div className="p-4">
+                    <span className="text-[11px] uppercase tracking-wider text-[#6E6D68] font-medium block">
+                        Selesai
+                    </span>
+                    <p className="text-2xl font-bold font-mono tabular-nums text-[#111110] mt-1">
                         {completedCount}
                     </p>
                 </div>
-                <div className="p-5 rounded-3xl bg-red-100/60 border border-red-900/10">
-                    <span className="text-xs text-red-900">Dibatalkan</span>
-                    <p className="font-display text-3xl font-bold mt-1 text-red-950">
+                <div className="p-4">
+                    <span className="text-[11px] uppercase tracking-wider text-red-700 font-medium block">
+                        Dibatalkan
+                    </span>
+                    <p className="text-2xl font-bold font-mono tabular-nums text-red-800 mt-1">
                         {cancelledCount}
                     </p>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                {/* Daftar Booking Terbaru */}
-                <div className="lg:col-span-8 rounded-3xl bg-brand-beige/50 border border-brand-charcoal/10 p-6">
-                    <h2 className="font-display text-lg font-bold mb-4">
-                        Booking Terbaru
-                    </h2>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                {/* Daftar Booking Terbaru - Tabel Data Padat */}
+                <div className="lg:col-span-8 bg-white border border-[#E4E2DD] rounded-md overflow-hidden">
+                    <div className="px-5 py-4 border-b border-[#E4E2DD] flex items-center justify-between">
+                        <h2 className="text-sm font-semibold text-[#111110]">
+                            Booking Terbaru
+                        </h2>
+                        <Link
+                            href="/admin/bookings"
+                            className="text-xs text-[#6E6D68] hover:text-[#111110] font-medium"
+                        >
+                            Lihat Semua &rarr;
+                        </Link>
+                    </div>
                     {bookings.length === 0 ? (
-                        <p className="text-sm text-brand-gray py-6">
+                        <p className="text-xs text-[#6E6D68] p-5 text-center">
                             Belum ada data booking yang masuk.
                         </p>
                     ) : (
-                        <div className="space-y-3">
+                        <div className="divide-y divide-[#E4E2DD]">
                             {bookings.slice(0, 6).map((b) => (
                                 <div
                                     key={b.id}
-                                    className="p-4 rounded-2xl bg-brand-cream flex flex-col sm:flex-row sm:items-center justify-between gap-3 border border-brand-charcoal/5"
+                                    className="p-3.5 px-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-[#F6F5F2] transition-colors"
                                 >
-                                    <div>
+                                    <div className="min-w-0">
                                         <div className="flex items-center gap-2">
-                                            <span className="font-mono text-xs font-bold">
+                                            <span className="font-mono text-xs font-semibold text-[#111110]">
                                                 {b.booking_code}
                                             </span>
-                                            <span className="text-xs px-2.5 py-0.5 rounded-full bg-brand-beige font-medium">
+                                            <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium border ${
+                                                b.status === "confirmed"
+                                                    ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                                                    : b.status === "pending"
+                                                    ? "bg-amber-50 text-amber-800 border-amber-200"
+                                                    : b.status === "completed"
+                                                    ? "bg-zinc-100 text-zinc-800 border-zinc-200"
+                                                    : "bg-red-50 text-red-800 border-red-200"
+                                            }`}>
+                                                <span className={`w-1.5 h-1.5 rounded-full ${
+                                                    b.status === "confirmed"
+                                                        ? "bg-emerald-500"
+                                                        : b.status === "pending"
+                                                        ? "bg-amber-500"
+                                                        : b.status === "completed"
+                                                        ? "bg-zinc-500"
+                                                        : "bg-red-500"
+                                                }`} />
                                                 {b.status}
                                             </span>
                                         </div>
-                                        <p className="font-semibold text-sm mt-1">
-                                            {b.customer_name} • {b.service_name_snapshot}
+                                        <p className="text-xs font-medium text-[#111110] mt-1 truncate">
+                                            {b.customer_name} <span className="text-[#6E6D68] font-normal">• {b.service_name_snapshot}</span>
                                         </p>
-                                        <p className="text-xs text-brand-gray">
-                                            {b.booking_date} pukul {b.start_time.slice(0, 5)} WIB —{" "}
-                                            {b.barber_name_snapshot}
+                                        <p className="text-[11px] text-[#6E6D68] font-mono tabular-nums mt-0.5">
+                                            {b.booking_date} • {b.start_time.slice(0, 5)} WIB — {b.barber_name_snapshot}
                                         </p>
                                     </div>
-                                    <div className="flex items-center gap-3">
-                                        <span className="font-display font-bold text-sm">
+                                    <div className="flex items-center gap-3 shrink-0 self-end sm:self-center">
+                                        <span className="font-mono tabular-nums text-xs font-semibold text-[#111110]">
                                             {formatRupiah(Number(b.price_snapshot))}
                                         </span>
                                         <Link
                                             href={`/admin/bookings/${b.id}`}
-                                            className="px-3.5 py-1.5 rounded-full bg-brand-charcoal text-brand-cream text-xs"
+                                            className="px-2.5 py-1 rounded-md bg-white border border-[#E4E2DD] text-[#111110] text-xs font-medium hover:bg-[#F6F5F2]"
                                         >
                                             Detail
                                         </Link>
@@ -146,27 +181,29 @@ export default async function AdminDashboardPage() {
                 </div>
 
                 {/* Layanan Populer */}
-                <div className="lg:col-span-4 rounded-3xl bg-brand-beige/50 border border-brand-charcoal/10 p-6">
-                    <h2 className="font-display text-lg font-bold mb-4">
-                        Layanan Terpopuler
-                    </h2>
-                    {popularServices.length === 0 ? (
-                        <p className="text-sm text-brand-gray">Belum ada statistik layanan.</p>
-                    ) : (
-                        <div className="space-y-4">
-                            {popularServices.map(([name, count]) => (
-                                <div
-                                    key={name}
-                                    className="p-3.5 rounded-2xl bg-brand-cream flex items-center justify-between"
-                                >
-                                    <span className="text-sm font-medium">{name}</span>
-                                    <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-brand-peach/50">
-                                        {count}x dipesan
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    )}
+                <div className="lg:col-span-4 bg-white border border-[#E4E2DD] rounded-md p-5 flex flex-col justify-between">
+                    <div>
+                        <h2 className="text-sm font-semibold text-[#111110] mb-4">
+                            Layanan Terpopuler
+                        </h2>
+                        {popularServices.length === 0 ? (
+                            <p className="text-xs text-[#6E6D68]">Belum ada statistik layanan.</p>
+                        ) : (
+                            <div className="divide-y divide-[#E4E2DD]">
+                                {popularServices.map(([name, count]) => (
+                                    <div
+                                        key={name}
+                                        className="py-2.5 flex items-center justify-between text-xs"
+                                    >
+                                        <span className="font-medium text-[#111110] truncate pr-2">{name}</span>
+                                        <span className="font-mono tabular-nums text-[11px] font-semibold px-2 py-0.5 rounded bg-[#F6F5F2] text-[#6E6D68] border border-[#E4E2DD] shrink-0">
+                                            {count} pesanan
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </AdminShell>

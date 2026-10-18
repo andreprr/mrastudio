@@ -90,7 +90,7 @@ export default async function LandingPage() {
                         <span>Premium Grooming Experience</span>
                     </div>
 
-                    <h1 className="font-display text-5xl sm:text-7xl lg:text-8xl font-extrabold tracking-tight text-white drop-shadow-md leading-[0.98]">
+                    <h1 className="font-display text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white drop-shadow-md leading-[0.98]">
                         {settings.brand_name}
                     </h1>
 
@@ -101,14 +101,14 @@ export default async function LandingPage() {
                     <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
                         <Link
                             href="/booking"
-                            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#141413] text-[#F8F6F1] border border-white/15 font-semibold text-sm sm:text-base hover:bg-[#3B281E] transition-all shadow-2xl"
+                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#141413] text-[#F8F6F1] border border-white/15 font-semibold text-xs sm:text-sm hover:bg-[#3B281E] transition-all shadow-2xl"
                         >
                             <span>Booking Sekarang</span>
                             <ArrowUpRight className="w-5 h-5" />
                         </Link>
                         <a
                             href="#services"
-                            className="inline-flex items-center px-7 py-4 rounded-full bg-[#F8F6F1]/90 backdrop-blur-md text-[#141413] font-semibold text-sm sm:text-base hover:bg-white transition-all"
+                            className="inline-flex items-center px-5 py-2.5 rounded-full bg-[#F8F6F1]/90 backdrop-blur-md text-[#141413] font-semibold text-xs sm:text-sm hover:bg-white transition-all"
                         >
                             Lihat Katalog Layanan
                         </a>
@@ -116,7 +116,7 @@ export default async function LandingPage() {
                 </div>
 
                 {/* Tipografi Statement Besar di Bagian Bawah Gambar Hero */}
-                <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pb-14 pt-20">
+                <div className="relative z-10 max-w-6xl mx-auto w-full px-4 sm:px-6 lg:px-8 pb-10 pt-14">
                     <p className="font-display text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-[#F8F6F1]">
                         <span className="text-[#DFC3B0]">{settings.hero_headline}</span>{" "}
                         Presisi dalam setiap guntingan.
@@ -127,9 +127,9 @@ export default async function LandingPage() {
             {/* SECTION LAYANAN & PRICELIST (Ringkas + Modal Pop-up) */}
             <section
                 id="services"
-                className="py-24 px-4 sm:px-6 lg:px-8 bg-[#141413] text-[#F8F6F1] rounded-b-[3rem]"
+                className="py-14 px-4 sm:px-6 lg:px-8 bg-[#141413] text-[#F8F6F1] rounded-b-2xl"
             >
-                <div className="max-w-7xl mx-auto">
+                <div className="max-w-6xl mx-auto">
                     <ServicesShowcase services={services || []} />
                 </div>
             </section>
@@ -137,11 +137,11 @@ export default async function LandingPage() {
             {/* SECTION TENTANG KAMI */}
             <section
                 id="about"
-                className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full"
+                className="py-14 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full"
             >
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
                     <div className="lg:col-span-6">
-                        <div className="rounded-[2.5rem] overflow-hidden aspect-[4/3] bg-[#3B281E] shadow-xl">
+                        <div className="rounded-2xl overflow-hidden aspect-[4/3] bg-[#3B281E] shadow-xl">
                             <img
                                 src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1000&q=80"
                                 alt="Interior suasana MR A Studio"
@@ -154,7 +154,7 @@ export default async function LandingPage() {
                         <span className="text-xs uppercase tracking-widest text-[#3B281E] font-bold">
                             Tentang MR A Studio
                         </span>
-                        <h2 className="font-display text-3xl sm:text-5xl font-extrabold leading-tight text-[#141413]">
+                        <h2 className="font-display text-2xl sm:text-3xl font-extrabold leading-tight text-[#141413]">
                             {settings.about_title}
                         </h2>
                         <p className="text-[#706D65] leading-relaxed text-base">
@@ -164,7 +164,7 @@ export default async function LandingPage() {
                             {settings.about_philosophy}
                         </p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
-                            <div className="p-5 rounded-2xl bg-[#EAE4DC]/70 border border-[#141413]/10 flex items-start gap-3">
+                            <div className="p-5 rounded-xl bg-[#EAE4DC]/70 border border-[#141413]/10 flex items-start gap-3">
                                 <CheckCircle2 className="w-5 h-5 text-[#3B281E] shrink-0 mt-0.5" />
                                 <div>
                                     <h4 className="font-bold text-sm">Konsultasi Personal</h4>
@@ -173,7 +173,7 @@ export default async function LandingPage() {
                                     </p>
                                 </div>
                             </div>
-                            <div className="p-5 rounded-2xl bg-[#EAE4DC]/70 border border-[#141413]/10 flex items-start gap-3">
+                            <div className="p-5 rounded-xl bg-[#EAE4DC]/70 border border-[#141413]/10 flex items-start gap-3">
                                 <CheckCircle2 className="w-5 h-5 text-[#3B281E] shrink-0 mt-0.5" />
                                 <div>
                                     <h4 className="font-bold text-sm">Alat Higienis & Steril</h4>
@@ -190,7 +190,7 @@ export default async function LandingPage() {
             {/* SECTION OUR TEAM */}
             <section
                 id="team"
-                className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full"
+                className="py-14 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full"
             >
                 <TeamShowcase barbers={barbers || []} />
             </section>
@@ -198,13 +198,13 @@ export default async function LandingPage() {
             {/* SECTION GALLERY */}
             <section
                 id="gallery"
-                className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full"
+                className="py-14 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full"
             >
                 <div className="mb-16">
                     <span className="text-xs font-semibold uppercase tracking-widest text-[#3B281E]">
                         Portofolio & Suasana
                     </span>
-                    <h2 className="font-display text-3xl sm:text-5xl font-extrabold text-[#141413] mt-2">
+                    <h2 className="font-display text-2xl sm:text-3xl font-extrabold text-[#141413] mt-2">
                         Lookbook & Studio Gallery
                     </h2>
                 </div>
@@ -214,19 +214,19 @@ export default async function LandingPage() {
             {/* SECTION REVIEWS */}
             <section
                 id="reviews"
-                className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full"
+                className="py-14 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full"
             >
                 <div className="mb-16">
                     <span className="text-xs font-semibold uppercase tracking-widest text-[#3B281E]">
                         Ulasan Terverifikasi
                     </span>
-                    <h2 className="font-display text-3xl sm:text-5xl font-extrabold text-[#141413] mt-2">
+                    <h2 className="font-display text-2xl sm:text-3xl font-extrabold text-[#141413] mt-2">
                         Kata Pelanggan Kami
                     </h2>
                 </div>
 
                 {!reviews || reviews.length === 0 ? (
-                    <div className="rounded-3xl border border-[#141413]/10 bg-[#EAE4DC]/40 p-12 text-center">
+                    <div className="rounded-xl border border-[#141413]/10 bg-[#EAE4DC]/40 p-8 text-center">
                         <p className="text-[#141413] font-medium">
                             Belum ada ulasan yang dipublikasikan.
                         </p>
@@ -240,7 +240,7 @@ export default async function LandingPage() {
                         {reviews.map((rev) => (
                             <div
                                 key={rev.id}
-                                className="rounded-3xl bg-[#EAE4DC]/70 p-8 flex flex-col justify-between border border-[#141413]/10"
+                                className="rounded-xl bg-[#EAE4DC]/70 p-5 sm:p-6 flex flex-col justify-between border border-[#141413]/10"
                             >
                                 <div>
                                     <div className="flex items-center gap-1 text-[#3B281E]">
@@ -271,11 +271,11 @@ export default async function LandingPage() {
             </section>
 
             {/* FOOTER */}
-            <footer className="mt-auto bg-[#141413] text-[#F8F6F1] pt-24 pb-12 px-4 sm:px-6 lg:px-8">
-                <div className="max-w-7xl mx-auto">
-                    <div className="rounded-[2.5rem] bg-[#DFC3B0] text-[#141413] p-8 sm:p-14 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 shadow-xl">
+            <footer className="mt-auto bg-[#141413] text-[#F8F6F1] pt-14 pb-12 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-6xl mx-auto">
+                    <div className="rounded-2xl bg-[#DFC3B0] text-[#141413] p-5 sm:p-6 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 shadow-xl">
                         <div>
-                            <h2 className="font-display text-3xl sm:text-5xl font-extrabold tracking-tight">
+                            <h2 className="font-display text-2xl sm:text-3xl font-extrabold tracking-tight">
                                 Ready for Your Next Look?
                             </h2>
                             <p className="text-[#3B281E] text-base sm:text-lg mt-2">
@@ -284,15 +284,15 @@ export default async function LandingPage() {
                         </div>
                         <Link
                             href="/booking"
-                            className="px-8 py-4 rounded-full bg-[#141413] text-[#F8F6F1] font-medium text-base hover:bg-[#3B281E] transition-colors shrink-0 shadow-md"
+                            className="px-5 py-2.5 rounded-full bg-[#141413] text-[#F8F6F1] font-medium text-xs sm:text-sm hover:bg-[#3B281E] transition-colors shrink-0 shadow-md"
                         >
                             Booking Sekarang
                         </Link>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 py-16 border-b border-white/10">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-12 border-b border-white/10">
                         <div>
-                            <h3 className="font-display text-2xl font-bold">
+                            <h3 className="font-display text-lg sm:text-xl font-bold">
                                 {settings.brand_name}
                             </h3>
                             <p className="text-sm text-[#EAE4DC]/70 mt-3 leading-relaxed">

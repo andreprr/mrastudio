@@ -31,7 +31,7 @@ export function Navbar({ brandName = "MR A Studio" }: { brandName?: string }) {
                     : "bg-transparent py-5"
                 }`}
         >
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
                 <Link
                     href="/"
                     className="font-display text-xl sm:text-2xl font-bold tracking-tight text-brand-charcoal flex items-center gap-2"
@@ -43,7 +43,7 @@ export function Navbar({ brandName = "MR A Studio" }: { brandName?: string }) {
                 </Link>
 
                 {/* Desktop Nav */}
-                <nav className="hidden lg:flex items-center gap-8">
+                <nav className="hidden lg:flex items-center gap-6">
                     {NAV_LINKS.map((item) => (
                         <Link
                             key={item.href}

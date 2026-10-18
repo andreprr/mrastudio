@@ -21,7 +21,7 @@ export function ServicesShowcase({ services }: { services: ServiceItem[] }) {
 
     if (!services || services.length === 0) {
         return (
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-12 text-center text-[#EAE4DC]">
+            <div className="rounded-xl border border-white/10 bg-white/5 p-8 text-center text-[#EAE4DC]">
                 <p className="font-medium">Daftar layanan belum ditambahkan.</p>
                 <p className="text-sm text-[#EAE4DC]/60 mt-1">
                     Admin dapat menambahkan layanan dan harga melalui Dashboard Admin.
@@ -37,11 +37,11 @@ export function ServicesShowcase({ services }: { services: ServiceItem[] }) {
         <>
             {/* BAGIAN ATAS: Pill Tags Interaktif (Gaya Referensi Editorial) */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-14">
-                <div className="lg:col-span-8 rounded-[2.5rem] bg-[#F8F6F1] text-[#141413] p-8 sm:p-10 shadow-xl">
+                <div className="lg:col-span-8 rounded-2xl bg-[#F8F6F1] text-[#141413] p-5 sm:p-6 shadow-xl">
                     <span className="text-xs font-bold uppercase tracking-widest text-[#3B281E] block mb-2">
                         Klik Layanan Untuk Melihat Detail & Harga
                     </span>
-                    <h3 className="font-display text-2xl sm:text-3xl font-extrabold tracking-tight mb-6">
+                    <h3 className="font-display text-lg sm:text-xl font-extrabold tracking-tight mb-6">
                         Pilihan Paket Grooming sesuai Karakter Anda
                     </h3>
 
@@ -72,7 +72,7 @@ export function ServicesShowcase({ services }: { services: ServiceItem[] }) {
                 </div>
 
                 {/* Kartu Ringkasan Kanan */}
-                <div className="lg:col-span-4 rounded-[2.5rem] bg-[#22211F] text-[#F8F6F1] p-8 sm:p-10 flex flex-col justify-between border border-white/10">
+                <div className="lg:col-span-4 rounded-2xl bg-[#22211F] text-[#F8F6F1] p-5 sm:p-6 flex flex-col justify-between border border-white/10">
                     <div>
                         <h4 className="font-display text-xl sm:text-2xl font-bold leading-snug">
                             MR A Studio — Lebih dari Sekadar Barbershop
@@ -95,13 +95,13 @@ export function ServicesShowcase({ services }: { services: ServiceItem[] }) {
             </div>
 
             {/* BAGIAN BAWAH: 3 Kartu Vertikal Editorial (Seperti Referensi) */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
                 <div className="lg:col-span-3 flex flex-col justify-between py-2">
                     <div>
                         <span className="text-xs uppercase tracking-widest text-[#DFC3B0] font-semibold">
                             Layanan Unggulan
                         </span>
-                        <h2 className="font-display text-3xl sm:text-4xl font-extrabold text-[#F8F6F1] mt-2 leading-tight">
+                        <h2 className="font-display text-2xl sm:text-3xl font-extrabold text-[#F8F6F1] mt-2 leading-tight">
                             Katalog & Pricelist
                         </h2>
                         <p className="text-sm text-[#EAE4DC]/70 mt-4 leading-relaxed">
@@ -127,14 +127,14 @@ export function ServicesShowcase({ services }: { services: ServiceItem[] }) {
                         <div
                             key={srv.id}
                             onClick={() => setSelectedService(srv)}
-                            className="group cursor-pointer rounded-[2rem] bg-gradient-to-b from-[#DFC3B0] via-[#EAE4DC] to-[#1E1D1B] p-7 flex flex-col justify-between min-h-[360px] text-[#141413] relative overflow-hidden transition-transform duration-300 hover:-translate-y-1.5 shadow-xl"
+                            className="group cursor-pointer rounded-2xl bg-gradient-to-b from-[#DFC3B0] via-[#EAE4DC] to-[#1E1D1B] p-5 sm:p-6 flex flex-col justify-between min-h-[280px] text-[#141413] relative overflow-hidden transition-transform duration-300 hover:-translate-y-1.5 shadow-xl"
                         >
                             <div className="relative z-10">
                                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#141413]/10 text-[#141413] text-[11px] font-bold">
                                     <Clock className="w-3 h-3" />
                                     {srv.duration_minutes} Menit
                                 </span>
-                                <h3 className="font-display text-2xl font-extrabold mt-4 leading-snug">
+                                <h3 className="font-display text-lg sm:text-xl font-extrabold mt-4 leading-snug">
                                     {srv.name}
                                 </h3>
                                 <p className="text-xs text-[#141413]/80 mt-2.5 line-clamp-3 leading-relaxed">
@@ -177,7 +177,7 @@ export function ServicesShowcase({ services }: { services: ServiceItem[] }) {
                     onClick={() => setSelectedService(null)}
                 >
                     <div
-                        className="relative max-w-lg w-full rounded-[2.5rem] bg-[#F8F6F1] text-[#141413] p-7 sm:p-9 shadow-2xl border border-[#141413]/10"
+                        className="relative max-w-lg w-full rounded-2xl bg-[#F8F6F1] text-[#141413] p-5 sm:p-6 shadow-2xl border border-[#141413]/10"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <button
@@ -194,11 +194,11 @@ export function ServicesShowcase({ services }: { services: ServiceItem[] }) {
                             <span>Detail Layanan</span>
                         </div>
 
-                        <h3 className="font-display text-3xl font-extrabold mt-4">
+                        <h3 className="font-display text-lg sm:text-xl font-extrabold mt-4">
                             {selectedService.name}
                         </h3>
 
-                        <div className="mt-4 p-5 rounded-2xl bg-[#EAE4DC]/70 space-y-3">
+                        <div className="mt-4 p-5 rounded-xl bg-[#EAE4DC]/70 space-y-3">
                             <p className="text-sm text-[#141413] leading-relaxed">
                                 {selectedService.description ||
                                     "Layanan grooming lengkap dengan konsultasi struktur wajah dan penataan rambut akhir."}
@@ -227,7 +227,7 @@ export function ServicesShowcase({ services }: { services: ServiceItem[] }) {
 
                             <Link
                                 href={`/booking?serviceId=${selectedService.id}`}
-                                className="inline-flex items-center gap-2 px-7 py-4 rounded-full bg-[#141413] text-[#F8F6F1] text-xs font-bold uppercase tracking-wider hover:bg-[#3B281E] transition-colors shadow-lg"
+                                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#141413] text-[#F8F6F1] text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-[#3B281E] transition-colors shadow-lg"
                             >
                                 <span>Pilih & Booking</span>
                                 <ArrowUpRight className="w-4 h-4" />
@@ -244,7 +244,7 @@ export function ServicesShowcase({ services }: { services: ServiceItem[] }) {
                     onClick={() => setIsFullCatalogOpen(false)}
                 >
                     <div
-                        className="relative max-w-2xl w-full max-h-[85vh] flex flex-col rounded-[2.5rem] bg-[#F8F6F1] text-[#141413] p-6 sm:p-9 shadow-2xl"
+                        className="relative max-w-2xl w-full max-h-[85vh] flex flex-col rounded-2xl bg-[#F8F6F1] text-[#141413] p-5 sm:p-6 shadow-2xl"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <div className="flex items-center justify-between pb-5 border-b border-[#141413]/10">
@@ -252,7 +252,7 @@ export function ServicesShowcase({ services }: { services: ServiceItem[] }) {
                                 <span className="text-xs font-bold uppercase tracking-widest text-[#3B281E]">
                                     Katalog Lengkap
                                 </span>
-                                <h3 className="font-display text-2xl sm:text-3xl font-extrabold">
+                                <h3 className="font-display text-lg sm:text-xl font-extrabold">
                                     Layanan & Pricelist MR A Studio
                                 </h3>
                             </div>
@@ -269,7 +269,7 @@ export function ServicesShowcase({ services }: { services: ServiceItem[] }) {
                             {services.map((srv) => (
                                 <div
                                     key={srv.id}
-                                    className="p-5 rounded-2xl bg-[#EAE4DC]/60 hover:bg-[#EAE4DC] transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-[#141413]/10"
+                                    className="p-5 rounded-xl bg-[#EAE4DC]/60 hover:bg-[#EAE4DC] transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-[#141413]/10"
                                 >
                                     <div className="space-y-1">
                                         <div className="flex items-center gap-2.5">

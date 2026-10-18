@@ -232,30 +232,31 @@ export default function AdminSchedulePage() {
 
     return (
         <AdminShell>
-            {/* Header Editorial */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-8 border-b border-[#141413]/10 mb-8">
+            {/* Header Architectural */}
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-[#E4E2DD] mb-6">
                 <div>
-                    <span className="text-xs font-bold uppercase tracking-widest text-[#3B281E]">
+                    <span className="text-[11px] font-mono uppercase tracking-wider text-[#6E6D68]">
                         Manajemen Ketersediaan
                     </span>
-                    <h1 className="font-display text-3xl sm:text-4xl font-extrabold mt-1">
+                    <h1 className="text-2xl font-bold tracking-tight text-[#111110] mt-1">
                         Jadwal Kerja & Hari Libur
                     </h1>
-                    <p className="text-xs sm:text-sm text-[#706D65] mt-1">
+                    <p className="text-xs text-[#6E6D68] mt-1">
                         Atur jam buka studio mingguan, waktu istirahat, serta jadwal cuti
                         atau shift khusus masing-masing barber.
                     </p>
                 </div>
 
-                {/* Switcher Tab Pill ala Referensi Paréa */}
-                <div className="inline-flex p-1.5 rounded-full bg-[#EAE4DC] border border-[#141413]/10 self-start md:self-auto">
+                {/* Segmented Switcher Tab */}
+                <div className="inline-flex p-1 bg-white border border-[#E4E2DD] rounded-md self-start md:self-auto gap-1">
                     <button
                         type="button"
                         onClick={() => setActiveTab("studio")}
-                        className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${activeTab === "studio"
-                                ? "bg-[#141413] text-[#F8F6F1] shadow-md"
-                                : "text-[#141413]/70 hover:text-[#141413]"
-                            }`}
+                        className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${
+                            activeTab === "studio"
+                                ? "bg-[#111110] text-white shadow-sm"
+                                : "text-[#6E6D68] hover:text-[#111110]"
+                        }`}
                     >
                         <Clock className="w-3.5 h-3.5" />
                         <span>Jam Studio</span>
@@ -263,10 +264,11 @@ export default function AdminSchedulePage() {
                     <button
                         type="button"
                         onClick={() => setActiveTab("barber")}
-                        className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${activeTab === "barber"
-                                ? "bg-[#141413] text-[#F8F6F1] shadow-md"
-                                : "text-[#141413]/70 hover:text-[#141413]"
-                            }`}
+                        className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 ${
+                            activeTab === "barber"
+                                ? "bg-[#111110] text-white shadow-sm"
+                                : "text-[#6E6D68] hover:text-[#111110]"
+                        }`}
                     >
                         <CalendarOff className="w-3.5 h-3.5" />
                         <span>Cuti & Shift Barber ({barberSchedules.length})</span>
@@ -275,25 +277,24 @@ export default function AdminSchedulePage() {
             </div>
 
             {loading ? (
-                <p className="text-sm text-[#706D65] py-12 text-center">
+                <div className="bg-white border border-[#E4E2DD] rounded-md p-12 text-center text-xs text-[#6E6D68]">
                     Memuat konfigurasi jadwal dari database...
-                </p>
+                </div>
             ) : activeTab === "studio" ? (
                 /* ================================================================== */
                 /* TAB 1: JAM OPERASIONAL MINGGUAN STUDIO                             */
                 /* ================================================================== */
-                <div className="space-y-6">
-                    <div className="rounded-[2rem] bg-[#141413] text-[#F8F6F1] p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="space-y-4">
+                    <div className="bg-white border border-[#E4E2DD] rounded-md p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
-                            <span className="text-[11px] font-bold uppercase tracking-widest text-[#DFC3B0] block">
+                            <span className="text-[10px] font-mono uppercase tracking-wider text-[#6E6D68] block">
                                 Aturan Slot Otomatis
                             </span>
-                            <h2 className="font-display text-xl sm:text-2xl font-extrabold mt-1">
+                            <h2 className="text-base font-bold text-[#111110] mt-0.5">
                                 Jam Buka, Tutup & Istirahat Mingguan
                             </h2>
-                            <p className="text-xs text-[#EAE4DC]/75 mt-1">
-                                Perubahan jam operasional langsung diterapkan pada perhitungan
-                                slot di halaman booking pelanggan tanpa menghapus booking lama.
+                            <p className="text-xs text-[#6E6D68] mt-1">
+                                Perubahan jam operasional langsung diterapkan pada perhitungan slot booking pelanggan.
                             </p>
                         </div>
 
@@ -301,32 +302,31 @@ export default function AdminSchedulePage() {
                             type="button"
                             disabled={savingStudio}
                             onClick={handleSaveStudioHours}
-                            className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-[#DFC3B0] text-[#141413] text-xs font-extrabold uppercase tracking-wider hover:bg-white transition-colors shrink-0 shadow-lg"
+                            className="inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-md bg-[#111110] text-white text-xs font-medium hover:bg-[#2A2A28] transition-colors shrink-0 shadow-sm"
                         >
-                            <Save className="w-4 h-4" />
+                            <Save className="w-3.5 h-3.5" />
                             <span>
                                 {savingStudio ? "Menyimpan..." : "Simpan Jam Operasional"}
                             </span>
                         </button>
                     </div>
 
-                    <div className="grid grid-cols-1 gap-4">
+                    <div className="bg-white border border-[#E4E2DD] rounded-md divide-y divide-[#E4E2DD] overflow-hidden">
                         {businessHours.map((bh, idx) => (
                             <div
                                 key={bh.day_of_week}
-                                className={`rounded-[2rem] p-6 border transition-all ${bh.is_closed
-                                        ? "bg-[#EAE4DC]/30 border-[#141413]/10 opacity-75"
-                                        : "bg-[#EAE4DC]/70 border-[#141413]/15"
-                                    }`}
+                                className={`p-4 transition-colors ${
+                                    bh.is_closed ? "bg-[#FBFBFA]" : "hover:bg-[#FAFAF9]"
+                                }`}
                             >
-                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
                                     {/* Nama Hari & Toggle Buka/Tutup */}
                                     <div className="lg:col-span-3 flex items-center justify-between lg:justify-start gap-4">
                                         <div>
-                                            <span className="text-[10px] font-bold uppercase tracking-widest text-[#706D65] block">
-                                                Hari ke-{bh.day_of_week + 1}
+                                            <span className="text-[10px] font-mono uppercase tracking-wider text-[#6E6D68] block">
+                                                HARI KE-{bh.day_of_week + 1}
                                             </span>
-                                            <h3 className="font-display text-xl font-extrabold text-[#141413]">
+                                            <h3 className="text-sm font-bold text-[#111110]">
                                                 {DAY_NAMES[bh.day_of_week]}
                                             </h3>
                                         </div>
@@ -338,12 +338,18 @@ export default function AdminSchedulePage() {
                                                 copy[idx].is_closed = !copy[idx].is_closed;
                                                 setBusinessHours(copy);
                                             }}
-                                            className={`px-4 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-wider transition-colors ${bh.is_closed
-                                                    ? "bg-red-900/90 text-red-100"
-                                                    : "bg-emerald-900 text-emerald-100"
-                                                }`}
+                                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-[11px] font-medium border transition-colors ${
+                                                bh.is_closed
+                                                    ? "bg-red-50 text-red-700 border-red-200"
+                                                    : "bg-emerald-50 text-emerald-800 border-emerald-200"
+                                            }`}
                                         >
-                                            {bh.is_closed ? "Tutup / Libur" : "Studio Buka"}
+                                            <span
+                                                className={`w-1.5 h-1.5 rounded-full ${
+                                                    bh.is_closed ? "bg-red-500" : "bg-emerald-600"
+                                                }`}
+                                            />
+                                            {bh.is_closed ? "Tutup" : "Buka"}
                                         </button>
                                     </div>
 
@@ -352,8 +358,8 @@ export default function AdminSchedulePage() {
                                         <>
                                             <div className="lg:col-span-4 grid grid-cols-2 gap-3">
                                                 <div>
-                                                    <label className="text-[10px] font-bold uppercase tracking-wider text-[#3B281E] block mb-1">
-                                                        Jam Buka (WIB)
+                                                    <label className="text-[10px] font-mono uppercase tracking-wider text-[#6E6D68] block mb-1">
+                                                        Buka (WIB)
                                                     </label>
                                                     <input
                                                         type="time"
@@ -363,12 +369,12 @@ export default function AdminSchedulePage() {
                                                             copy[idx].open_time = e.target.value;
                                                             setBusinessHours(copy);
                                                         }}
-                                                        className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F6F1] border border-[#141413]/15 text-sm font-bold"
+                                                        className="w-full px-3 py-1.5 rounded-md bg-white border border-[#DCDAD4] text-xs font-mono tabular-nums text-[#111110] focus:outline-none focus:border-[#111110]"
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label className="text-[10px] font-bold uppercase tracking-wider text-[#3B281E] block mb-1">
-                                                        Jam Tutup (WIB)
+                                                    <label className="text-[10px] font-mono uppercase tracking-wider text-[#6E6D68] block mb-1">
+                                                        Tutup (WIB)
                                                     </label>
                                                     <input
                                                         type="time"
@@ -378,16 +384,16 @@ export default function AdminSchedulePage() {
                                                             copy[idx].close_time = e.target.value;
                                                             setBusinessHours(copy);
                                                         }}
-                                                        className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F6F1] border border-[#141413]/15 text-sm font-bold"
+                                                        className="w-full px-3 py-1.5 rounded-md bg-white border border-[#DCDAD4] text-xs font-mono tabular-nums text-[#111110] focus:outline-none focus:border-[#111110]"
                                                     />
                                                 </div>
                                             </div>
 
                                             {/* Input Jam Istirahat */}
-                                            <div className="lg:col-span-5 grid grid-cols-2 gap-3 pt-3 lg:pt-0 border-t lg:border-t-0 border-[#141413]/10">
+                                            <div className="lg:col-span-5 grid grid-cols-2 gap-3 pt-3 lg:pt-0 border-t lg:border-t-0 border-[#E4E2DD]">
                                                 <div>
-                                                    <label className="text-[10px] font-bold uppercase tracking-wider text-[#706D65] flex items-center gap-1 mb-1">
-                                                        <Coffee className="w-3 h-3" /> Mulai Istirahat
+                                                    <label className="text-[10px] font-mono uppercase tracking-wider text-[#6E6D68] flex items-center gap-1 mb-1">
+                                                        <Coffee className="w-3 h-3 text-[#6E6D68]" /> Istirahat Mulai
                                                     </label>
                                                     <input
                                                         type="time"
@@ -399,12 +405,12 @@ export default function AdminSchedulePage() {
                                                             copy[idx].break_start = e.target.value || null;
                                                             setBusinessHours(copy);
                                                         }}
-                                                        className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F6F1] border border-[#141413]/15 text-sm"
+                                                        className="w-full px-3 py-1.5 rounded-md bg-white border border-[#DCDAD4] text-xs font-mono tabular-nums text-[#111110] focus:outline-none focus:border-[#111110]"
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label className="text-[10px] font-bold uppercase tracking-wider text-[#706D65] flex items-center gap-1 mb-1">
-                                                        <Coffee className="w-3 h-3" /> Selesai Istirahat
+                                                    <label className="text-[10px] font-mono uppercase tracking-wider text-[#6E6D68] flex items-center gap-1 mb-1">
+                                                        <Coffee className="w-3 h-3 text-[#6E6D68]" /> Istirahat Selesai
                                                     </label>
                                                     <input
                                                         type="time"
@@ -414,15 +420,14 @@ export default function AdminSchedulePage() {
                                                             copy[idx].break_end = e.target.value || null;
                                                             setBusinessHours(copy);
                                                         }}
-                                                        className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F6F1] border border-[#141413]/15 text-sm"
+                                                        className="w-full px-3 py-1.5 rounded-md bg-white border border-[#DCDAD4] text-xs font-mono tabular-nums text-[#111110] focus:outline-none focus:border-[#111110]"
                                                     />
                                                 </div>
                                             </div>
                                         </>
                                     ) : (
-                                        <div className="lg:col-span-9 text-xs text-[#706D65] italic">
-                                            Studio diatur tutup pada hari {DAY_NAMES[bh.day_of_week]}.
-                                            Pelanggan tidak dapat memilih tanggal pada hari ini.
+                                        <div className="lg:col-span-9 text-xs text-[#6E6D68] italic">
+                                            Studio diatur tutup pada hari {DAY_NAMES[bh.day_of_week]}. Pelanggan tidak dapat memilih hari ini.
                                         </div>
                                     )}
                                 </div>
@@ -434,19 +439,17 @@ export default function AdminSchedulePage() {
                 /* ================================================================== */
                 /* TAB 2: JADWAL KHUSUS & HARI LIBUR BARBER                           */
                 /* ================================================================== */
-                <div className="space-y-6">
-                    <div className="rounded-[2rem] bg-[#EAE4DC]/80 border border-[#141413]/10 p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="space-y-4">
+                    <div className="bg-white border border-[#E4E2DD] rounded-md p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
-                            <span className="text-xs font-bold uppercase tracking-widest text-[#3B281E] block">
+                            <span className="text-[10px] font-mono uppercase tracking-wider text-[#6E6D68] block">
                                 Pengecualian Jadwal Stylist
                             </span>
-                            <h2 className="font-display text-2xl font-extrabold mt-1">
+                            <h2 className="text-base font-bold text-[#111110] mt-0.5">
                                 Cuti, Izin, atau Jam Shift Khusus Barber
                             </h2>
-                            <p className="text-xs text-[#706D65] mt-1">
-                                Secara default, seluruh barber aktif mengikuti jam buka studio.
-                                Tambahkan jadwal di sini jika ada barber yang libur atau masuk
-                                di jam berbeda pada tanggal tertentu.
+                            <p className="text-xs text-[#6E6D68] mt-1">
+                                Secara default barber mengikuti jam buka studio. Atur pengecualian untuk tanggal tertentu di sini.
                             </p>
                         </div>
 
@@ -461,118 +464,132 @@ export default function AdminSchedulePage() {
                                     schedule_date: today,
                                     start_time: "10:00",
                                     end_time: "21:00",
-                                    is_available: false, // Default untuk mencatat libur/cuti
+                                    is_available: false,
                                     note: "",
                                 });
                             }}
-                            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#141413] text-[#F8F6F1] text-xs font-bold uppercase tracking-wider hover:bg-[#3B281E] transition-colors shrink-0 shadow-md"
+                            className="inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-md bg-[#111110] text-white text-xs font-medium hover:bg-[#2A2A28] transition-colors shrink-0 shadow-sm"
                         >
-                            <Plus className="w-4 h-4" />
-                            <span>Tambah Libur / Shift Barber</span>
+                            <Plus className="w-3.5 h-3.5" />
+                            <span>Tambah Libur / Shift</span>
                         </button>
                     </div>
 
                     {barberSchedules.length === 0 ? (
-                        <div className="rounded-[2rem] bg-[#EAE4DC]/40 border border-[#141413]/10 p-12 text-center">
-                            <CheckCircle2 className="w-8 h-8 text-[#3B281E] mx-auto mb-3 opacity-80" />
-                            <p className="font-display text-lg font-bold text-[#141413]">
+                        <div className="bg-white border border-[#E4E2DD] rounded-md p-8 text-center">
+                            <CheckCircle2 className="w-6 h-6 text-[#6E6D68] mx-auto mb-2 opacity-60" />
+                            <p className="text-sm font-semibold text-[#111110]">
                                 Seluruh Barber Mengikuti Jam Normal Studio
                             </p>
-                            <p className="text-xs text-[#706D65] mt-1 max-w-md mx-auto">
+                            <p className="text-xs text-[#6E6D68] mt-1 max-w-md mx-auto">
                                 Belum ada catatan hari libur atau perubahan shift khusus barber.
                             </p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {barberSchedules.map((bs) => (
-                                <div
-                                    key={bs.id}
-                                    className="rounded-[2rem] bg-[#EAE4DC]/70 border border-[#141413]/10 p-6 flex flex-col justify-between gap-4"
-                                >
-                                    <div>
-                                        <div className="flex items-center justify-between gap-2 mb-3">
-                                            <span className="font-mono text-xs font-extrabold px-3 py-1 rounded-full bg-[#141413] text-[#DFC3B0]">
-                                                {bs.schedule_date}
-                                            </span>
-                                            <span
-                                                className={`px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest ${bs.is_available
-                                                        ? "bg-emerald-900 text-emerald-100"
-                                                        : "bg-red-900 text-red-100"
-                                                    }`}
-                                            >
-                                                {bs.is_available
-                                                    ? `Shift Khusus (${bs.start_time.slice(0, 5)} – ${bs.end_time.slice(0, 5)})`
-                                                    : "Libur / Cuti Seharian"}
-                                            </span>
-                                        </div>
-
-                                        <h3 className="font-display text-xl font-extrabold text-[#141413] flex items-center gap-2">
-                                            <UserCheck className="w-4 h-4 text-[#3B281E]" />
-                                            <span>{getBarberName(bs.barber_id)}</span>
-                                        </h3>
-
-                                        {bs.note && (
-                                            <p className="text-xs text-[#706D65] mt-2 leading-relaxed">
-                                                Catatan: &ldquo;{bs.note}&rdquo;
-                                            </p>
-                                        )}
-                                    </div>
-
-                                    <div className="pt-4 border-t border-[#141413]/10 flex items-center justify-end gap-2">
-                                        <button
-                                            type="button"
-                                            onClick={() => setScheduleModal({ ...bs })}
-                                            className="px-4 py-2 rounded-full bg-[#F8F6F1] border border-[#141413]/15 text-xs font-bold uppercase tracking-wider hover:bg-[#DFC3B0]/50 transition-colors"
-                                        >
-                                            Ubah
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => setDeletingSchedule(bs)}
-                                            className="p-2 rounded-full bg-red-500/10 text-red-800 hover:bg-red-600 hover:text-white transition-colors"
-                                            aria-label="Hapus jadwal khusus"
-                                        >
-                                            <Trash2 className="w-4 h-4" />
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
+                        <div className="bg-white border border-[#E4E2DD] rounded-md overflow-hidden">
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr className="border-b border-[#E4E2DD] bg-[#F6F5F2] text-[11px] font-mono uppercase tracking-wider text-[#6E6D68]">
+                                            <th className="px-4 py-2.5">Tanggal</th>
+                                            <th className="px-4 py-2.5">Barber</th>
+                                            <th className="px-4 py-2.5">Status / Shift</th>
+                                            <th className="px-4 py-2.5">Catatan</th>
+                                            <th className="px-4 py-2.5 text-right">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-[#E4E2DD] text-xs">
+                                        {barberSchedules.map((bs) => (
+                                            <tr key={bs.id} className="hover:bg-[#FAFAF9] transition-colors">
+                                                <td className="px-4 py-3 font-mono tabular-nums font-semibold text-[#111110]">
+                                                    {bs.schedule_date}
+                                                </td>
+                                                <td className="px-4 py-3 font-medium text-[#111110]">
+                                                    <span className="flex items-center gap-1.5">
+                                                        <UserCheck className="w-3.5 h-3.5 text-[#6E6D68]" />
+                                                        {getBarberName(bs.barber_id)}
+                                                    </span>
+                                                </td>
+                                                <td className="px-4 py-3">
+                                                    <span
+                                                        className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium border ${
+                                                            bs.is_available
+                                                                ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                                                                : "bg-amber-50 text-amber-800 border-amber-200"
+                                                        }`}
+                                                    >
+                                                        <span
+                                                            className={`w-1.5 h-1.5 rounded-full ${
+                                                                bs.is_available ? "bg-emerald-600" : "bg-amber-600"
+                                                            }`}
+                                                        />
+                                                        {bs.is_available
+                                                            ? `Shift: ${bs.start_time.slice(0, 5)} – ${bs.end_time.slice(0, 5)}`
+                                                            : "Libur / Cuti"}
+                                                    </span>
+                                                </td>
+                                                <td className="px-4 py-3 text-[#6E6D68] max-w-xs truncate">
+                                                    {bs.note || "—"}
+                                                </td>
+                                                <td className="px-4 py-3 text-right">
+                                                    <div className="flex items-center justify-end gap-1.5">
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setScheduleModal({ ...bs })}
+                                                            className="px-2.5 py-1 rounded-md bg-white border border-[#E4E2DD] text-[#111110] text-xs font-medium hover:bg-[#F6F5F2] transition-colors"
+                                                        >
+                                                            Ubah
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setDeletingSchedule(bs)}
+                                                            className="p-1 rounded-md border border-[#E4E2DD] text-[#6E6D68] hover:text-red-600 hover:border-red-200 hover:bg-red-50 transition-colors"
+                                                            aria-label="Hapus jadwal khusus"
+                                                        >
+                                                            <Trash2 className="w-3.5 h-3.5" />
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     )}
                 </div>
             )}
 
-            {/* MODAL TAMBAH / EDIT JADWAL KHUSUS BARBER */}
+            {/* RIGHT SLIDE-OVER DRAWER: TAMBAH / EDIT JADWAL KHUSUS BARBER */}
             {scheduleModal && (
-                <div
-                    className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
-                    onClick={() => setScheduleModal(null)}
-                >
+                <div className="fixed inset-0 z-50 overflow-hidden">
                     <div
-                        className="relative max-w-lg w-full rounded-[2.5rem] bg-[#F8F6F1] text-[#141413] p-7 sm:p-9 shadow-2xl"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <button
-                            type="button"
-                            onClick={() => setScheduleModal(null)}
-                            className="absolute top-6 right-6 w-10 h-10 rounded-full bg-[#EAE4DC] flex items-center justify-center"
-                        >
-                            <X className="w-5 h-5" />
-                        </button>
-
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#DFC3B0]/60 text-[#3B281E] text-[11px] font-bold uppercase tracking-wider">
-                            <Sparkles className="w-3.5 h-3.5" />
-                            <span>Atur Ketersediaan Barber</span>
-                        </div>
-
-                        <h2 className="font-display text-2xl sm:text-3xl font-extrabold mt-3">
-                            Jadwal Khusus / Hari Libur
-                        </h2>
-
-                        <form onSubmit={handleSaveBarberSchedule} className="mt-6 space-y-4">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        className="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
+                        onClick={() => setScheduleModal(null)}
+                    />
+                    <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white border-l border-[#E4E2DD] p-6 shadow-2xl overflow-y-auto flex flex-col justify-between">
+                        <div>
+                            <div className="flex items-center justify-between pb-4 border-b border-[#E4E2DD]">
                                 <div>
-                                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#3B281E] mb-1.5">
+                                    <span className="text-[10px] font-mono uppercase tracking-wider text-[#6E6D68]">
+                                        Drawer Pengecualian
+                                    </span>
+                                    <h2 className="text-base font-bold text-[#111110] mt-0.5">
+                                        Jadwal Khusus / Cuti Barber
+                                    </h2>
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={() => setScheduleModal(null)}
+                                    className="p-1.5 rounded-md text-[#6E6D68] hover:text-[#111110] hover:bg-[#F6F5F2] transition-colors"
+                                >
+                                    <X className="w-4 h-4" />
+                                </button>
+                            </div>
+
+                            <form id="schedule-drawer-form" onSubmit={handleSaveBarberSchedule} className="mt-5 space-y-4">
+                                <div>
+                                    <label className="block text-[11px] font-mono uppercase tracking-wider text-[#6E6D68] mb-1">
                                         Pilih Barber *
                                     </label>
                                     <select
@@ -584,7 +601,7 @@ export default function AdminSchedulePage() {
                                                 barber_id: e.target.value,
                                             })
                                         }
-                                        className="w-full px-4 py-3 rounded-xl bg-[#EAE4DC]/70 border border-[#141413]/15 text-sm font-semibold"
+                                        className="w-full px-3 py-2 rounded-md bg-white border border-[#DCDAD4] text-xs sm:text-sm text-[#111110] focus:outline-none focus:border-[#111110]"
                                     >
                                         <option value="" disabled>
                                             -- Pilih Barber --
@@ -598,7 +615,7 @@ export default function AdminSchedulePage() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#3B281E] mb-1.5">
+                                    <label className="block text-[11px] font-mono uppercase tracking-wider text-[#6E6D68] mb-1">
                                         Tanggal *
                                     </label>
                                     <input
@@ -611,125 +628,126 @@ export default function AdminSchedulePage() {
                                                 schedule_date: e.target.value,
                                             })
                                         }
-                                        className="w-full px-4 py-3 rounded-xl bg-[#EAE4DC]/70 border border-[#141413]/15 text-sm font-semibold"
+                                        className="w-full px-3 py-2 rounded-md bg-white border border-[#DCDAD4] text-xs sm:text-sm font-mono text-[#111110] focus:outline-none focus:border-[#111110]"
                                     />
                                 </div>
-                            </div>
 
-                            {/* Pilihan Status: Libur Seharian vs Shift Jam Khusus */}
-                            <div className="p-4 rounded-2xl bg-[#EAE4DC]/70 space-y-3">
-                                <span className="block text-[11px] font-bold uppercase tracking-wider text-[#3B281E]">
-                                    Status Kehadiran pada Tanggal Tersebut
-                                </span>
-                                <div className="grid grid-cols-2 gap-3">
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            setScheduleModal({
-                                                ...scheduleModal,
-                                                is_available: false,
-                                            })
-                                        }
-                                        className={`py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider border transition-all ${!scheduleModal.is_available
-                                                ? "bg-red-900 text-white border-red-900 shadow-sm"
-                                                : "bg-[#F8F6F1] text-[#141413] border-[#141413]/15"
-                                            }`}
-                                    >
-                                        Libur / Cuti Seharian
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            setScheduleModal({
-                                                ...scheduleModal,
-                                                is_available: true,
-                                            })
-                                        }
-                                        className={`py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider border transition-all ${scheduleModal.is_available
-                                                ? "bg-[#141413] text-[#F8F6F1] border-[#141413] shadow-sm"
-                                                : "bg-[#F8F6F1] text-[#141413] border-[#141413]/15"
-                                            }`}
-                                    >
-                                        Masuk Jam Khusus
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Jika Masuk Jam Khusus, Tampilkan Jam Mulai & Jam Selesai */}
-                            {scheduleModal.is_available && (
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-[11px] font-bold uppercase tracking-wider text-[#3B281E] mb-1.5">
-                                            Jam Mulai Shift
-                                        </label>
-                                        <input
-                                            type="time"
-                                            required
-                                            value={(scheduleModal.start_time || "10:00").slice(0, 5)}
-                                            onChange={(e) =>
+                                <div>
+                                    <span className="block text-[11px] font-mono uppercase tracking-wider text-[#6E6D68] mb-1">
+                                        Status Kehadiran
+                                    </span>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <button
+                                            type="button"
+                                            onClick={() =>
                                                 setScheduleModal({
                                                     ...scheduleModal,
-                                                    start_time: e.target.value,
+                                                    is_available: false,
                                                 })
                                             }
-                                            className="w-full px-4 py-3 rounded-xl bg-[#EAE4DC]/70 border border-[#141413]/15 text-sm font-bold"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-[11px] font-bold uppercase tracking-wider text-[#3B281E] mb-1.5">
-                                            Jam Selesai Shift
-                                        </label>
-                                        <input
-                                            type="time"
-                                            required
-                                            value={(scheduleModal.end_time || "21:00").slice(0, 5)}
-                                            onChange={(e) =>
+                                            className={`py-2 px-3 rounded-md text-xs font-medium border transition-colors ${
+                                                !scheduleModal.is_available
+                                                    ? "bg-[#111110] text-white border-[#111110]"
+                                                    : "bg-white text-[#111110] border-[#E4E2DD] hover:bg-[#F6F5F2]"
+                                            }`}
+                                        >
+                                            Libur / Cuti
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() =>
                                                 setScheduleModal({
                                                     ...scheduleModal,
-                                                    end_time: e.target.value,
+                                                    is_available: true,
                                                 })
                                             }
-                                            className="w-full px-4 py-3 rounded-xl bg-[#EAE4DC]/70 border border-[#141413]/15 text-sm font-bold"
-                                        />
+                                            className={`py-2 px-3 rounded-md text-xs font-medium border transition-colors ${
+                                                scheduleModal.is_available
+                                                    ? "bg-[#111110] text-white border-[#111110]"
+                                                    : "bg-white text-[#111110] border-[#E4E2DD] hover:bg-[#F6F5F2]"
+                                            }`}
+                                        >
+                                            Masuk Jam Khusus
+                                        </button>
                                     </div>
                                 </div>
-                            )}
 
-                            <div>
-                                <label className="block text-[11px] font-bold uppercase tracking-wider text-[#3B281E] mb-1.5">
-                                    Catatan Keterangan (Opsional)
-                                </label>
-                                <input
-                                    type="text"
-                                    value={scheduleModal.note || ""}
-                                    onChange={(e) =>
-                                        setScheduleModal({
-                                            ...scheduleModal,
-                                            note: e.target.value,
-                                        })
-                                    }
-                                    placeholder="Contoh: Cuti keluarga / Masuk shift siang mulai 13:00"
-                                    className="w-full px-4 py-3 rounded-xl bg-[#EAE4DC]/70 border border-[#141413]/15 text-sm"
-                                />
-                            </div>
+                                {scheduleModal.is_available && (
+                                    <div className="grid grid-cols-2 gap-3 p-3 bg-[#F6F5F2] border border-[#E4E2DD] rounded-md">
+                                        <div>
+                                            <label className="block text-[10px] font-mono uppercase tracking-wider text-[#6E6D68] mb-1">
+                                                Mulai Shift
+                                            </label>
+                                            <input
+                                                type="time"
+                                                required
+                                                value={(scheduleModal.start_time || "10:00").slice(0, 5)}
+                                                onChange={(e) =>
+                                                    setScheduleModal({
+                                                        ...scheduleModal,
+                                                        start_time: e.target.value,
+                                                    })
+                                                }
+                                                className="w-full px-2.5 py-1.5 rounded-md bg-white border border-[#DCDAD4] text-xs font-mono tabular-nums text-[#111110] focus:outline-none focus:border-[#111110]"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-[10px] font-mono uppercase tracking-wider text-[#6E6D68] mb-1">
+                                                Selesai Shift
+                                            </label>
+                                            <input
+                                                type="time"
+                                                required
+                                                value={(scheduleModal.end_time || "21:00").slice(0, 5)}
+                                                onChange={(e) =>
+                                                    setScheduleModal({
+                                                        ...scheduleModal,
+                                                        end_time: e.target.value,
+                                                    })
+                                                }
+                                                className="w-full px-2.5 py-1.5 rounded-md bg-white border border-[#DCDAD4] text-xs font-mono tabular-nums text-[#111110] focus:outline-none focus:border-[#111110]"
+                                            />
+                                        </div>
+                                    </div>
+                                )}
 
-                            <div className="pt-4 flex justify-end gap-3">
-                                <button
-                                    type="button"
-                                    onClick={() => setScheduleModal(null)}
-                                    className="px-5 py-3 rounded-full border border-[#141413]/20 text-xs font-bold uppercase tracking-wider"
-                                >
-                                    Batal
-                                </button>
-                                <button
-                                    type="submit"
-                                    disabled={savingModal}
-                                    className="px-7 py-3 rounded-full bg-[#141413] text-[#F8F6F1] text-xs font-bold uppercase tracking-wider hover:bg-[#3B281E]"
-                                >
-                                    {savingModal ? "Menyimpan..." : "Simpan Jadwal"}
-                                </button>
-                            </div>
-                        </form>
+                                <div>
+                                    <label className="block text-[11px] font-mono uppercase tracking-wider text-[#6E6D68] mb-1">
+                                        Catatan Keterangan (Opsional)
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={scheduleModal.note || ""}
+                                        onChange={(e) =>
+                                            setScheduleModal({
+                                                ...scheduleModal,
+                                                note: e.target.value,
+                                            })
+                                        }
+                                        placeholder="Contoh: Cuti keluarga / Shift siang"
+                                        className="w-full px-3 py-2 rounded-md bg-white border border-[#DCDAD4] text-xs sm:text-sm text-[#111110] focus:outline-none focus:border-[#111110]"
+                                    />
+                                </div>
+                            </form>
+                        </div>
+
+                        <div className="pt-4 border-t border-[#E4E2DD] flex items-center justify-end gap-2">
+                            <button
+                                type="button"
+                                onClick={() => setScheduleModal(null)}
+                                className="px-3.5 py-2 rounded-md bg-white border border-[#E4E2DD] text-[#111110] text-xs font-medium hover:bg-[#F6F5F2] transition-colors"
+                            >
+                                Batal
+                            </button>
+                            <button
+                                type="submit"
+                                form="schedule-drawer-form"
+                                disabled={savingModal}
+                                className="px-3.5 py-2 rounded-md bg-[#111110] text-white text-xs font-medium hover:bg-[#2A2A28] transition-colors"
+                            >
+                                {savingModal ? "Menyimpan..." : "Simpan Jadwal"}
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
@@ -737,27 +755,27 @@ export default function AdminSchedulePage() {
             {/* MODAL KONFIRMASI HAPUS JADWAL KHUSUS */}
             {deletingSchedule && (
                 <div
-                    className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+                    className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4"
                     onClick={() => setDeletingSchedule(null)}
                 >
                     <div
-                        className="max-w-md w-full rounded-[2.5rem] bg-[#F8F6F1] text-[#141413] p-8 shadow-2xl"
+                        className="max-w-md w-full rounded-md bg-white border border-[#E4E2DD] p-6 shadow-xl"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <h3 className="font-display text-2xl font-extrabold">
+                        <h3 className="text-base font-bold text-[#111110]">
                             Kembalikan ke Jadwal Normal?
                         </h3>
-                        <p className="text-xs text-[#706D65] mt-2 leading-relaxed">
+                        <p className="text-xs text-[#6E6D68] mt-2 leading-relaxed">
                             Pengecualian jadwal untuk{" "}
                             <strong>{getBarberName(deletingSchedule.barber_id)}</strong> pada
-                            tanggal <strong>{deletingSchedule.schedule_date}</strong> akan
+                            tanggal <span className="font-mono">{deletingSchedule.schedule_date}</span> akan
                             dihapus dan barber akan mengikuti jam operasional normal studio.
                         </p>
-                        <div className="mt-7 flex justify-end gap-3">
+                        <div className="mt-6 flex justify-end gap-2">
                             <button
                                 type="button"
                                 onClick={() => setDeletingSchedule(null)}
-                                className="px-5 py-3 rounded-full border border-[#141413]/20 text-xs font-bold uppercase"
+                                className="px-3.5 py-2 rounded-md bg-white border border-[#E4E2DD] text-[#111110] text-xs font-medium hover:bg-[#F6F5F2]"
                             >
                                 Batal
                             </button>
@@ -765,7 +783,7 @@ export default function AdminSchedulePage() {
                                 type="button"
                                 disabled={savingModal}
                                 onClick={confirmDeleteBarberSchedule}
-                                className="px-6 py-3 rounded-full bg-red-700 text-white text-xs font-bold uppercase hover:bg-red-800"
+                                className="px-3.5 py-2 rounded-md bg-red-600 text-white text-xs font-medium hover:bg-red-700"
                             >
                                 {savingModal ? "Menghapus..." : "Ya, Hapus"}
                             </button>
