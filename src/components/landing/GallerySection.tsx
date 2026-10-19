@@ -30,8 +30,8 @@ function GalleryCard({
 
     return (
         <div
-            className={`bg-[#EAE4DC]/70 p-2.5 rounded-xl border border-[#141413]/15 flex flex-col justify-between transition-colors hover:border-[#141413]/40 ${
-                fixedWidth ? "snap-start shrink-0 w-[240px] sm:w-[265px]" : ""
+            className={`bg-[#EAE4DC]/70 p-2 sm:p-2.5 rounded-xl border border-[#141413]/15 flex flex-col justify-between transition-colors hover:border-[#141413]/40 ${
+                fixedWidth ? "snap-start shrink-0 w-[200px] sm:w-[250px] md:w-[265px]" : ""
             }`}
         >
             {/* Top Editorial Meta Bar */}
@@ -80,7 +80,7 @@ function GalleryCard({
                 )}
             </button>
 
-            {/* Mute/Unmute floating button — outside the onClick button to avoid modal trigger */}
+            {/* Mute/Unmute floating button — inside media area but positioned via wrapper */}
             {isVideo && (
                 <div className="relative">
                     <button
@@ -89,17 +89,17 @@ function GalleryCard({
                             e.stopPropagation();
                             onToggleMute();
                         }}
-                        className="absolute -top-12 right-2 z-20 px-2.5 py-1.5 rounded-md bg-[#141413]/80 backdrop-blur-md text-[#F8F6F1] border border-white/15 flex items-center gap-1.5 text-[10px] font-mono uppercase hover:bg-[#141413] transition-colors"
+                        className="absolute -top-10 right-1.5 sm:right-2 z-20 p-1.5 sm:px-2.5 sm:py-1.5 rounded-md bg-[#141413]/80 backdrop-blur-md text-[#F8F6F1] border border-white/15 flex items-center gap-1 sm:gap-1.5 text-[10px] font-mono uppercase hover:bg-[#141413] transition-colors"
                     >
                         {isMuted ? (
                             <>
-                                <VolumeX className="w-3 h-3" />
-                                <span>Suara Off</span>
+                                <VolumeX className="w-3.5 h-3.5 sm:w-3 sm:h-3" />
+                                <span className="hidden sm:inline">Off</span>
                             </>
                         ) : (
                             <>
-                                <Volume2 className="w-3 h-3" />
-                                <span>Suara On</span>
+                                <Volume2 className="w-3.5 h-3.5 sm:w-3 sm:h-3" />
+                                <span className="hidden sm:inline">On</span>
                             </>
                         )}
                     </button>
@@ -162,8 +162,8 @@ export function GallerySection({ items }: { items: GalleryItem[] }) {
     return (
         <>
             {/* Filter Kategori + Optional Slider Nav */}
-            <div className="flex flex-wrap items-center justify-between gap-2 mb-6">
-                <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center justify-between gap-2 mb-5 sm:mb-6">
+                <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-1 sm:pb-0" style={{ scrollbarWidth: "none" }}>
                     {CATEGORIES.map((cat) => {
                         const isActive = selectedCategory === cat;
                         return (
@@ -171,7 +171,7 @@ export function GallerySection({ items }: { items: GalleryItem[] }) {
                                 key={cat}
                                 type="button"
                                 onClick={() => setSelectedCategory(cat)}
-                                className={`px-3.5 py-1.5 rounded-md text-xs font-semibold transition-colors ${
+                                className={`px-3 py-1.5 rounded-md text-[11px] sm:text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${
                                     isActive
                                         ? "bg-[#141413] text-[#F8F6F1] shadow-sm"
                                         : "bg-[#EAE4DC]/60 text-[#706D65] hover:bg-[#EAE4DC] hover:text-[#141413]"
@@ -207,8 +207,8 @@ export function GallerySection({ items }: { items: GalleryItem[] }) {
             {useSlider ? (
                 <div
                     ref={scrollRef}
-                    className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4"
-                    style={{ scrollbarWidth: "none" }}
+                    className="-mx-4 sm:-mx-6 lg:mx-0 px-4 sm:px-6 lg:px-0 flex gap-3 sm:gap-4 overflow-x-auto snap-x snap-mandatory pb-4"
+                    style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" } as React.CSSProperties}
                 >
                     {filteredItems.map((item, idx) => (
                         <GalleryCard
@@ -223,7 +223,7 @@ export function GallerySection({ items }: { items: GalleryItem[] }) {
                     ))}
                 </div>
             ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
                     {filteredItems.map((item, idx) => (
                         <GalleryCard
                             key={item.id}
@@ -245,43 +245,48 @@ export function GallerySection({ items }: { items: GalleryItem[] }) {
             {/* Modal Lightbox */}
             {selectedImage && (
                 <div
-                    className="fixed inset-0 z-50 bg-[#141413]/80 backdrop-blur-md flex items-center justify-center p-4"
+                    className="fixed inset-0 z-50 bg-[#141413]/80 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4"
                     onClick={() => setSelectedImage(null)}
                 >
                     <div
-                        className="modal-spring-in relative max-w-2xl w-full rounded-xl bg-[#F8F6F1] overflow-hidden shadow-2xl border border-[#141413]/10"
+                        className="modal-spring-in relative w-full sm:max-w-2xl rounded-t-2xl sm:rounded-xl bg-[#F8F6F1] overflow-hidden shadow-2xl border-t sm:border border-[#141413]/10 max-h-[92vh] sm:max-h-[90vh] flex flex-col"
                         onClick={(e) => e.stopPropagation()}
                     >
+                        {/* Close + mobile drag hint */}
+                        <div className="flex items-center justify-between px-4 pt-3 pb-0 sm:hidden">
+                            <div className="w-10 h-1 rounded-full bg-[#141413]/20 mx-auto" />
+                        </div>
                         <button
                             type="button"
                             onClick={() => setSelectedImage(null)}
                             aria-label="Tutup pratinjau"
-                            className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-[#141413]/80 hover:bg-[#141413] text-[#F8F6F1] flex items-center justify-center transition-colors shadow-sm"
+                            className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 w-8 h-8 rounded-full bg-[#141413]/80 hover:bg-[#141413] text-[#F8F6F1] flex items-center justify-center transition-colors shadow-sm"
                         >
                             <X className="w-4 h-4" />
                         </button>
-                        <div className="bg-[#141413] flex items-center justify-center max-h-[65vh] overflow-hidden">
+                        <div className="bg-[#141413] flex items-center justify-center flex-1 min-h-0 max-h-[55vh] sm:max-h-[60vh] overflow-hidden">
                             {isSelectedVideo ? (
                                 <video
                                     src={selectedImage.image_url}
                                     controls
                                     autoPlay
-                                    className="w-full max-h-[65vh] object-contain bg-black"
+                                    playsInline
+                                    className="w-full max-h-[55vh] sm:max-h-[60vh] object-contain bg-black"
                                 />
                             ) : (
                                 <img
                                     src={selectedImage.image_url}
                                     alt={selectedImage.title}
-                                    className="w-full h-full object-contain max-h-[65vh]"
+                                    className="w-full h-full object-contain max-h-[55vh] sm:max-h-[60vh]"
                                 />
                             )}
                         </div>
-                        <div className="p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-[#F8F6F1]">
-                            <div className="min-w-0">
+                        <div className="p-3.5 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 bg-[#F8F6F1] shrink-0">
+                            <div className="min-w-0 w-full sm:w-auto">
                                 <span className="inline-block px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#DFC3B0]/40 text-[#3B281E]">
                                     {selectedImage.category}
                                 </span>
-                                <h3 className="font-display text-base font-bold text-[#141413] mt-1.5 truncate">
+                                <h3 className="font-display text-sm sm:text-base font-bold text-[#141413] mt-1.5 truncate">
                                     {selectedImage.title}
                                 </h3>
                                 {selectedImage.description && (
@@ -292,7 +297,7 @@ export function GallerySection({ items }: { items: GalleryItem[] }) {
                             </div>
                             <a
                                 href="/booking"
-                                className="shrink-0 px-4 py-2 rounded-lg bg-[#141413] hover:bg-[#3B281E] text-[#F8F6F1] text-xs font-semibold transition-colors"
+                                className="shrink-0 w-full sm:w-auto text-center px-4 py-2.5 sm:py-2 rounded-lg bg-[#141413] hover:bg-[#3B281E] text-[#F8F6F1] text-xs font-semibold transition-colors"
                             >
                                 Booking Gaya Ini
                             </a>
