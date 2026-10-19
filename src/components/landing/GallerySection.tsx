@@ -30,9 +30,10 @@ function GalleryCard({
 
     return (
         <div
-            className={`bg-[#EAE4DC]/70 p-2 sm:p-2.5 rounded-xl border border-[#141413]/15 flex flex-col justify-between transition-colors hover:border-[#141413]/40 ${
-                fixedWidth ? "snap-start shrink-0 w-[200px] sm:w-[250px] md:w-[265px]" : ""
-            }`}
+            className={`bg-[#EAE4DC]/70 p-2 sm:p-2.5 rounded-xl border border-[#141413]/15 flex flex-col justify-between transition-colors hover:border-[#141413]/40 snap-center sm:snap-start shrink-0 w-full ${fixedWidth
+                    ? "sm:w-[250px] md:w-[265px]"
+                    : "sm:w-auto sm:shrink"
+                }`}
         >
             {/* Top Editorial Meta Bar */}
             <div className="flex items-center justify-between px-1 pb-2 text-[10px] font-mono uppercase tracking-widest text-[#706D65]">
@@ -72,9 +73,8 @@ function GalleryCard({
                             alt={item.title}
                             loading="lazy"
                             onLoad={() => setIsLoaded(true)}
-                            className={`w-full h-full object-cover ${
-                                isLoaded ? "opacity-100" : "opacity-0"
-                            }`}
+                            className={`w-full h-full object-cover ${isLoaded ? "opacity-100" : "opacity-0"
+                                }`}
                         />
                     </>
                 )}
@@ -139,16 +139,19 @@ export function GallerySection({ items }: { items: GalleryItem[] }) {
         selectedCategory === "Semua"
             ? items
             : items.filter(
-                  (item) =>
-                      item.category?.toLowerCase() === selectedCategory.toLowerCase()
-              );
+                (item) =>
+                    item.category?.toLowerCase() === selectedCategory.toLowerCase()
+            );
 
     const useSlider = filteredItems.length > 5;
 
     function scrollByAmount(direction: "left" | "right") {
         if (!scrollRef.current) return;
+        // Di mobile geser sejauh lebar container (1 kartu), di desktop geser 285px
+        const isMobile = window.innerWidth < 640;
+        const amount = isMobile ? scrollRef.current.clientWidth : 285;
         scrollRef.current.scrollBy({
-            left: direction === "left" ? -285 : 285,
+            left: direction === "left" ? -amount : amount,
             behavior: "smooth",
         });
     }
@@ -161,9 +164,12 @@ export function GallerySection({ items }: { items: GalleryItem[] }) {
 
     return (
         <>
-            {/* Filter Kategori + Optional Slider Nav */}
+            {/* Filter Kategori + Slider Nav */}
             <div className="flex items-center justify-between gap-2 mb-5 sm:mb-6">
-                <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-1 sm:pb-0" style={{ scrollbarWidth: "none" }}>
+                <div
+                    className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-1 sm:pb-0"
+                    style={{ scrollbarWidth: "none" }}
+                >
                     {CATEGORIES.map((cat) => {
                         const isActive = selectedCategory === cat;
                         return (
@@ -171,11 +177,10 @@ export function GallerySection({ items }: { items: GalleryItem[] }) {
                                 key={cat}
                                 type="button"
                                 onClick={() => setSelectedCategory(cat)}
-                                className={`px-3 py-1.5 rounded-md text-[11px] sm:text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${
-                                    isActive
+                                className={`px-3 py-1.5 rounded-md text-[11px] sm:text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${isActive
                                         ? "bg-[#141413] text-[#F8F6F1] shadow-sm"
                                         : "bg-[#EAE4DC]/60 text-[#706D65] hover:bg-[#EAE4DC] hover:text-[#141413]"
-                                }`}
+                                    }`}
                             >
                                 {cat}
                             </button>
@@ -183,8 +188,12 @@ export function GallerySection({ items }: { items: GalleryItem[] }) {
                     })}
                 </div>
 
-                {useSlider && (
-                    <div className="flex items-center gap-1.5">
+                {/* Tombol navigasi tampil di mobile jika > 1 item, dan di desktop jika > 5 item */}
+                {filteredItems.length > 1 && (
+                    <div
+                        className={`items-center gap-1.5 shrink-0 ${useSlider ? "flex" : "flex sm:hidden"
+                            }`}
+                    >
                         <button
                             type="button"
                             onClick={() => scrollByAmount("left")}
@@ -203,12 +212,25 @@ export function GallerySection({ items }: { items: GalleryItem[] }) {
                 )}
             </div>
 
-            {/* Grid or Horizontal Slider */}
-            {useSlider ? (
+            {/* Mobile: Selalu 1 Card Slider | Desktop: Slider jika > 5, Grid jika <= 5 */}
+            {filteredItems.length === 0 ? (
+                <div className="py-12 text-center text-xs text-[#706D65]">
+                    Tidak ada foto dalam kategori {selectedCategory}.
+                </div>
+            ) : (
                 <div
                     ref={scrollRef}
-                    className="-mx-4 sm:-mx-6 lg:mx-0 px-4 sm:px-6 lg:px-0 flex gap-3 sm:gap-4 overflow-x-auto snap-x snap-mandatory pb-4"
-                    style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" } as React.CSSProperties}
+                    className={
+                        useSlider
+                            ? "flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4"
+                            : "flex sm:grid sm:grid-cols-3 md:grid-cols-4 gap-4 overflow-x-auto sm:overflow-visible snap-x snap-mandatory sm:snap-none pb-4 sm:pb-0"
+                    }
+                    style={
+                        {
+                            scrollbarWidth: "none",
+                            WebkitOverflowScrolling: "touch",
+                        } as React.CSSProperties
+                    }
                 >
                     {filteredItems.map((item, idx) => (
                         <GalleryCard
@@ -218,27 +240,9 @@ export function GallerySection({ items }: { items: GalleryItem[] }) {
                             onClick={() => setSelectedImage(item)}
                             isMuted={mutedMap[item.id] ?? true}
                             onToggleMute={() => toggleMute(item.id)}
-                            fixedWidth
+                            fixedWidth={useSlider}
                         />
                     ))}
-                </div>
-            ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
-                    {filteredItems.map((item, idx) => (
-                        <GalleryCard
-                            key={item.id}
-                            item={item}
-                            idx={idx}
-                            onClick={() => setSelectedImage(item)}
-                            isMuted={mutedMap[item.id] ?? true}
-                            onToggleMute={() => toggleMute(item.id)}
-                        />
-                    ))}
-                    {filteredItems.length === 0 && (
-                        <div className="col-span-full py-12 text-center text-xs text-[#706D65]">
-                            Tidak ada foto dalam kategori {selectedCategory}.
-                        </div>
-                    )}
                 </div>
             )}
 
