@@ -200,7 +200,7 @@ export default async function LandingPage() {
                 id="gallery"
                 className="py-14 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full"
             >
-                <div className="mb-16">
+                <div className="mb-8">
                     <span className="text-xs font-semibold uppercase tracking-widest text-[#3B281E]">
                         Portofolio & Suasana
                     </span>
@@ -216,7 +216,7 @@ export default async function LandingPage() {
                 id="reviews"
                 className="py-14 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full"
             >
-                <div className="mb-16">
+                <div className="mb-10">
                     <span className="text-xs font-semibold uppercase tracking-widest text-[#3B281E]">
                         Ulasan Terverifikasi
                     </span>
@@ -235,17 +235,68 @@ export default async function LandingPage() {
                             ditampilkan di bagian ini.
                         </p>
                     </div>
+                ) : reviews.length >= 3 ? (
+                    <div className="relative -mx-4 sm:-mx-6 lg:-mx-8 overflow-hidden py-4">
+                        {/* Gradient edge masks untuk transisi halus tepi kiri & kanan */}
+                        <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-r from-[#F8F6F1] to-transparent z-10" />
+                        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-l from-[#F8F6F1] to-transparent z-10" />
+
+                        <div className="flex gap-5 animate-marquee animate-marquee-pause">
+                            {(() => {
+                                const baseList = reviews.length < 5 ? [...reviews, ...reviews] : reviews;
+                                const marqueeItems = [...baseList, ...baseList];
+                                return marqueeItems.map((rev, idx) => (
+                                    <div
+                                        key={`${rev.id}-${idx}`}
+                                        className="w-[280px] sm:w-[350px] shrink-0 rounded-xl bg-[#EAE4DC]/70 p-5 sm:p-6 flex flex-col justify-between border border-[#141413]/10 hover:-translate-y-1 hover:bg-[#EAE4DC] hover:border-[#141413]/25 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-sm"
+                                    >
+                                        <div>
+                                            <div className="flex items-center gap-1 text-[#3B281E]">
+                                                {Array.from({ length: rev.rating }).map((_, i) => (
+                                                    <Star
+                                                        key={i}
+                                                        className="w-4 h-4 fill-current motion-stagger-item"
+                                                        style={{ "--i": i } as React.CSSProperties}
+                                                    />
+                                                ))}
+                                            </div>
+                                            <p className="text-[#141413] mt-4 text-sm sm:text-base leading-relaxed">
+                                                &ldquo;{rev.comment}&rdquo;
+                                            </p>
+                                        </div>
+                                        <div className="mt-6 pt-4 border-t border-[#141413]/10 flex items-center justify-between text-xs text-[#706D65]">
+                                            <span className="font-semibold text-[#141413]">
+                                                {rev.customer_name}
+                                            </span>
+                                            <span>
+                                                {new Date(rev.created_at).toLocaleDateString("id-ID", {
+                                                    day: "numeric",
+                                                    month: "short",
+                                                    year: "numeric",
+                                                })}
+                                            </span>
+                                        </div>
+                                    </div>
+                                ));
+                            })()}
+                        </div>
+                    </div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {reviews.map((rev) => (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {reviews.map((rev, idx) => (
                             <div
                                 key={rev.id}
-                                className="rounded-xl bg-[#EAE4DC]/70 p-5 sm:p-6 flex flex-col justify-between border border-[#141413]/10"
+                                style={{ "--i": idx } as React.CSSProperties}
+                                className="motion-stagger-item rounded-xl bg-[#EAE4DC]/70 p-5 sm:p-6 flex flex-col justify-between border border-[#141413]/10 hover:-translate-y-1 hover:bg-[#EAE4DC] hover:border-[#141413]/25 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-sm"
                             >
                                 <div>
                                     <div className="flex items-center gap-1 text-[#3B281E]">
                                         {Array.from({ length: rev.rating }).map((_, i) => (
-                                            <Star key={i} className="w-4 h-4 fill-current" />
+                                            <Star
+                                                key={i}
+                                                className="w-4 h-4 fill-current motion-stagger-item"
+                                                style={{ "--i": i } as React.CSSProperties}
+                                            />
                                         ))}
                                     </div>
                                     <p className="text-[#141413] mt-4 text-sm sm:text-base leading-relaxed">

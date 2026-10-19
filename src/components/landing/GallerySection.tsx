@@ -1,110 +1,301 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { GalleryItem } from "@/types/database";
-import { X, Maximize2 } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Volume2, VolumeX } from "lucide-react";
+
+const CATEGORIES = ["Semua", "Haircut", "Styling", "Studio"];
+
+const isVideoUrl = (url?: string | null) =>
+    !!url && /\.(mp4|webm|mov)(\?.*)?$/i.test(url);
+
+function GalleryCard({
+    item,
+    idx,
+    onClick,
+    isMuted,
+    onToggleMute,
+    fixedWidth,
+}: {
+    item: GalleryItem;
+    idx: number;
+    onClick: () => void;
+    isMuted: boolean;
+    onToggleMute: () => void;
+    fixedWidth?: boolean;
+}) {
+    const [isLoaded, setIsLoaded] = useState(false);
+    const isVideo = isVideoUrl(item.image_url);
+    const indexLabel = String(idx + 1).padStart(2, "0");
+
+    return (
+        <div
+            className={`bg-[#EAE4DC]/70 p-2.5 rounded-xl border border-[#141413]/15 flex flex-col justify-between transition-colors hover:border-[#141413]/40 ${
+                fixedWidth ? "snap-start shrink-0 w-[240px] sm:w-[265px]" : ""
+            }`}
+        >
+            {/* Top Editorial Meta Bar */}
+            <div className="flex items-center justify-between px-1 pb-2 text-[10px] font-mono uppercase tracking-widest text-[#706D65]">
+                <span>{indexLabel}</span>
+                <span>{item.category}</span>
+            </div>
+
+            {/* Media Area */}
+            <button
+                type="button"
+                onClick={onClick}
+                className="relative aspect-[4/5] w-full rounded-lg overflow-hidden bg-[#141413] block text-left"
+            >
+                {isVideo ? (
+                    <>
+                        <video
+                            src={item.image_url}
+                            autoPlay
+                            loop
+                            playsInline
+                            muted={isMuted}
+                            className="w-full h-full object-cover"
+                        />
+                        {/* REEL indicator */}
+                        <span className="absolute top-2.5 left-2.5 z-10 inline-flex items-center gap-1 px-2 py-0.5 rounded bg-red-600/90 text-white text-[9px] font-mono font-bold uppercase tracking-wider">
+                            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                            REEL
+                        </span>
+                    </>
+                ) : (
+                    <>
+                        {!isLoaded && (
+                            <div className="absolute inset-0 bg-[#EAE4DC] animate-pulse" />
+                        )}
+                        <img
+                            src={item.image_url}
+                            alt={item.title}
+                            loading="lazy"
+                            onLoad={() => setIsLoaded(true)}
+                            className={`w-full h-full object-cover ${
+                                isLoaded ? "opacity-100" : "opacity-0"
+                            }`}
+                        />
+                    </>
+                )}
+            </button>
+
+            {/* Mute/Unmute floating button — outside the onClick button to avoid modal trigger */}
+            {isVideo && (
+                <div className="relative">
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onToggleMute();
+                        }}
+                        className="absolute -top-12 right-2 z-20 px-2.5 py-1.5 rounded-md bg-[#141413]/80 backdrop-blur-md text-[#F8F6F1] border border-white/15 flex items-center gap-1.5 text-[10px] font-mono uppercase hover:bg-[#141413] transition-colors"
+                    >
+                        {isMuted ? (
+                            <>
+                                <VolumeX className="w-3 h-3" />
+                                <span>Suara Off</span>
+                            </>
+                        ) : (
+                            <>
+                                <Volume2 className="w-3 h-3" />
+                                <span>Suara On</span>
+                            </>
+                        )}
+                    </button>
+                </div>
+            )}
+
+            {/* Bottom Caption Bar */}
+            <div className="pt-2.5 px-1 flex items-center justify-between gap-2">
+                <p className="font-display text-xs sm:text-sm font-bold text-[#141413] truncate">
+                    {item.title}
+                </p>
+                <span className="text-[10px] font-mono text-[#3B281E] shrink-0 uppercase">
+                    {isVideo ? "VIDEO" : "PHOTO"}
+                </span>
+            </div>
+        </div>
+    );
+}
 
 export function GallerySection({ items }: { items: GalleryItem[] }) {
+    const [selectedCategory, setSelectedCategory] = useState("Semua");
     const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
+    const [mutedMap, setMutedMap] = useState<Record<string, boolean>>({});
+    const scrollRef = useRef<HTMLDivElement>(null);
 
     if (items.length === 0) {
         return (
-            <div className="rounded-xl border border-brand-charcoal/10 bg-brand-beige/40 p-8 text-center">
-                <p className="text-brand-gray text-sm">
+            <div className="rounded-xl border border-[#141413]/10 bg-[#EAE4DC]/40 p-8 text-center">
+                <p className="text-[#706D65] text-sm">
                     Galeri hasil potongan rambut sedang disiapkan oleh tim MR A Studio.
                 </p>
             </div>
         );
     }
 
+    const filteredItems =
+        selectedCategory === "Semua"
+            ? items
+            : items.filter(
+                  (item) =>
+                      item.category?.toLowerCase() === selectedCategory.toLowerCase()
+              );
+
+    const useSlider = filteredItems.length > 5;
+
+    function scrollByAmount(direction: "left" | "right") {
+        if (!scrollRef.current) return;
+        scrollRef.current.scrollBy({
+            left: direction === "left" ? -285 : 285,
+            behavior: "smooth",
+        });
+    }
+
+    function toggleMute(id: string) {
+        setMutedMap((prev) => ({ ...prev, [id]: !(prev[id] ?? true) }));
+    }
+
+    const isSelectedVideo = isVideoUrl(selectedImage?.image_url);
+
     return (
         <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-5">
-                {items.map((item, idx) => {
-                    // Variasi span asimetris editorial
-                    const colSpan =
-                        idx % 5 === 0
-                            ? "lg:col-span-7 aspect-[16/11]"
-                            : idx % 5 === 1
-                                ? "lg:col-span-5 aspect-[4/5]"
-                                : "lg:col-span-4 aspect-square";
+            {/* Filter Kategori + Optional Slider Nav */}
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-6">
+                <div className="flex flex-wrap items-center gap-2">
+                    {CATEGORIES.map((cat) => {
+                        const isActive = selectedCategory === cat;
+                        return (
+                            <button
+                                key={cat}
+                                type="button"
+                                onClick={() => setSelectedCategory(cat)}
+                                className={`px-3.5 py-1.5 rounded-md text-xs font-semibold transition-colors ${
+                                    isActive
+                                        ? "bg-[#141413] text-[#F8F6F1] shadow-sm"
+                                        : "bg-[#EAE4DC]/60 text-[#706D65] hover:bg-[#EAE4DC] hover:text-[#141413]"
+                                }`}
+                            >
+                                {cat}
+                            </button>
+                        );
+                    })}
+                </div>
 
-                    return (
+                {useSlider && (
+                    <div className="flex items-center gap-1.5">
                         <button
-                            key={item.id}
                             type="button"
-                            onClick={() => setSelectedImage(item)}
-                            className={`group relative overflow-hidden rounded-xl bg-brand-beige text-left ${colSpan}`}
+                            onClick={() => scrollByAmount("left")}
+                            className="px-3 py-1.5 rounded-md bg-[#141413] text-[#F8F6F1] text-xs flex items-center gap-1 hover:bg-[#3B281E] transition-colors"
                         >
-                            <img
-                                src={item.image_url}
-                                alt={item.title}
-                                loading="lazy"
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-brand-charcoal/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
-                                <span className="text-xs uppercase tracking-widest text-brand-peach">
-                                    {item.category}
-                                </span>
-                                <div className="flex items-center justify-between mt-1">
-                                    <p className="text-brand-cream font-medium text-lg">
-                                        {item.title}
-                                    </p>
-                                    <Maximize2 className="w-4 h-4 text-brand-cream/80" />
-                                </div>
-                            </div>
+                            <ChevronLeft className="w-3.5 h-3.5" />
                         </button>
-                    );
-                })}
+                        <button
+                            type="button"
+                            onClick={() => scrollByAmount("right")}
+                            className="px-3 py-1.5 rounded-md bg-[#141413] text-[#F8F6F1] text-xs flex items-center gap-1 hover:bg-[#3B281E] transition-colors"
+                        >
+                            <ChevronRight className="w-3.5 h-3.5" />
+                        </button>
+                    </div>
+                )}
             </div>
+
+            {/* Grid or Horizontal Slider */}
+            {useSlider ? (
+                <div
+                    ref={scrollRef}
+                    className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4"
+                    style={{ scrollbarWidth: "none" }}
+                >
+                    {filteredItems.map((item, idx) => (
+                        <GalleryCard
+                            key={item.id}
+                            item={item}
+                            idx={idx}
+                            onClick={() => setSelectedImage(item)}
+                            isMuted={mutedMap[item.id] ?? true}
+                            onToggleMute={() => toggleMute(item.id)}
+                            fixedWidth
+                        />
+                    ))}
+                </div>
+            ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                    {filteredItems.map((item, idx) => (
+                        <GalleryCard
+                            key={item.id}
+                            item={item}
+                            idx={idx}
+                            onClick={() => setSelectedImage(item)}
+                            isMuted={mutedMap[item.id] ?? true}
+                            onToggleMute={() => toggleMute(item.id)}
+                        />
+                    ))}
+                    {filteredItems.length === 0 && (
+                        <div className="col-span-full py-12 text-center text-xs text-[#706D65]">
+                            Tidak ada foto dalam kategori {selectedCategory}.
+                        </div>
+                    )}
+                </div>
+            )}
 
             {/* Modal Lightbox */}
             {selectedImage && (
                 <div
-                    className="fixed inset-0 z-50 bg-brand-charcoal/90 backdrop-blur-sm flex items-center justify-center p-4"
+                    className="fixed inset-0 z-50 bg-[#141413]/80 backdrop-blur-md flex items-center justify-center p-4"
                     onClick={() => setSelectedImage(null)}
                 >
                     <div
-                        className="relative max-w-4xl w-full bg-brand-cream rounded-2xl overflow-hidden shadow-2xl"
+                        className="modal-spring-in relative max-w-2xl w-full rounded-xl bg-[#F8F6F1] overflow-hidden shadow-2xl border border-[#141413]/10"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <button
                             type="button"
                             onClick={() => setSelectedImage(null)}
-                            aria-label="Tutup pratinjau foto"
-                            className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-brand-charcoal text-brand-cream flex items-center justify-center"
+                            aria-label="Tutup pratinjau"
+                            className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-[#141413]/80 hover:bg-[#141413] text-[#F8F6F1] flex items-center justify-center transition-colors shadow-sm"
                         >
-                            <X className="w-5 h-5" />
+                            <X className="w-4 h-4" />
                         </button>
-                        <div className="grid grid-cols-1 md:grid-cols-12">
-                            <div className="md:col-span-8 bg-brand-charcoal flex items-center justify-center max-h-[75vh]">
+                        <div className="bg-[#141413] flex items-center justify-center max-h-[65vh] overflow-hidden">
+                            {isSelectedVideo ? (
+                                <video
+                                    src={selectedImage.image_url}
+                                    controls
+                                    autoPlay
+                                    className="w-full max-h-[65vh] object-contain bg-black"
+                                />
+                            ) : (
                                 <img
                                     src={selectedImage.image_url}
                                     alt={selectedImage.title}
-                                    className="w-full h-full object-contain max-h-[75vh]"
+                                    className="w-full h-full object-contain max-h-[65vh]"
                                 />
+                            )}
+                        </div>
+                        <div className="p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-[#F8F6F1]">
+                            <div className="min-w-0">
+                                <span className="inline-block px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#DFC3B0]/40 text-[#3B281E]">
+                                    {selectedImage.category}
+                                </span>
+                                <h3 className="font-display text-base font-bold text-[#141413] mt-1.5 truncate">
+                                    {selectedImage.title}
+                                </h3>
+                                {selectedImage.description && (
+                                    <p className="text-xs text-[#706D65] mt-1 line-clamp-2">
+                                        {selectedImage.description}
+                                    </p>
+                                )}
                             </div>
-                            <div className="md:col-span-4 p-5 sm:p-6 flex flex-col justify-between">
-                                <div>
-                                    <span className="inline-block px-3 py-1 rounded-full bg-brand-peach/40 text-brand-espresso text-xs font-semibold uppercase tracking-wider">
-                                        {selectedImage.category}
-                                    </span>
-                                    <h3 className="font-display text-lg sm:text-xl font-bold mt-4 text-brand-charcoal">
-                                        {selectedImage.title}
-                                    </h3>
-                                    {selectedImage.description && (
-                                        <p className="text-sm text-brand-gray mt-3 leading-relaxed">
-                                            {selectedImage.description}
-                                        </p>
-                                    )}
-                                </div>
-                                <a
-                                    href="/booking"
-                                    className="mt-8 block w-full text-center py-3 rounded-full bg-brand-charcoal text-brand-cream text-sm font-medium hover:bg-brand-espresso transition-colors"
-                                >
-                                    Booking Gaya Ini
-                                </a>
-                            </div>
+                            <a
+                                href="/booking"
+                                className="shrink-0 px-4 py-2 rounded-lg bg-[#141413] hover:bg-[#3B281E] text-[#F8F6F1] text-xs font-semibold transition-colors"
+                            >
+                                Booking Gaya Ini
+                            </a>
                         </div>
                     </div>
                 </div>

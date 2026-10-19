@@ -29,3 +29,57 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #141413;
 }
+
+/* Motion Graphic Utilities (Anime.js curve cubic-bezier(0.16, 1, 0.3, 1)) */
+@keyframes clipRevealUp {
+  0% {
+    opacity: 0;
+    transform: translateY(28px) scale(0.96);
+    clip-path: inset(12% 0 0 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes marqueeInfinite {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes modalSpringIn {
+  0% {
+    opacity: 0;
+    transform: translateY(16px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.motion-stagger-item {
+  animation: clipRevealUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--i, 0) * 85ms);
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marqueeInfinite 35s linear infinite;
+}
+
+.animate-marquee:hover,
+.animate-marquee-pause:hover {
+  animation-play-state: paused;
+}
+
+.modal-spring-in {
+  animation: modalSpringIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}

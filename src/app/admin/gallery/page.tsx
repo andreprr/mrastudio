@@ -18,6 +18,9 @@ import {
     Filter,
 } from "lucide-react";
 
+const isVideoUrl = (url?: string | null) =>
+    !!url && /\.(mp4|webm|mov)(\?.*)?$/i.test(url);
+
 const CATEGORIES = ["Semua", "Haircut", "Styling", "Beard", "Studio"] as const;
 
 export default function AdminGalleryPage() {
@@ -95,15 +98,16 @@ export default function AdminGalleryPage() {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        // Validasi tipe & ukuran (maks 5MB)
-        const validTypes = ["image/jpeg", "image/png", "image/webp"];
+        // Validasi tipe & ukuran (maks 25MB video, 5MB foto)
+        const validTypes = ["image/jpeg", "image/png", "image/webp", "video/mp4", "video/webm", "video/quicktime"];
         if (!validTypes.includes(file.type)) {
-            toast.error("Format file tidak didukung. Gunakan JPEG, PNG, atau WebP.");
+            toast.error("Format file tidak didukung. Gunakan JPEG, PNG, WebP, MP4, WebM, atau MOV.");
             return;
         }
 
-        if (file.size > 5 * 1024 * 1024) {
-            toast.error("Ukuran file melebihi batas maksimal 5MB.");
+        const maxSize = file.type.startsWith("video/") ? 25 * 1024 * 1024 : 5 * 1024 * 1024;
+        if (file.size > maxSize) {
+            toast.error(`Ukuran file melebihi batas maksimal ${file.type.startsWith("video/") ? "25MB" : "5MB"}.`);
             return;
         }
 
@@ -277,7 +281,7 @@ export default function AdminGalleryPage() {
                     className="inline-flex items-center gap-2 px-3.5 py-2 rounded-md bg-[#111110] text-white text-xs font-medium hover:bg-[#2A2A28] transition-colors shadow-sm self-start sm:self-auto"
                 >
                     <Plus className="w-3.5 h-3.5" />
-                    <span>Tambah Foto</span>
+                    <span>Tambah Konten</span>
                 </button>
             </div>
 
@@ -290,11 +294,10 @@ export default function AdminGalleryPage() {
                             key={cat}
                             type="button"
                             onClick={() => setCategoryFilter(cat)}
-                            className={`px-2.5 py-1 rounded-md text-xs font-medium whitespace-nowrap transition-colors ${
-                                categoryFilter === cat
+                            className={`px-2.5 py-1 rounded-md text-xs font-medium whitespace-nowrap transition-colors ${categoryFilter === cat
                                     ? "bg-[#111110] text-white shadow-sm"
                                     : "text-[#6E6D68] hover:text-[#111110] hover:bg-[#F6F5F2]"
-                            }`}
+                                }`}
                         >
                             {cat}
                         </button>
@@ -310,11 +313,10 @@ export default function AdminGalleryPage() {
                             key={st}
                             type="button"
                             onClick={() => setStatusFilter(st)}
-                            className={`px-2 py-0.5 rounded text-[11px] font-medium border transition-colors ${
-                                statusFilter === st
+                            className={`px-2 py-0.5 rounded text-[11px] font-medium border transition-colors ${statusFilter === st
                                     ? "bg-[#111110] text-white border-[#111110]"
                                     : "bg-white text-[#6E6D68] border-[#E4E2DD] hover:bg-[#F6F5F2]"
-                            }`}
+                                }`}
                         >
                             {st === "all" ? "Semua" : st === "published" ? "Live" : "Draft"}
                         </button>
@@ -353,14 +355,32 @@ export default function AdminGalleryPage() {
                             <tbody className="divide-y divide-[#E4E2DD] text-xs">
                                 {filteredItems.map((item) => (
                                     <tr key={item.id} className="hover:bg-[#FAFAF9] transition-colors">
-                                        {/* Foto & Judul */}
+                                        {/* Media & Judul */}
                                         <td className="px-4 py-3">
                                             <div className="flex items-center gap-3">
-                                                <img
-                                                    src={item.image_url}
-                                                    alt={item.title}
-                                                    className="w-14 h-14 rounded object-cover bg-[#F6F5F2] border border-[#E4E2DD] shrink-0"
-                                                />
+                                                <div className="relative shrink-0">
+                                                    {isVideoUrl(item.image_url) ? (
+                                                        <video
+                                                            src={item.image_url}
+                                                            muted
+                                                            loop
+                                                            autoPlay
+                                                            playsInline
+                                                            className="w-14 h-14 rounded object-cover bg-[#111110] border border-[#E4E2DD]"
+                                                        />
+                                                    ) : (
+                                                        <img
+                                                            src={item.image_url}
+                                                            alt={item.title}
+                                                            className="w-14 h-14 rounded object-cover bg-[#F6F5F2] border border-[#E4E2DD]"
+                                                        />
+                                                    )}
+                                                    {isVideoUrl(item.image_url) && (
+                                                        <span className="absolute -top-1 -right-1 px-1 py-px rounded text-[8px] font-mono font-bold uppercase bg-red-600 text-white leading-none">
+                                                            VID
+                                                        </span>
+                                                    )}
+                                                </div>
                                                 <div className="min-w-0">
                                                     <h3 className="font-semibold text-sm text-[#111110] truncate max-w-xs sm:max-w-md">
                                                         {item.title}
@@ -400,16 +420,14 @@ export default function AdminGalleryPage() {
                                             <button
                                                 type="button"
                                                 onClick={() => handleTogglePublish(item)}
-                                                className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium border transition-colors ${
-                                                    item.is_published
+                                                className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium border transition-colors ${item.is_published
                                                         ? "bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100"
                                                         : "bg-[#F6F5F2] text-[#6E6D68] border-[#E4E2DD] hover:bg-[#EAE4DC]"
-                                                }`}
+                                                    }`}
                                             >
                                                 <span
-                                                    className={`w-1.5 h-1.5 rounded-full ${
-                                                        item.is_published ? "bg-emerald-500" : "bg-stone-400"
-                                                    }`}
+                                                    className={`w-1.5 h-1.5 rounded-full ${item.is_published ? "bg-emerald-500" : "bg-stone-400"
+                                                        }`}
                                                 />
                                                 <span>{item.is_published ? "Published" : "Draft"}</span>
                                             </button>
@@ -486,22 +504,33 @@ export default function AdminGalleryPage() {
 
                             {/* Form Input */}
                             <form id="gallery-drawer-form" onSubmit={handleSave} className="mt-5 space-y-4">
-                                {/* Upload Foto */}
+                                {/* Upload Foto / Video */}
                                 <div>
                                     <label className="block text-[11px] font-mono uppercase tracking-wider text-[#6E6D68] mb-1.5">
-                                        Media Foto * (Maks 5MB)
+                                        Media * (Foto maks 5MB, Video maks 25MB)
                                     </label>
 
                                     {drawerItem.image_url ? (
                                         <div className="flex items-start gap-3 p-3 bg-[#F6F5F2] border border-[#E4E2DD] rounded-md mb-2">
-                                            <img
-                                                src={drawerItem.image_url}
-                                                alt="Preview"
-                                                className="w-20 h-20 rounded-md object-cover border border-[#E4E2DD] bg-white shrink-0"
-                                            />
+                                            {isVideoUrl(drawerItem.image_url) ? (
+                                                <video
+                                                    src={drawerItem.image_url}
+                                                    muted
+                                                    loop
+                                                    autoPlay
+                                                    playsInline
+                                                    className="w-20 h-20 rounded-md object-cover border border-[#E4E2DD] bg-[#111110] shrink-0"
+                                                />
+                                            ) : (
+                                                <img
+                                                    src={drawerItem.image_url}
+                                                    alt="Preview"
+                                                    className="w-20 h-20 rounded-md object-cover border border-[#E4E2DD] bg-white shrink-0"
+                                                />
+                                            )}
                                             <div className="min-w-0 flex-1">
                                                 <span className="text-xs font-medium text-[#111110] block truncate">
-                                                    Foto Terpilih
+                                                    {isVideoUrl(drawerItem.image_url) ? "Video Terpilih" : "Foto Terpilih"}
                                                 </span>
                                                 <p className="text-[11px] text-[#6E6D68] truncate mt-0.5">
                                                     {drawerItem.image_url}
@@ -513,7 +542,7 @@ export default function AdminGalleryPage() {
                                                     }
                                                     className="mt-2 text-[11px] text-red-600 hover:underline font-medium"
                                                 >
-                                                    Ganti Foto
+                                                    Ganti Media
                                                 </button>
                                             </div>
                                         </div>
@@ -528,16 +557,16 @@ export default function AdminGalleryPage() {
                                                 <>
                                                     <Upload className="w-5 h-5 text-[#6E6D68] mb-1.5" />
                                                     <span className="text-xs font-medium text-[#111110]">
-                                                        Pilih File Gambar
+                                                        Pilih File Foto atau Video
                                                     </span>
                                                     <span className="text-[10px] text-[#6E6D68] mt-0.5">
-                                                        JPEG, PNG, WebP (Maks 5MB)
+                                                        JPEG, PNG, WebP, MP4, WebM, MOV
                                                     </span>
                                                 </>
                                             )}
                                             <input
                                                 type="file"
-                                                accept="image/jpeg,image/png,image/webp"
+                                                accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,video/quicktime"
                                                 disabled={uploadingImage}
                                                 onChange={handleFileUpload}
                                                 className="hidden"

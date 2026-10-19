@@ -138,17 +138,18 @@ export function TeamShowcase({ barbers }: { barbers: BarberItem[] }) {
                 className="flex gap-6 overflow-x-auto pb-6 pt-2 snap-x snap-mandatory scrollbar-none"
                 style={{ scrollbarWidth: "none" }}
             >
-                {barbers.map((barber) => (
+                {barbers.map((barber, idx) => (
                     <div
                         key={barber.id}
                         onClick={() => setSelectedBarber(barber)}
-                        className="snap-center shrink-0 w-[260px] sm:w-[280px] h-[340px] rounded-xl overflow-hidden relative cursor-pointer group bg-[#141413] text-[#F8F6F1] p-5 flex flex-col justify-between border border-white/10 shadow-md transition-transform duration-300 hover:-translate-y-1"
+                        style={{ "--i": idx } as React.CSSProperties}
+                        className="motion-stagger-item snap-center shrink-0 w-[260px] sm:w-[280px] h-[340px] rounded-xl overflow-hidden relative cursor-pointer group bg-[#141413] text-[#F8F6F1] p-5 flex flex-col justify-between border border-white/10 shadow-md hover:-translate-y-1.5 hover:border-[#DFC3B0]/40 hover:shadow-[0_16px_32px_-12px_rgba(20,20,19,0.5)] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
                     >
                         {barber.photo_url ? (
                             <img
                                 src={barber.photo_url}
                                 alt={barber.name}
-                                className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500"
+                                className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 group-hover:opacity-90 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
                             />
                         ) : (
                             <div className="absolute inset-0 w-full h-full bg-[#141413] flex items-center justify-center text-white/30">
@@ -159,8 +160,8 @@ export function TeamShowcase({ barbers }: { barbers: BarberItem[] }) {
 
                         {/* Bagian atas kartu: badge status kecil ACTIVE dengan titik hijau dan spesialisasi */}
                         <div className="relative z-10 flex items-center justify-between gap-2">
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-[11px] font-semibold border border-white/10">
-                                <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-[11px] font-semibold border border-white/10 group-hover:border-[#DFC3B0]/30 transition-colors">
+                                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                                 ACTIVE
                             </span>
                             <span className="px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-[11px] font-semibold border border-white/10 truncate max-w-[130px]">
@@ -183,8 +184,11 @@ export function TeamShowcase({ barbers }: { barbers: BarberItem[] }) {
                                 <span className="text-[11px] text-[#DFC3B0] font-semibold">
                                     Spesialis Potongan
                                 </span>
-                                <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-bold text-white group-hover:bg-[#DFC3B0] group-hover:text-[#141413] transition-colors">
-                                    Profil &gt;
+                                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-bold text-white group-hover:bg-[#DFC3B0] group-hover:text-[#141413] transition-colors">
+                                    <span>Profil</span>
+                                    <span className="group-hover:translate-x-1 transition-transform duration-300">
+                                        &gt;
+                                    </span>
                                 </span>
                             </div>
                         </div>
@@ -200,10 +204,11 @@ export function TeamShowcase({ barbers }: { barbers: BarberItem[] }) {
                         type="button"
                         onClick={() => setSelectedBarber(b)}
                         aria-label={`Lihat profil ${b.name}`}
-                        className={`h-1.5 rounded-full transition-all ${i === activeIndex
+                        className={`h-1.5 rounded-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                            i === activeIndex
                                 ? "w-8 bg-[#141413]"
                                 : "w-4 bg-[#141413]/20 hover:bg-[#141413]/40"
-                            }`}
+                        }`}
                     />
                 ))}
             </div>
@@ -211,11 +216,11 @@ export function TeamShowcase({ barbers }: { barbers: BarberItem[] }) {
             {/* MODAL PROFIL BARBER SAAT DIKLIK (Persis Referensi Gambar 2 "Sienna Brooks") */}
             {selectedBarber && (
                 <div
-                    className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200"
+                    className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 transition-all duration-300"
                     onClick={() => setSelectedBarber(null)}
                 >
                     <div
-                        className="relative max-w-[390px] w-full rounded-2xl bg-white p-4 shadow-2xl border border-[#141413]/5"
+                        className="modal-spring-in relative max-w-[390px] w-full rounded-2xl bg-white p-4 shadow-2xl border border-[#141413]/5"
                         onClick={(e) => e.stopPropagation()}
                     >
                         {/* Tombol Close Pojok Kanan Atas */}
@@ -253,7 +258,7 @@ export function TeamShowcase({ barbers }: { barbers: BarberItem[] }) {
                                     <img
                                         src={selectedBarber.photo_url}
                                         alt={selectedBarber.name}
-                                        className="w-full h-full object-cover object-top"
+                                        className="w-full h-full object-cover object-top transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] scale-100 hover:scale-105"
                                     />
                                 ) : (
                                     <div className="w-full h-full flex items-center justify-center text-sm text-[#706D65] font-semibold">
@@ -281,7 +286,7 @@ export function TeamShowcase({ barbers }: { barbers: BarberItem[] }) {
                                         )}
                                     </div>
                                     {/* Titik Hijau Online seperti di Gambar 2 */}
-                                    <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white" />
+                                    <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white animate-pulse" />
                                 </div>
 
                                 <div className="truncate">
@@ -296,7 +301,7 @@ export function TeamShowcase({ barbers }: { barbers: BarberItem[] }) {
 
                             <Link
                                 href={`/booking?barberId=${selectedBarber.id}`}
-                                className="inline-flex items-center gap-1.5 px-5 py-3 rounded-lg bg-[#141413] text-white text-xs font-semibold hover:bg-[#3B281E] transition-colors shrink-0 shadow-md"
+                                className="inline-flex items-center gap-1.5 px-5 py-3 rounded-lg bg-[#141413] text-white text-xs font-semibold hover:bg-[#3B281E] transition-all duration-300 hover:scale-105 shrink-0 shadow-md"
                             >
                                 <Plus className="w-3.5 h-3.5" />
                                 <span>Pilih Barber</span>
