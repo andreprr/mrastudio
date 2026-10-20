@@ -45,11 +45,7 @@ export async function calculateAvailableSlots(params: {
     };
 
     // 2. Validasi tanggal pada zona waktu Asia/Jakarta
-    const jakartaNowStr = new Date().toLocaleString("en-US", {
-        timeZone: "Asia/Jakarta",
-    });
-    const jakartaNow = new Date(jakartaNowStr);
-    const todayStr = jakartaNow.toLocaleDateString("en-CA", {
+    const todayStr = new Date().toLocaleDateString("en-CA", {
         timeZone: "Asia/Jakarta",
     });
 
@@ -70,16 +66,23 @@ export async function calculateAvailableSlots(params: {
 
     // 4. Periksa hari operasional (0 = Minggu ... 6 = Sabtu)
     const [y, m, d] = params.date.split("-").map(Number);
-    const targetDateObj = new Date(Date.UTC(y, m - 1, d));
-    const dayOfWeek = targetDateObj.getUTCDay();
+    const dayOfWeek = new Date(y, m - 1, d).getDay();
 
     const { data: bizHour } = await supabase
         .from("business_hours")
         .select("*")
         .eq("day_of_week", dayOfWeek)
-        .single();
+        .maybeSingle();
 
-    if (!bizHour || bizHour.is_closed) {
+    const effectiveBizHour = bizHour || {
+        is_closed: false,
+        open_time: "10:00",
+        close_time: "21:00",
+        break_start: null,
+        break_end: null,
+    };
+
+    if (effectiveBizHour.is_closed) {
         return {
             slots: [],
             isClosed: true,
@@ -128,17 +131,24 @@ export async function calculateAvailableSlots(params: {
     );
 
     // 7. Iterasi pembentukan slot
-    const openMin = timeToMinutes(bizHour.open_time);
-    const closeMin = timeToMinutes(bizHour.close_time);
-    const breakStartMin = bizHour.break_start ? timeToMinutes(bizHour.break_start) : null;
-    const breakEndMin = bizHour.break_end ? timeToMinutes(bizHour.break_end) : null;
+    const openMin = timeToMinutes(effectiveBizHour.open_time);
+    const closeMin = timeToMinutes(effectiveBizHour.close_time);
+    const breakStartMin = effectiveBizHour.break_start ? timeToMinutes(effectiveBizHour.break_start) : null;
+    const breakEndMin = effectiveBizHour.break_end ? timeToMinutes(effectiveBizHour.break_end) : null;
 
     const duration = service.duration_minutes;
     const interval = settings.slot_interval_minutes || 30;
     const buffer = settings.buffer_minutes || 10;
 
-    const currentJakartaMinutes =
-        jakartaNow.getHours() * 60 + jakartaNow.getMinutes();
+    const jakartaParts = new Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Jakarta",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: false,
+    }).formatToParts(new Date());
+    const jHour = Number(jakartaParts.find((p) => p.type === "hour")?.value ?? 0);
+    const jMin = Number(jakartaParts.find((p) => p.type === "minute")?.value ?? 0);
+    const currentJakartaMinutes = jHour * 60 + jMin;
 
     const slots: SlotAvailabilityItem[] = [];
 
@@ -170,9 +180,11 @@ export async function calculateAvailableSlots(params: {
             );
             if (customSched) {
                 if (!customSched.is_available) return false;
-                const bStart = timeToMinutes(customSched.start_time);
-                const bEnd = timeToMinutes(customSched.end_time);
-                if (start < bStart || end > bEnd) return false;
+                if (customSched.start_time && customSched.end_time) {
+                    const bStart = timeToMinutes(customSched.start_time);
+                    const bEnd = timeToMinutes(customSched.end_time);
+                    if (start < bStart || end > bEnd) return false;
+                }
             }
 
             const hasConflict = validBookings.some((bk) => {

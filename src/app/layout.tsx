@@ -27,7 +27,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id" className={`${inter.variable} ${syne.variable} scroll-smooth`}>
-      <body className="bg-brand-cream text-brand-charcoal font-sans antialiased selection:bg-brand-peach selection:text-brand-charcoal">
+      <body className="bg-brand-cream text-brand-charcoal font-sans antialiased selection:bg-[#dd3e1f] selection:text-white">
         {children}
         <Toaster position="top-center" richColors />
       </body>

@@ -116,7 +116,8 @@ export function BookingWizard({
         const mm = String(nowJakarta.getMonth() + 1).padStart(2, "0");
         const dd = String(nowJakarta.getDate()).padStart(2, "0");
         const dateStr = `${yyyy}-${mm}-${dd}`;
-        const dow = nowJakarta.getDay();
+        const [y, m, d] = dateStr.split("-").map(Number);
+        const dow = new Date(y, m - 1, d).getDay();
         const bh = businessHours.find((h) => h.day_of_week === dow);
 
         return {
@@ -255,7 +256,7 @@ export function BookingWizard({
                 <div className="flex flex-col sm:flex-row gap-3">
                     <Link
                         href={`/cek-booking?code=${ticket.booking_code}`}
-                        className="flex-1 inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-full border border-brand-charcoal text-brand-charcoal text-sm font-medium hover:bg-brand-charcoal hover:text-brand-cream transition-colors"
+                        className="flex-1 inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-full border-2 border-[#141413] text-[#141413] text-sm font-bold hover:bg-[#141413] hover:text-white transition-colors"
                     >
                         <Search className="w-4 h-4" />
                         <span>Cek Booking</span>
@@ -265,7 +266,7 @@ export function BookingWizard({
                             href={`https://wa.me/${waNumber}?text=${waText}`}
                             target="_blank"
                             rel="noreferrer"
-                            className="flex-1 inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-full bg-brand-charcoal text-brand-cream text-sm font-medium hover:bg-brand-espresso transition-colors"
+                            className="flex-1 inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-full bg-[#141413] text-white border-2 border-[#141413] hover:border-[#dd3e1f] text-sm font-bold transition-colors shadow-sm"
                         >
                             <MessageCircle className="w-4 h-4" />
                             <span>Hubungi WhatsApp</span>
@@ -338,9 +339,9 @@ export function BookingWizard({
                                         </div>
                                     </div>
                                     <div
-                                        className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 border ${selected
-                                            ? "bg-brand-peach text-brand-charcoal border-brand-peach"
-                                            : "border-brand-charcoal/30"
+                                        className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 border-2 ${selected
+                                            ? "bg-[#dd3e1f] text-white border-[#141413]"
+                                            : "border-[#141413]/30"
                                             }`}
                                     >
                                         {selected && <Check className="w-4 h-4" />}
@@ -354,7 +355,7 @@ export function BookingWizard({
                             type="button"
                             disabled={!watchedServiceId}
                             onClick={() => setStep(2)}
-                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-brand-charcoal text-brand-cream text-xs sm:text-sm font-medium disabled:opacity-40"
+                            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#141413] text-white border-2 border-[#141413] hover:border-[#dd3e1f] text-xs sm:text-sm font-bold disabled:opacity-40 shadow-sm"
                         >
                             <span>Lanjut Pilih Tanggal</span>
                             <ChevronRight className="w-4 h-4" />
@@ -367,7 +368,7 @@ export function BookingWizard({
             {step === 2 && (
                 <div className="space-y-6">
                     <h2 className="font-display text-2xl sm:text-3xl font-bold flex items-center gap-2">
-                        <Calendar className="w-6 h-6" />
+                        <Calendar className="w-6 h-6 text-[#dd3e1f]" />
                         <span>2. Pilih Tanggal Kunjungan</span>
                     </h2>
                     <p className="text-sm text-brand-gray">
@@ -386,20 +387,20 @@ export function BookingWizard({
                                         form.setValue("booking_date", d.dateStr);
                                         form.setValue("start_time", "");
                                     }}
-                                    className={`p-4 rounded-lg border text-center transition-all ${d.isClosed
-                                        ? "opacity-35 cursor-not-allowed bg-brand-beige/20 border-brand-charcoal/5"
+                                    className={`p-4 rounded-xl border-2 text-center transition-all ${d.isClosed
+                                        ? "opacity-35 cursor-not-allowed bg-brand-beige/20 border-[#141413]/20"
                                         : isSelected
-                                            ? "bg-brand-charcoal text-brand-cream border-brand-charcoal shadow-md"
-                                            : "bg-brand-beige/60 text-brand-charcoal border-brand-charcoal/10 hover:bg-brand-beige"
+                                            ? "bg-[#dd3e1f] text-white border-[#141413] font-bold shadow-[3px_3px_0px_#141413]"
+                                            : "bg-white text-[#141413] font-bold border-[#141413] hover:bg-[#dd3e1f] hover:text-white"
                                         }`}
                                 >
-                                    <span className="text-xs uppercase block opacity-75">
+                                    <span className="text-xs uppercase block opacity-80">
                                         {d.dayLabel}
                                     </span>
                                     <span className="font-display text-2xl font-bold block my-1">
                                         {d.dateNum}
                                     </span>
-                                    <span className="text-xs block opacity-80">
+                                    <span className="text-xs block opacity-85">
                                         {d.isClosed ? "Tutup" : d.monthLabel}
                                     </span>
                                 </button>
@@ -411,7 +412,7 @@ export function BookingWizard({
                         <button
                             type="button"
                             onClick={() => setStep(1)}
-                            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-brand-charcoal/20 text-sm font-medium"
+                            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border-2 border-[#141413] text-[#141413] hover:bg-[#141413] hover:text-white text-sm font-bold transition-colors"
                         >
                             <ChevronLeft className="w-4 h-4" />
                             <span>Kembali</span>
@@ -420,7 +421,7 @@ export function BookingWizard({
                             type="button"
                             disabled={!watchedDate}
                             onClick={() => setStep(3)}
-                            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-brand-charcoal text-brand-cream text-sm font-medium disabled:opacity-40"
+                            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#141413] text-white border-2 border-[#141413] hover:border-[#dd3e1f] text-sm font-bold disabled:opacity-40 shadow-sm"
                         >
                             <span>Lanjut Pilih Barber</span>
                             <ChevronRight className="w-4 h-4" />
@@ -500,7 +501,7 @@ export function BookingWizard({
                         <button
                             type="button"
                             onClick={() => setStep(2)}
-                            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-brand-charcoal/20 text-sm font-medium"
+                            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border-2 border-[#141413] text-[#141413] hover:bg-[#141413] hover:text-white text-sm font-bold transition-colors"
                         >
                             <ChevronLeft className="w-4 h-4" />
                             <span>Kembali</span>
@@ -508,7 +509,7 @@ export function BookingWizard({
                         <button
                             type="button"
                             onClick={() => setStep(4)}
-                            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-brand-charcoal text-brand-cream text-sm font-medium"
+                            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#141413] text-white border-2 border-[#141413] hover:border-[#dd3e1f] text-sm font-bold shadow-sm"
                         >
                             <span>Lanjut Pilih Waktu</span>
                             <ChevronRight className="w-4 h-4" />
@@ -521,19 +522,32 @@ export function BookingWizard({
             {step === 4 && (
                 <div className="space-y-6">
                     <h2 className="font-display text-2xl sm:text-3xl font-bold flex items-center gap-2">
-                        <Clock className="w-6 h-6" />
+                        <Clock className="w-6 h-6 text-[#dd3e1f]" />
                         <span>4. Pilih Jam Kedatangan</span>
                     </h2>
 
                     {loadingSlots ? (
                         <div className="py-16 flex flex-col items-center justify-center text-brand-gray gap-3">
-                            <Loader2 className="w-7 h-7 animate-spin" />
-                            <span className="text-sm">Memeriksa slot yang tersedia...</span>
+                            <Loader2 className="w-7 h-7 animate-spin text-[#dd3e1f]" />
+                            <span className="text-sm font-medium">Memeriksa slot yang tersedia...</span>
                         </div>
                     ) : slots.length === 0 ? (
-                        <div className="p-5 sm:p-6 rounded-xl bg-brand-beige/50 text-center text-sm text-brand-gray">
+                        <div className="p-6 rounded-xl bg-white border-2 border-[#141413] text-center text-sm text-[#141413]">
                             Tidak ada slot waktu yang tersedia pada tanggal ini. Silakan pilih
                             tanggal atau barber lain.
+                        </div>
+                    ) : slots.every((s) => !s.available) ? (
+                        <div className="p-6 rounded-xl bg-white border-2 border-[#141413] text-center text-sm text-[#141413] space-y-3">
+                            <p className="font-bold text-base">Semua slot waktu untuk hari ini sudah lewat atau penuh.</p>
+                            <p className="text-xs text-[#706D65]">Silakan pilih tanggal <strong>besok</strong> atau hari berikutnya untuk reservasi jadwal dengan leluasa.</p>
+                            <button
+                                type="button"
+                                onClick={() => setStep(2)}
+                                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#dd3e1f] text-white border-2 border-[#141413] text-xs font-bold shadow-[2px_2px_0px_#141413] hover:bg-[#141413] transition-colors"
+                            >
+                                <ChevronLeft className="w-4 h-4" />
+                                <span>Pilih Tanggal Lain</span>
+                            </button>
                         </div>
                     ) : (
                         <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
@@ -545,11 +559,11 @@ export function BookingWizard({
                                         type="button"
                                         disabled={!s.available}
                                         onClick={() => form.setValue("start_time", s.time)}
-                                        className={`py-3.5 px-4 rounded-lg border text-center transition-all ${!s.available
-                                            ? "opacity-35 cursor-not-allowed bg-brand-beige/20 border-brand-charcoal/5 line-through"
+                                        className={`py-3.5 px-4 rounded-xl border-2 text-center transition-all ${!s.available
+                                            ? "opacity-35 cursor-not-allowed bg-brand-beige/20 border-[#141413]/20 line-through"
                                             : isSelected
-                                                ? "bg-brand-charcoal text-brand-cream border-brand-charcoal font-bold shadow-md"
-                                                : "bg-brand-beige/60 text-brand-charcoal border-brand-charcoal/10 hover:bg-brand-beige"
+                                                ? "bg-[#dd3e1f] text-white border-[#141413] font-bold shadow-[3px_3px_0px_#141413]"
+                                                : "bg-white text-[#141413] font-bold border-[#141413] hover:bg-[#dd3e1f] hover:text-white"
                                             }`}
                                     >
                                         <span className="text-sm block">{s.time} WIB</span>
@@ -568,7 +582,7 @@ export function BookingWizard({
                         <button
                             type="button"
                             onClick={() => setStep(3)}
-                            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-brand-charcoal/20 text-sm font-medium"
+                            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border-2 border-[#141413] text-[#141413] hover:bg-[#141413] hover:text-white text-sm font-bold transition-colors"
                         >
                             <ChevronLeft className="w-4 h-4" />
                             <span>Kembali</span>
@@ -577,7 +591,7 @@ export function BookingWizard({
                             type="button"
                             disabled={!watchedStartTime}
                             onClick={() => setStep(5)}
-                            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-brand-charcoal text-brand-cream text-sm font-medium disabled:opacity-40"
+                            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#141413] text-white border-2 border-[#141413] hover:border-[#dd3e1f] text-sm font-bold disabled:opacity-40 shadow-sm"
                         >
                             <span>Isi Data Pelanggan</span>
                             <ChevronRight className="w-4 h-4" />
@@ -648,7 +662,7 @@ export function BookingWizard({
                             <input
                                 type="checkbox"
                                 {...form.register("agree_terms")}
-                                className="mt-1 w-4 h-4 accent-brand-charcoal"
+                                className="mt-1 w-4 h-4 accent-[#dd3e1f]"
                             />
                             <span className="text-xs text-brand-gray leading-relaxed">
                                 Saya menyetujui aturan booking ({settings.cancellation_policy})
@@ -666,7 +680,7 @@ export function BookingWizard({
                         <button
                             type="button"
                             onClick={() => setStep(4)}
-                            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-brand-charcoal/20 text-sm font-medium"
+                            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border-2 border-[#141413] text-[#141413] hover:bg-[#141413] hover:text-white text-sm font-bold transition-colors"
                         >
                             <ChevronLeft className="w-4 h-4" />
                             <span>Kembali</span>
@@ -682,7 +696,7 @@ export function BookingWizard({
                                 ]);
                                 if (valid) setStep(6);
                             }}
-                            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-brand-charcoal text-brand-cream text-sm font-medium"
+                            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#141413] text-white border-2 border-[#141413] hover:border-[#dd3e1f] text-sm font-bold shadow-sm"
                         >
                             <span>Tinjau Konfirmasi</span>
                             <ChevronRight className="w-4 h-4" />
@@ -751,7 +765,7 @@ export function BookingWizard({
                             type="button"
                             disabled={submitting}
                             onClick={() => setStep(5)}
-                            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-brand-charcoal/20 text-sm font-medium"
+                            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border-2 border-[#141413] text-[#141413] hover:bg-[#141413] hover:text-white text-sm font-bold transition-colors"
                         >
                             <ChevronLeft className="w-4 h-4" />
                             <span>Ubah Data</span>
@@ -760,7 +774,7 @@ export function BookingWizard({
                             type="button"
                             disabled={submitting}
                             onClick={form.handleSubmit(onConfirmBooking)}
-                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-brand-charcoal text-brand-cream text-xs sm:text-sm font-medium hover:bg-brand-espresso disabled:opacity-50"
+                            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#dd3e1f] text-white font-bold border-2 border-[#141413] shadow-[2px_2px_0px_#141413] hover:bg-[#141413] transition-colors disabled:opacity-50 text-sm"
                         >
                             {submitting ? (
                                 <>

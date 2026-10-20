@@ -45,11 +45,11 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                 <div>
                     <div className="flex items-center justify-between lg:block mb-6">
                         <div className="flex items-center gap-2.5">
-                            <div className="w-8 h-8 rounded-md bg-[#C89D7C] text-[#111110] flex items-center justify-center font-display font-extrabold text-sm">
+                            <div className="w-8 h-8 rounded-md bg-[#dd3e1f] text-[#111110] flex items-center justify-center font-display font-extrabold text-sm">
                                 M
                             </div>
                             <div>
-                                <span className="text-[9px] uppercase tracking-widest text-[#C89D7C] font-semibold block">
+                                <span className="text-[9px] uppercase tracking-widest text-[#dd3e1f] font-semibold block">
                                     Backoffice
                                 </span>
                                 <h2 className="font-display text-base font-bold tracking-tight text-white">
@@ -79,11 +79,10 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                                 <Link
                                     key={item.href}
                                     href={item.href}
-                                    className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-xs font-medium whitespace-nowrap transition-colors ${
-                                        active
-                                            ? "bg-white/10 text-white border-l-2 border-[#C89D7C]"
-                                            : "text-[#6E6D68] hover:bg-white/5 hover:text-white"
-                                    }`}
+                                    className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-xs font-medium whitespace-nowrap transition-colors ${active
+                                        ? "bg-white/10 text-white border-l-2 border-[#dd3e1f]"
+                                        : "text-[#6E6D68] hover:bg-white/5 hover:text-white"
+                                        }`}
                                 >
                                     <Icon className="w-4 h-4 shrink-0" />
                                     <span>{item.label}</span>

@@ -37,6 +37,7 @@ body {
     transform: translateY(28px) scale(0.96);
     clip-path: inset(12% 0 0 0);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -48,6 +49,7 @@ body {
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(-50%);
   }
@@ -58,6 +60,7 @@ body {
     opacity: 0;
     transform: translateY(16px) scale(0.95);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -82,4 +85,54 @@ body {
 
 .modal-spring-in {
   animation: modalSpringIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes heroTextReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(24px);
+    filter: blur(6px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.animate-hero-text {
+  animation: heroTextReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes brandShimmerGlow {
+  0% {
+    background-position: 0% 50%;
+    filter: drop-shadow(0 4px 12px rgba(221, 62, 31, 0.35)) drop-shadow(0 0 28px rgba(221, 62, 31, 0.2));
+  }
+
+  50% {
+    background-position: 100% 50%;
+    filter: drop-shadow(0 4px 20px rgba(221, 62, 31, 0.85)) drop-shadow(0 0 42px rgba(255, 140, 105, 0.45));
+  }
+
+  100% {
+    background-position: 0% 50%;
+    filter: drop-shadow(0 4px 12px rgba(221, 62, 31, 0.35)) drop-shadow(0 0 28px rgba(221, 62, 31, 0.2));
+  }
+}
+
+.hero-brand-glow {
+  background: linear-gradient(110deg,
+      #FFFFFF 0%,
+      #F8F6F1 25%,
+      #ff9a7b 45%,
+      #dd3e1f 55%,
+      #F8F6F1 75%,
+      #FFFFFF 100%);
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: brandShimmerGlow 4.5s ease-in-out infinite;
 }

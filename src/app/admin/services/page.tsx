@@ -6,16 +6,39 @@ import { AdminShell } from "@/components/admin/AdminShell";
 import { ServiceItem } from "@/types/database";
 import { formatRupiah } from "@/config/site";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, Clock, X, Sparkles } from "lucide-react";
+import { Plus, Pencil, Trash2, X } from "lucide-react";
+
+const SERVICE_CATEGORIES = [
+    "Paket Utama",
+    "Braids",
+    "Chemical",
+    "Haircolor",
+    "Treatment",
+] as const;
+
+// Helper untuk membaca & menyimpan kategori di dalam kolom description tanpa ubah skema DB
+function extractCategoryAndDesc(rawDesc?: string | null) {
+    const text = rawDesc || "";
+    const match = text.match(/^\[([^\]]+)\]\s*([\s\S]*)$/);
+    if (match) {
+        return { category: match[1].trim(), cleanDesc: match[2].trim() };
+    }
+    return { category: "Paket Utama", cleanDesc: text };
+}
+
+function packCategoryAndDesc(category: string, cleanDesc?: string | null) {
+    const desc = (cleanDesc || "").trim();
+    return `[${category}] ${desc}`.trim();
+}
 
 export default function AdminServicesPage() {
     const [services, setServices] = useState<ServiceItem[]>([]);
     const [loading, setLoading] = useState(true);
 
     // Modal State untuk Tambah / Edit Layanan
-    const [editingService, setEditingService] = useState<Partial<ServiceItem> | null>(
-        null
-    );
+    const [editingService, setEditingService] = useState<
+        (Partial<ServiceItem> & { categoryName?: string }) | null
+    >(null);
     // Modal State untuk Konfirmasi Hapus
     const [deletingService, setDeletingService] = useState<ServiceItem | null>(
         null
@@ -57,6 +80,10 @@ export default function AdminServicesPage() {
         setSaving(true);
 
         const supabase = createClient();
+        const finalDescription = packCategoryAndDesc(
+            editingService.categoryName || "Paket Utama",
+            editingService.description
+        );
 
         if (editingService.id) {
             // Mode Edit Layanan
@@ -66,7 +93,7 @@ export default function AdminServicesPage() {
                     name: editingService.name,
                     price: Number(editingService.price || 0),
                     duration_minutes: Number(editingService.duration_minutes || 45),
-                    description: editingService.description || null,
+                    description: finalDescription,
                     image_url: editingService.image_url || null,
                     is_active: editingService.is_active ?? true,
                     sort_order: Number(editingService.sort_order || 1),
@@ -95,7 +122,7 @@ export default function AdminServicesPage() {
                 slug,
                 price: Number(editingService.price || 0),
                 duration_minutes: Number(editingService.duration_minutes || 45),
-                description: editingService.description || null,
+                description: finalDescription,
                 image_url: editingService.image_url || null,
                 is_active: editingService.is_active ?? true,
                 sort_order: Number(editingService.sort_order || services.length + 1),
@@ -141,7 +168,7 @@ export default function AdminServicesPage() {
                         Manajemen Layanan & Pricelist
                     </h1>
                     <p className="text-xs text-[#6E6D68] mt-0.5">
-                        Kelola katalog layanan, durasi penanganan, dan harga paket studio.
+                        Urutan #1–#6 tampil sebagai 6 Kotak Utama. Urutan #7 ke atas masuk ke Eksplorasi Cepat.
                     </p>
                 </div>
 
@@ -152,6 +179,7 @@ export default function AdminServicesPage() {
                             name: "",
                             price: 80000,
                             duration_minutes: 45,
+                            categoryName: services.length < 6 ? "Paket Utama" : "Braids",
                             description: "",
                             image_url: "",
                             is_active: true,
@@ -172,7 +200,9 @@ export default function AdminServicesPage() {
                 </div>
             ) : services.length === 0 ? (
                 <div className="bg-white border border-[#E4E2DD] rounded-md p-8 text-center">
-                    <p className="text-sm font-semibold text-[#111110]">Belum ada layanan terdaftar.</p>
+                    <p className="text-sm font-semibold text-[#111110]">
+                        Belum ada layanan terdaftar.
+                    </p>
                 </div>
             ) : (
                 <div className="bg-white border border-[#E4E2DD] rounded-md overflow-hidden shadow-sm">
@@ -180,68 +210,107 @@ export default function AdminServicesPage() {
                         <table className="w-full text-left border-collapse text-xs">
                             <thead>
                                 <tr className="border-b border-[#E4E2DD] bg-[#F6F5F2]/70 text-[#6E6D68] uppercase text-[10px] tracking-wider font-semibold">
-                                    <th className="py-2.5 px-4 w-16">URUTAN</th>
+                                    <th className="py-2.5 px-4 w-24">URUTAN</th>
+                                    <th className="py-2.5 px-4 w-32">KATEGORI</th>
                                     <th className="py-2.5 px-4">NAMA & DESKRIPSI</th>
-                                    <th className="py-2.5 px-4 w-28">DURASI</th>
-                                    <th className="py-2.5 px-4 w-36">HARGA</th>
+                                    <th className="py-2.5 px-4 w-24">DURASI</th>
+                                    <th className="py-2.5 px-4 w-32">HARGA</th>
                                     <th className="py-2.5 px-4 w-28">STATUS</th>
-                                    <th className="py-2.5 px-4 w-28 text-right">AKSI</th>
+                                    <th className="py-2.5 px-4 w-24 text-right">AKSI</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-[#E4E2DD]">
-                                {services.map((srv) => (
-                                    <tr key={srv.id} className="hover:bg-[#F6F5F2]/50 transition-colors">
-                                        <td className="py-3 px-4 font-mono font-medium text-[#6E6D68]">
-                                            #{srv.sort_order}
-                                        </td>
-                                        <td className="py-3 px-4">
-                                            <div className="font-semibold text-[#111110]">{srv.name}</div>
-                                            {srv.description && (
-                                                <div className="text-[11px] text-[#6E6D68] mt-0.5 line-clamp-1 max-w-md">
-                                                    {srv.description}
+                                {services.map((srv, idx) => {
+                                    const { category, cleanDesc } = extractCategoryAndDesc(
+                                        srv.description
+                                    );
+                                    const isTopSix = idx < 6;
+
+                                    return (
+                                        <tr
+                                            key={srv.id}
+                                            className="hover:bg-[#F6F5F2]/50 transition-colors"
+                                        >
+                                            <td className="py-3 px-4 font-mono font-medium text-[#6E6D68]">
+                                                <div>#{srv.sort_order}</div>
+                                                <span
+                                                    className={`inline-block mt-0.5 text-[9px] px-1.5 py-0.2 rounded font-sans ${isTopSix
+                                                        ? "bg-amber-100 text-amber-800"
+                                                        : "bg-zinc-100 text-zinc-600"
+                                                        }`}
+                                                >
+                                                    {isTopSix ? "6 Kotak Atas" : "Eksplorasi"}
+                                                </span>
+                                            </td>
+                                            <td className="py-3 px-4">
+                                                <span className="inline-flex px-2 py-0.5 rounded text-[11px] font-semibold bg-[#F6F5F2] text-[#111110] border border-[#E4E2DD]">
+                                                    {category}
+                                                </span>
+                                            </td>
+                                            <td className="py-3 px-4">
+                                                <div className="font-semibold text-[#111110]">
+                                                    {srv.name}
                                                 </div>
-                                            )}
-                                        </td>
-                                        <td className="py-3 px-4 font-mono tabular-nums text-[#6E6D68]">
-                                            {srv.duration_minutes} mnt
-                                        </td>
-                                        <td className="py-3 px-4 font-mono tabular-nums font-semibold text-[#111110]">
-                                            {formatRupiah(Number(srv.price))}
-                                        </td>
-                                        <td className="py-3 px-4">
-                                            <span
-                                                className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium border ${
-                                                    srv.is_active
+                                                {cleanDesc && (
+                                                    <div className="text-[11px] text-[#6E6D68] mt-0.5 line-clamp-1 max-w-md">
+                                                        {cleanDesc}
+                                                    </div>
+                                                )}
+                                            </td>
+                                            <td className="py-3 px-4 font-mono tabular-nums text-[#6E6D68]">
+                                                {srv.duration_minutes} mnt
+                                            </td>
+                                            <td className="py-3 px-4 font-mono tabular-nums font-semibold text-[#111110]">
+                                                {formatRupiah(Number(srv.price))}
+                                            </td>
+                                            <td className="py-3 px-4">
+                                                <span
+                                                    className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium border ${srv.is_active
                                                         ? "bg-emerald-50 text-emerald-800 border-emerald-200"
                                                         : "bg-zinc-100 text-zinc-600 border-zinc-200"
-                                                }`}
-                                            >
-                                                <span className={`w-1.5 h-1.5 rounded-full ${srv.is_active ? "bg-emerald-500" : "bg-zinc-400"}`} />
-                                                {srv.is_active ? "Aktif" : "Nonaktif"}
-                                            </span>
-                                        </td>
-                                        <td className="py-3 px-4 text-right">
-                                            <div className="flex items-center justify-end gap-1">
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setEditingService({ ...srv })}
-                                                    className="p-1.5 rounded-md hover:bg-[#F6F5F2] text-[#6E6D68] hover:text-[#111110] transition-colors"
-                                                    title="Edit layanan"
+                                                        }`}
                                                 >
-                                                    <Pencil className="w-3.5 h-3.5" />
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setDeletingService(srv)}
-                                                    className="p-1.5 rounded-md hover:bg-red-50 text-[#6E6D68] hover:text-red-700 transition-colors"
-                                                    title="Hapus layanan"
-                                                >
-                                                    <Trash2 className="w-3.5 h-3.5" />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
+                                                    <span
+                                                        className={`w-1.5 h-1.5 rounded-full ${srv.is_active
+                                                            ? "bg-emerald-500"
+                                                            : "bg-zinc-400"
+                                                            }`}
+                                                    />
+                                                    {srv.is_active ? "Aktif" : "Nonaktif"}
+                                                </span>
+                                            </td>
+                                            <td className="py-3 px-4 text-right">
+                                                <div className="flex items-center justify-end gap-1">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            const parsed = extractCategoryAndDesc(
+                                                                srv.description
+                                                            );
+                                                            setEditingService({
+                                                                ...srv,
+                                                                categoryName: parsed.category,
+                                                                description: parsed.cleanDesc,
+                                                            });
+                                                        }}
+                                                        className="p-1.5 rounded-md hover:bg-[#F6F5F2] text-[#6E6D68] hover:text-[#111110] transition-colors"
+                                                        title="Edit layanan"
+                                                    >
+                                                        <Pencil className="w-3.5 h-3.5" />
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setDeletingService(srv)}
+                                                        className="p-1.5 rounded-md hover:bg-red-50 text-[#6E6D68] hover:text-red-700 transition-colors"
+                                                        title="Hapus layanan"
+                                                    >
+                                                        <Trash2 className="w-3.5 h-3.5" />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
                             </tbody>
                         </table>
                     </div>
@@ -277,7 +346,36 @@ export default function AdminServicesPage() {
                                 </button>
                             </div>
 
-                            <form id="service-form" onSubmit={handleSaveModal} className="mt-5 space-y-4">
+                            <form
+                                id="service-form"
+                                onSubmit={handleSaveModal}
+                                className="mt-5 space-y-4"
+                            >
+                                <div>
+                                    <label className="block text-[11px] font-medium text-[#6E6D68] mb-1">
+                                        Kategori Layanan *
+                                    </label>
+                                    <select
+                                        value={editingService.categoryName || "Paket Utama"}
+                                        onChange={(e) =>
+                                            setEditingService({
+                                                ...editingService,
+                                                categoryName: e.target.value,
+                                            })
+                                        }
+                                        className="w-full px-3 py-2 rounded-md bg-white border border-[#DCDAD4] text-xs sm:text-sm text-[#111110] focus:outline-none focus:border-[#111110]"
+                                    >
+                                        {SERVICE_CATEGORIES.map((cat) => (
+                                            <option key={cat} value={cat}>
+                                                {cat}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <p className="text-[10px] text-[#6E6D68] mt-1">
+                                        Pilih Braids / Chemical / Haircolor / Treatment untuk filter Eksplorasi Cepat.
+                                    </p>
+                                </div>
+
                                 <div>
                                     <label className="block text-[11px] font-medium text-[#6E6D68] mb-1">
                                         Nama Layanan *
@@ -292,7 +390,7 @@ export default function AdminServicesPage() {
                                                 name: e.target.value,
                                             })
                                         }
-                                        placeholder="Contoh: Classic Cut & Wash"
+                                        placeholder="Contoh: Basic / Braidbox Top Knot / Perming Curly"
                                         className="w-full px-3 py-2 rounded-md bg-white border border-[#DCDAD4] text-xs sm:text-sm text-[#111110] focus:outline-none focus:border-[#111110]"
                                     />
                                 </div>
@@ -350,7 +448,7 @@ export default function AdminServicesPage() {
                                                 description: e.target.value,
                                             })
                                         }
-                                        placeholder="Detail tahapan layanan..."
+                                        placeholder="Contoh: Haircut + Shaving + Hairwash + Scrub + Hair Styling"
                                         className="w-full px-3 py-2 rounded-md bg-white border border-[#DCDAD4] text-xs text-[#111110] focus:outline-none focus:border-[#111110]"
                                     />
                                 </div>
@@ -358,7 +456,7 @@ export default function AdminServicesPage() {
                                 <div className="grid grid-cols-2 gap-3 items-center pt-1">
                                     <div>
                                         <label className="block text-[11px] font-medium text-[#6E6D68] mb-1">
-                                            Urutan Tampil
+                                            Urutan Tampil (1-6 = Kotak Atas)
                                         </label>
                                         <input
                                             type="number"

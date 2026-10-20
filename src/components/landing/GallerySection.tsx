@@ -177,9 +177,9 @@ export function GallerySection({ items }: { items: GalleryItem[] }) {
                                 key={cat}
                                 type="button"
                                 onClick={() => setSelectedCategory(cat)}
-                                className={`px-3 py-1.5 rounded-md text-[11px] sm:text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${isActive
-                                        ? "bg-[#141413] text-[#F8F6F1] shadow-sm"
-                                        : "bg-[#EAE4DC]/60 text-[#706D65] hover:bg-[#EAE4DC] hover:text-[#141413]"
+                                className={`px-3.5 py-1.5 rounded-lg text-[11px] sm:text-xs transition-colors whitespace-nowrap shrink-0 border-2 border-[#141413] ${isActive
+                                        ? "bg-[#dd3e1f] text-white font-bold shadow-[2px_2px_0px_#141413]"
+                                        : "bg-white text-[#141413] font-semibold hover:bg-[#141413] hover:text-white"
                                     }`}
                             >
                                 {cat}
@@ -197,14 +197,14 @@ export function GallerySection({ items }: { items: GalleryItem[] }) {
                         <button
                             type="button"
                             onClick={() => scrollByAmount("left")}
-                            className="px-3 py-1.5 rounded-md bg-[#141413] text-[#F8F6F1] text-xs flex items-center gap-1 hover:bg-[#3B281E] transition-colors"
+                            className="px-3 py-1.5 rounded-md bg-[#141413] text-[#F8F6F1] border-2 border-[#141413] hover:border-[#dd3e1f] text-xs flex items-center gap-1 hover:bg-[#dd3e1f] transition-colors"
                         >
                             <ChevronLeft className="w-3.5 h-3.5" />
                         </button>
                         <button
                             type="button"
                             onClick={() => scrollByAmount("right")}
-                            className="px-3 py-1.5 rounded-md bg-[#141413] text-[#F8F6F1] text-xs flex items-center gap-1 hover:bg-[#3B281E] transition-colors"
+                            className="px-3 py-1.5 rounded-md bg-[#141413] text-[#F8F6F1] border-2 border-[#141413] hover:border-[#dd3e1f] text-xs flex items-center gap-1 hover:bg-[#dd3e1f] transition-colors"
                         >
                             <ChevronRight className="w-3.5 h-3.5" />
                         </button>
@@ -264,7 +264,7 @@ export function GallerySection({ items }: { items: GalleryItem[] }) {
                             type="button"
                             onClick={() => setSelectedImage(null)}
                             aria-label="Tutup pratinjau"
-                            className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 w-8 h-8 rounded-full bg-[#141413]/80 hover:bg-[#141413] text-[#F8F6F1] flex items-center justify-center transition-colors shadow-sm"
+                            className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 w-8 h-8 rounded-full bg-white text-[#141413] border-2 border-[#141413] flex items-center justify-center hover:bg-[#141413] hover:text-white transition-colors shadow-sm"
                         >
                             <X className="w-4 h-4" />
                         </button>
@@ -287,7 +287,7 @@ export function GallerySection({ items }: { items: GalleryItem[] }) {
                         </div>
                         <div className="p-3.5 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 bg-[#F8F6F1] shrink-0">
                             <div className="min-w-0 w-full sm:w-auto">
-                                <span className="inline-block px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#DFC3B0]/40 text-[#3B281E]">
+                                <span className="inline-block px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#dd3e1f]/15 text-[#dd3e1f] border border-[#dd3e1f]/40">
                                     {selectedImage.category}
                                 </span>
                                 <h3 className="font-display text-sm sm:text-base font-bold text-[#141413] mt-1.5 truncate">
@@ -301,7 +301,7 @@ export function GallerySection({ items }: { items: GalleryItem[] }) {
                             </div>
                             <a
                                 href="/booking"
-                                className="shrink-0 w-full sm:w-auto text-center px-4 py-2.5 sm:py-2 rounded-lg bg-[#141413] hover:bg-[#3B281E] text-[#F8F6F1] text-xs font-semibold transition-colors"
+                                className="shrink-0 w-full sm:w-auto text-center px-5 py-2.5 rounded-xl bg-[#dd3e1f] text-white font-bold border-2 border-[#141413] shadow-[2px_2px_0px_#141413] hover:bg-[#141413] transition-colors text-xs uppercase tracking-wider"
                             >
                                 Booking Gaya Ini
                             </a>
