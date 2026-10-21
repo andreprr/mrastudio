@@ -82,7 +82,7 @@ export function ServicesShowcase({ services }: { services: ServiceItem[] }) {
                 </button>
             </div>
 
-            {/* 2. FEATURED CARDS: 6 Kotak Pertama (Simetris 2 kolom di HP, 3 di Tablet, 6 di Desktop) */}
+            {/* 2. FEATURED CARDS: 6 Kotak Pertama (Semua Putih/Terang + Aksen Oranye) */}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-3.5">
                 {featuredServices.map((srv, idx) => {
                     const isPrimary = idx === 0;
@@ -93,68 +93,48 @@ export function ServicesShowcase({ services }: { services: ServiceItem[] }) {
                         <div
                             key={srv.id}
                             onClick={() => setSelectedService(srv)}
-                            className={`group cursor-pointer rounded-xl p-3.5 sm:p-4 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 border ${isPrimary
-                                    ? "bg-[#F8F6F1] text-[#141413] border-[#F8F6F1] shadow-lg"
-                                    : "bg-[#1C1B19] text-[#F8F6F1] border-white/10 hover:border-[#dd3e1f]/50"
-                                }`}
+                            className="group cursor-pointer rounded-xl p-3.5 sm:p-4 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 bg-[#F8F6F1] text-[#141413] border-2 border-[#F8F6F1] hover:border-[#dd3e1f] shadow-lg"
                         >
                             {/* Bagian Atas Kartu Compact */}
                             <div>
                                 <div className="flex items-center justify-between gap-1 mb-2.5">
                                     <span
-                                        className={`text-[9px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded font-semibold ${isPrimary
-                                                ? "bg-[#141413] text-[#F8F6F1]"
-                                                : "bg-[#dd3e1f]/20 text-[#dd3e1f]"
+                                        className={`text-[9px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded font-bold ${isPrimary
+                                                ? "bg-[#dd3e1f] text-white"
+                                                : "bg-[#dd3e1f]/15 text-[#dd3e1f] border border-[#dd3e1f]/30"
                                             }`}
                                     >
                                         {isPrimary ? "Populer" : `Paket ${indexNumber}`}
                                     </span>
 
-                                    <span
-                                        className={`inline-flex items-center gap-1 text-[10px] font-medium ${isPrimary ? "text-[#706D65]" : "text-[#EAE4DC]/60"
-                                            }`}
-                                    >
-                                        <Clock className="w-2.5 h-2.5" />
+                                    <span className="inline-flex items-center gap-1 text-[10px] font-medium text-[#706D65]">
+                                        <Clock className="w-2.5 h-2.5 text-[#dd3e1f]" />
                                         {srv.duration_minutes}m
                                     </span>
                                 </div>
 
-                                <h3 className="font-display text-sm sm:text-[15px] font-extrabold tracking-tight leading-snug line-clamp-1">
+                                <h3 className="font-display text-sm sm:text-[15px] font-extrabold tracking-tight leading-snug line-clamp-1 group-hover:text-[#dd3e1f] transition-colors">
                                     {srv.name}
                                 </h3>
 
-                                <p
-                                    className={`text-[11px] mt-1.5 line-clamp-2 leading-relaxed ${isPrimary ? "text-[#141413]/75" : "text-[#EAE4DC]/65"
-                                        }`}
-                                >
+                                <p className="text-[11px] mt-1.5 line-clamp-2 leading-relaxed text-[#141413]/75">
                                     {cleanDescription ||
                                         "Haircut, shaving, hairwash, scrub & styling."}
                                 </p>
                             </div>
 
                             {/* Bagian Bawah Kartu Compact */}
-                            <div
-                                className={`mt-4 pt-2.5 border-t flex items-end justify-between gap-1.5 ${isPrimary ? "border-[#141413]/10" : "border-white/10"
-                                    }`}
-                            >
+                            <div className="mt-4 pt-2.5 border-t border-[#141413]/10 flex items-end justify-between gap-1.5">
                                 <div className="min-w-0">
-                                    <span
-                                        className={`text-[9px] font-mono uppercase tracking-widest block ${isPrimary ? "text-[#706D65]" : "text-[#EAE4DC]/50"
-                                            }`}
-                                    >
+                                    <span className="text-[9px] font-mono uppercase tracking-widest block text-[#706D65]">
                                         Harga
                                     </span>
-                                    <span className="font-display text-sm sm:text-base font-extrabold tracking-tight truncate block">
+                                    <span className="font-display text-sm sm:text-base font-extrabold tracking-tight truncate block text-[#141413]">
                                         {formatRupiah(Number(srv.price))}
                                     </span>
                                 </div>
 
-                                <span
-                                    className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-transform duration-300 group-hover:scale-105 shrink-0 ${isPrimary
-                                            ? "bg-[#141413] text-[#F8F6F1] group-hover:bg-[#dd3e1f]"
-                                            : "bg-[#dd3e1f] text-white group-hover:bg-white group-hover:text-[#141413]"
-                                        }`}
-                                >
+                                <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-105 shrink-0 bg-[#dd3e1f] text-white group-hover:bg-[#141413]">
                                     <ArrowUpRight className="w-3.5 h-3.5" />
                                 </span>
                             </div>
@@ -163,21 +143,24 @@ export function ServicesShowcase({ services }: { services: ServiceItem[] }) {
                 })}
             </div>
 
-            {/* 3. KONTAINER EKSPLORASI CEPAT (Muncul jika layanan > 6) */}
+            {/* 3. KONTAINER EKSPLORASI CEPAT (Warna Putih/Terang + Aksen Oranye) */}
             {extraServices.length > 0 && (
-                <div className="rounded-2xl bg-[#1C1B19] border border-white/10 p-4 sm:p-6 space-y-4">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+                <div className="rounded-2xl bg-[#F8F6F1] text-[#141413] border-2 border-[#F8F6F1] shadow-lg p-4 sm:p-6 space-y-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#141413]/10 pb-4">
                         <div>
-                            <span className="text-[11px] font-mono uppercase tracking-widest text-[#dd3e1f] block">
+                            <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-[#dd3e1f] block">
                                 Eksplorasi Cepat
                             </span>
-                            <p className="text-sm font-bold text-[#F8F6F1] mt-0.5">
+                            <p className="text-sm font-extrabold text-[#141413] mt-0.5">
                                 Pilih layanan untuk melihat kategori detail:
                             </p>
                         </div>
 
                         {/* Tab Kategori: Semua, Braids, Chemical, Haircolor, Treatment */}
-                        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0" style={{ scrollbarWidth: "none" }}>
+                        <div
+                            className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0"
+                            style={{ scrollbarWidth: "none" }}
+                        >
                             {EXPLORE_CATEGORIES.map((cat) => {
                                 const isActive = activeCategory === cat;
                                 return (
@@ -187,7 +170,7 @@ export function ServicesShowcase({ services }: { services: ServiceItem[] }) {
                                         onClick={() => setActiveCategory(cat)}
                                         className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer shrink-0 ${isActive
                                                 ? "bg-[#dd3e1f] text-white shadow-sm"
-                                                : "bg-white/5 text-[#EAE4DC]/70 hover:bg-white/10 hover:text-white"
+                                                : "bg-[#EAE4DC]/80 text-[#706D65] hover:bg-[#141413] hover:text-white"
                                             }`}
                                     >
                                         {cat}
@@ -199,7 +182,7 @@ export function ServicesShowcase({ services }: { services: ServiceItem[] }) {
 
                     {/* Daftar Item Layanan ke-7 dst */}
                     {filteredExtraServices.length === 0 ? (
-                        <div className="py-6 text-center text-xs text-[#EAE4DC]/50">
+                        <div className="py-6 text-center text-xs text-[#706D65]">
                             Belum ada layanan pada kategori {activeCategory}.
                         </div>
                     ) : (
@@ -211,15 +194,15 @@ export function ServicesShowcase({ services }: { services: ServiceItem[] }) {
                                         key={srv.id}
                                         type="button"
                                         onClick={() => setSelectedService(srv)}
-                                        className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-[#dd3e1f] text-[#EAE4DC] hover:text-white border border-white/10 hover:border-[#dd3e1f] text-xs font-semibold transition-all cursor-pointer flex items-center gap-2 group"
+                                        className="px-3.5 py-2 rounded-xl bg-white hover:bg-[#dd3e1f] text-[#141413] hover:text-white border border-[#141413]/15 hover:border-[#dd3e1f] text-xs font-semibold transition-all cursor-pointer flex items-center gap-2 group shadow-xs"
                                     >
                                         {activeCategory === "Semua" && (
-                                            <span className="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-white/10 group-hover:bg-black/20 text-[#dd3e1f] group-hover:text-white">
+                                            <span className="text-[10px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-[#dd3e1f]/15 group-hover:bg-white/20 text-[#dd3e1f] group-hover:text-white">
                                                 {category}
                                             </span>
                                         )}
                                         <span>{srv.name}</span>
-                                        <span className="opacity-60 font-mono text-[11px]">
+                                        <span className="text-[#706D65] group-hover:text-white/90 font-mono text-[11px]">
                                             • {formatRupiah(Number(srv.price))}
                                         </span>
                                     </button>
