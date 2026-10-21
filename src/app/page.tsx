@@ -78,7 +78,7 @@ export default async function LandingPage() {
     ];
 
     return (
-        <div className="min-h-screen flex flex-col bg-[#F8F6F1] text-[#141413]">
+        <div className="min-h-screen flex flex-col bg-[#FFFFFF] text-[#141413]">
             {/* Animasi Keyframes untuk Border Glow Hitam & Teks Berjalan ke Kanan */}
             <style>{`
         @keyframes spinBorderBlack {
@@ -129,7 +129,7 @@ export default async function LandingPage() {
           height: 260%;
           background: conic-gradient(
             from 0deg,
-            transparent 0%,
+            transparent 0deg,
             rgba(255, 255, 255, 0.35) 18%,
             #141413 42%,
             #000000 58%,
@@ -142,7 +142,7 @@ export default async function LandingPage() {
 
             <Navbar brandName={settings.brand_name} />
 
-            {/* HERO SECTION — FULL GAMBAR DENGAN TEKS DI ATAS GAMBAR (Gaya Paréa) */}
+            {/* HERO SECTION — FULL GAMBAR DENGAN TEKS DI ATAS GAMBAR */}
             <section className="relative min-h-[92vh] w-full flex flex-col justify-between overflow-hidden bg-[#141413]">
                 {/* Background Full Image */}
                 <img
@@ -151,13 +151,13 @@ export default async function LandingPage() {
                     className="absolute inset-0 w-full h-full object-cover object-center scale-105"
                 />
 
-                {/* Overlay Gradasi Atas (Terang/Hangat untuk Navbar) & Bawah (Gelap Pekat untuk Headline) */}
-                <div className="absolute inset-0 bg-gradient-to-b from-[#F8F6F1]/85 via-[#141413]/45 to-[#141413] pointer-events-none" />
+                {/* Overlay Gradasi Atas & Bawah */}
+                <div className="absolute inset-0 bg-gradient-to-b from-[#FFFFFF]/85 via-[#141413]/45 to-[#141413] pointer-events-none" />
 
                 {/* Konten Tengah di Atas Gambar */}
                 <div className="relative z-10 pt-36 sm:pt-44 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center flex flex-col items-center">
                     <div
-                        className="animate-hero-text inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[#F8F6F1]  backdrop-blur-md text-xs font-semibold uppercase tracking-widest mb-6"
+                        className="animate-hero-text inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[#FFFFFF] backdrop-blur-md text-xs font-semibold uppercase tracking-widest mb-6"
                         style={{ animationDelay: "100ms" }}
                     >
                         <Sparkles className="w-3.5 h-3.5" />
@@ -174,13 +174,13 @@ export default async function LandingPage() {
                         >
                             {settings.brand_name}
                         </span>
-                        <span className="hero-brand-glow relative z-10">
+                        <span className="hero-brand-glow relative z-10 text-white">
                             {settings.brand_name}
                         </span>
                     </h1>
 
                     <p
-                        className="animate-hero-text mt-5 text-base sm:text-xl text-[#F8F6F1]/90 max-w-xl font-medium drop-shadow"
+                        className="animate-hero-text mt-5 text-base sm:text-xl text-[#FFFFFF]/90 max-w-xl font-medium drop-shadow"
                         style={{ animationDelay: "340ms" }}
                     >
                         {settings.hero_subheadline}
@@ -190,7 +190,6 @@ export default async function LandingPage() {
                         className="animate-hero-text mt-8 flex flex-wrap items-center justify-center gap-4"
                         style={{ animationDelay: "460ms" }}
                     >
-                        {/* Tombol Booking Sekarang dengan Animasi Garis Hitam Mengelilingi Border + Glow */}
                         <Link
                             href="/booking"
                             className="booking-glow-btn group transition-transform duration-300 hover:scale-[1.03]"
@@ -203,14 +202,14 @@ export default async function LandingPage() {
 
                         <a
                             href="#services"
-                            className="inline-flex items-center px-6 py-3 rounded-full bg-[#F8F6F1] text-[#141413] border-2 border-[#141413] font-bold text-xs sm:text-sm hover:bg-[#141413] hover:text-white transition-all shadow-sm"
+                            className="inline-flex items-center px-6 py-3 rounded-full bg-[#FFFFFF] text-[#141413] border-2 border-[#141413] font-bold text-xs sm:text-sm hover:bg-[#141413] hover:text-white transition-all shadow-sm"
                         >
                             Lihat Katalog Layanan
                         </a>
                     </div>
                 </div>
 
-                {/* Tipografi Statement Besar Bergerak Otomatis ke Kanan di Bagian Bawah Gambar Hero */}
+                {/* Tipografi Statement Besar Bergerak Otomatis ke Kanan */}
                 <div
                     className="animate-hero-text relative z-10 w-full overflow-hidden pb-10 pt-14 border-t border-white/10"
                     style={{ animationDelay: "580ms" }}
@@ -219,7 +218,7 @@ export default async function LandingPage() {
                         {[0, 1, 2, 3].map((i) => (
                             <p
                                 key={i}
-                                className="font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-[#F8F6F1] whitespace-nowrap flex items-center gap-6"
+                                className="font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-[#FFFFFF] whitespace-nowrap flex items-center gap-6"
                             >
                                 <span className="text-[#dd3e1f]">{settings.hero_headline}</span>
                                 <span>Presisi dalam setiap guntingan.</span>
@@ -230,7 +229,7 @@ export default async function LandingPage() {
                 </div>
             </section>
 
-            {/* SECTION LAYANAN & PRICELIST (Ringkas + Modal Pop-up) */}
+            {/* SECTION LAYANAN & PRICELIST */}
             <section
                 id="services"
                 className="py-14 px-4 sm:px-6 lg:px-8 bg-[#141413] text-[#F8F6F1] rounded-b-2xl"
@@ -270,19 +269,19 @@ export default async function LandingPage() {
                             {settings.about_philosophy}
                         </p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
-                            <div className="p-5 rounded-xl bg-[#EAE4DC]/70 border-2 border-[#141413] flex items-start gap-3">
+                            <div className="p-5 rounded-xl bg-[#FFFFFF] border-2 border-[#141413] flex items-start gap-3 shadow-xs">
                                 <CheckCircle2 className="w-5 h-5 text-[#dd3e1f] shrink-0 mt-0.5" />
                                 <div>
-                                    <h4 className="font-bold text-sm">Konsultasi Personal</h4>
+                                    <h4 className="font-bold text-sm text-[#141413]">Konsultasi Personal</h4>
                                     <p className="text-xs text-[#706D65] mt-1">
                                         Analisis bentuk kepala sebelum guntingan pertama.
                                     </p>
                                 </div>
                             </div>
-                            <div className="p-5 rounded-xl bg-[#EAE4DC]/70 border-2 border-[#141413] flex items-start gap-3">
+                            <div className="p-5 rounded-xl bg-[#FFFFFF] border-2 border-[#141413] flex items-start gap-3 shadow-xs">
                                 <CheckCircle2 className="w-5 h-5 text-[#dd3e1f] shrink-0 mt-0.5" />
                                 <div>
-                                    <h4 className="font-bold text-sm">Alat Higienis & Steril</h4>
+                                    <h4 className="font-bold text-sm text-[#141413]">Alat Higienis & Steril</h4>
                                     <p className="text-xs text-[#706D65] mt-1">
                                         Standar kebersihan tinggi pada setiap sesi.
                                     </p>
@@ -332,7 +331,7 @@ export default async function LandingPage() {
                 </div>
 
                 {!reviews || reviews.length === 0 ? (
-                    <div className="rounded-xl border-2 border-[#141413] bg-[#EAE4DC]/40 p-8 text-center">
+                    <div className="rounded-xl border-2 border-[#141413] bg-[#FFFFFF] p-8 text-center shadow-xs">
                         <p className="text-[#141413] font-medium">
                             Belum ada ulasan yang dipublikasikan.
                         </p>
@@ -343,9 +342,8 @@ export default async function LandingPage() {
                     </div>
                 ) : reviews.length >= 3 ? (
                     <div className="relative -mx-4 sm:-mx-6 lg:-mx-8 overflow-hidden py-4">
-                        {/* Gradient edge masks untuk transisi halus tepi kiri & kanan */}
-                        <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-r from-[#F8F6F1] to-transparent z-10" />
-                        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-l from-[#F8F6F1] to-transparent z-10" />
+                        <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-r from-[#FFFFFF] to-transparent z-10" />
+                        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-l from-[#FFFFFF] to-transparent z-10" />
 
                         <div className="flex gap-5 animate-marquee animate-marquee-pause">
                             {(() => {
@@ -355,7 +353,7 @@ export default async function LandingPage() {
                                 return marqueeItems.map((rev, idx) => (
                                     <div
                                         key={`${rev.id}-${idx}`}
-                                        className="w-[280px] sm:w-[350px] shrink-0 rounded-xl bg-[#EAE4DC]/70 p-5 sm:p-6 flex flex-col justify-between border-2 border-[#141413] hover:-translate-y-1 hover:bg-[#EAE4DC] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-sm"
+                                        className="w-[280px] sm:w-[350px] shrink-0 rounded-xl bg-[#FFFFFF] p-5 sm:p-6 flex flex-col justify-between border-2 border-[#141413] hover:-translate-y-1 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-sm"
                                     >
                                         <div>
                                             <div className="flex items-center gap-1 text-[#dd3e1f]">
@@ -394,7 +392,7 @@ export default async function LandingPage() {
                             <div
                                 key={rev.id}
                                 style={{ "--i": idx } as React.CSSProperties}
-                                className="motion-stagger-item rounded-xl bg-[#EAE4DC]/70 p-5 sm:p-6 flex flex-col justify-between border-2 border-[#141413] hover:-translate-y-1 hover:bg-[#EAE4DC] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-sm"
+                                className="motion-stagger-item rounded-xl bg-[#FFFFFF] p-5 sm:p-6 flex flex-col justify-between border-2 border-[#141413] hover:-translate-y-1 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-sm"
                             >
                                 <div>
                                     <div className="flex items-center gap-1 text-[#dd3e1f]">
@@ -440,12 +438,11 @@ export default async function LandingPage() {
                                 Pilih layanan dan jadwalkan kunjunganmu di MR A Studio.
                             </p>
                         </div>
-                        {/* Tombol Booking di Footer dengan Animasi Glow Border */}
                         <Link
                             href="/booking"
                             className="booking-glow-btn group shrink-0 transition-transform duration-300 hover:scale-[1.03]"
                         >
-                            <span className="relative z-10 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#141413] text-[#F8F6F1] font-bold text-xs sm:text-sm group-hover:bg-[#242422] transition-colors">
+                            <span className="relative z-10 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#141413] text-[#FFFFFF] font-bold text-xs sm:text-sm group-hover:bg-[#242422] transition-colors">
                                 <span>Booking Sekarang</span>
                                 <ArrowUpRight className="w-4 h-4" />
                             </span>
@@ -482,7 +479,7 @@ export default async function LandingPage() {
                                         key={bh.day_of_week}
                                         className="p-3 rounded-xl bg-white/5 border border-white/10"
                                     >
-                                        <span className="font-semibold block text-[#F8F6F1]">
+                                        <span className="font-semibold block text-[#FFFFFF]">
                                             {DAY_NAMES[bh.day_of_week]}
                                         </span>
                                         {bh.is_closed ? (

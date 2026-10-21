@@ -30,9 +30,9 @@ function GalleryCard({
 
     return (
         <div
-            className={`bg-[#EAE4DC]/70 p-2 sm:p-2.5 rounded-xl border border-[#141413]/15 flex flex-col justify-between transition-colors hover:border-[#141413]/40 snap-center sm:snap-start shrink-0 w-full ${fixedWidth
-                    ? "sm:w-[250px] md:w-[265px]"
-                    : "sm:w-auto sm:shrink"
+            className={`bg-[#FFFFFF]/70 p-2 sm:p-2.5 rounded-xl border border-[#141413]/15 flex flex-col justify-between transition-colors hover:border-[#141413]/40 snap-center sm:snap-start shrink-0 w-full ${fixedWidth
+                ? "sm:w-[250px] md:w-[265px]"
+                : "sm:w-auto sm:shrink"
                 }`}
         >
             {/* Top Editorial Meta Bar */}
@@ -178,8 +178,8 @@ export function GallerySection({ items }: { items: GalleryItem[] }) {
                                 type="button"
                                 onClick={() => setSelectedCategory(cat)}
                                 className={`px-3.5 py-1.5 rounded-lg text-[11px] sm:text-xs transition-colors whitespace-nowrap shrink-0 border-2 border-[#141413] ${isActive
-                                        ? "bg-[#dd3e1f] text-white font-bold shadow-[2px_2px_0px_#141413]"
-                                        : "bg-white text-[#141413] font-semibold hover:bg-[#141413] hover:text-white"
+                                    ? "bg-[#dd3e1f] text-white font-bold shadow-[2px_2px_0px_#141413]"
+                                    : "bg-white text-[#141413] font-semibold hover:bg-[#141413] hover:text-white"
                                     }`}
                             >
                                 {cat}

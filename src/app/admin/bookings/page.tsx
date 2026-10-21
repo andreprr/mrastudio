@@ -102,7 +102,7 @@ export default function AdminBookingsListPage() {
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Cari Kode (MRA-...), Pelanggan, WhatsApp..."
-                        className="w-full pl-8 pr-3 py-1.5 rounded-md bg-[#F6F5F2] border border-[#E4E2DD] text-xs text-[#111110] focus:outline-none focus:bg-white focus:border-[#111110]"
+                        className="w-full pl-8 pr-3 py-1.5 rounded-md bg-[#FFFFFF] border border-[#E4E2DD] text-xs text-[#111110] focus:outline-none focus:bg-white focus:border-[#111110]"
                     />
                 </div>
 

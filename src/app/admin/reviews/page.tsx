@@ -14,9 +14,6 @@ import {
     Search,
     X,
     MessageSquare,
-    CheckCircle2,
-    Clock,
-    ShieldAlert,
 } from "lucide-react";
 
 type FilterStatus = "all" | "pending" | "approved" | "hidden";
@@ -136,8 +133,8 @@ export default function AdminReviewsPage() {
             nextStatus === "approved"
                 ? "Ulasan disetujui dan tampil di halaman website."
                 : nextStatus === "hidden"
-                ? "Ulasan disembunyikan dari publik."
-                : "Ulasan dipindahkan ke antrean moderasi."
+                    ? "Ulasan disembunyikan dari publik."
+                    : "Ulasan dipindahkan ke antrean moderasi."
         );
     }
 
@@ -244,9 +241,9 @@ export default function AdminReviewsPage() {
                 </button>
             </div>
 
-            {/* 1 Baris Architectural Metric Strip */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 bg-white border border-[#E4E2DD] rounded-md divide-y lg:divide-y-0 lg:divide-x divide-[#E4E2DD] mb-6 overflow-hidden">
-                <div className="p-4">
+            {/* 1 Baris Architectural Metric Strip (Background Pure White) */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 bg-[#FFFFFF] border border-[#E4E2DD] rounded-md divide-y lg:divide-y-0 lg:divide-x divide-[#E4E2DD] mb-6 overflow-hidden shadow-sm">
+                <div className="p-4 bg-[#FFFFFF]">
                     <span className="text-[11px] font-mono uppercase tracking-wider text-[#6E6D68] block">
                         TOTAL ULASAN
                     </span>
@@ -258,14 +255,13 @@ export default function AdminReviewsPage() {
                     </span>
                 </div>
 
-                <div className="p-4">
+                <div className="p-4 bg-[#FFFFFF]">
                     <span className="text-[11px] font-mono uppercase tracking-wider text-[#6E6D68] block">
                         MENUNGGU MODERASI
                     </span>
                     <div
-                        className={`text-2xl font-bold font-mono tabular-nums mt-1 ${
-                            metrics.pending > 0 ? "text-amber-600" : "text-[#111110]"
-                        }`}
+                        className={`text-2xl font-bold font-mono tabular-nums mt-1 ${metrics.pending > 0 ? "text-amber-600" : "text-[#111110]"
+                            }`}
                     >
                         {metrics.pending}
                     </div>
@@ -274,7 +270,7 @@ export default function AdminReviewsPage() {
                     </span>
                 </div>
 
-                <div className="p-4">
+                <div className="p-4 bg-[#FFFFFF]">
                     <span className="text-[11px] font-mono uppercase tracking-wider text-[#6E6D68] block">
                         DISETUJUI (LIVE)
                     </span>
@@ -286,7 +282,7 @@ export default function AdminReviewsPage() {
                     </span>
                 </div>
 
-                <div className="p-4">
+                <div className="p-4 bg-[#FFFFFF]">
                     <span className="text-[11px] font-mono uppercase tracking-wider text-[#6E6D68] block">
                         RATA-RATA RATING
                     </span>
@@ -302,7 +298,7 @@ export default function AdminReviewsPage() {
             </div>
 
             {/* Filter Bar & Pencarian */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white p-2.5 border border-[#E4E2DD] rounded-md mb-4">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-[#FFFFFF] p-2.5 border border-[#E4E2DD] rounded-md mb-4 shadow-sm">
                 <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
                     {(
                         [
@@ -316,19 +312,17 @@ export default function AdminReviewsPage() {
                             key={tab.key}
                             type="button"
                             onClick={() => setStatusFilter(tab.key)}
-                            className={`px-2.5 py-1 rounded-md text-xs font-medium whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-                                statusFilter === tab.key
+                            className={`px-2.5 py-1 rounded-md text-xs font-medium whitespace-nowrap transition-colors flex items-center gap-1.5 ${statusFilter === tab.key
                                     ? "bg-[#111110] text-white shadow-sm"
                                     : "text-[#6E6D68] hover:text-[#111110] hover:bg-[#F6F5F2]"
-                            }`}
+                                }`}
                         >
                             <span>{tab.label}</span>
                             <span
-                                className={`font-mono tabular-nums text-[10px] px-1.5 py-0.2 rounded ${
-                                    statusFilter === tab.key
+                                className={`font-mono tabular-nums text-[10px] px-1.5 py-0.2 rounded ${statusFilter === tab.key
                                         ? "bg-white/20 text-white"
                                         : "bg-[#F6F5F2] text-[#6E6D68]"
-                                }`}
+                                    }`}
                             >
                                 {tab.count}
                             </span>
@@ -343,18 +337,18 @@ export default function AdminReviewsPage() {
                         placeholder="Cari nama atau ulasan..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-8 pr-3 py-1.5 rounded-md bg-white border border-[#DCDAD4] text-xs text-[#111110] placeholder:text-[#6E6D68] focus:outline-none focus:border-[#111110]"
+                        className="w-full pl-8 pr-3 py-1.5 rounded-md bg-[#FFFFFF] border border-[#DCDAD4] text-xs text-[#111110] placeholder:text-[#6E6D68] focus:outline-none focus:border-[#111110]"
                     />
                 </div>
             </div>
 
             {/* High-Density Moderation Table */}
             {loading ? (
-                <div className="bg-white border border-[#E4E2DD] rounded-md p-12 text-center text-xs text-[#6E6D68]">
+                <div className="bg-[#FFFFFF] border border-[#E4E2DD] rounded-md p-12 text-center text-xs text-[#6E6D68] shadow-sm">
                     Memuat data ulasan pelanggan...
                 </div>
             ) : filteredReviews.length === 0 ? (
-                <div className="bg-white border border-[#E4E2DD] rounded-md p-12 text-center">
+                <div className="bg-[#FFFFFF] border border-[#E4E2DD] rounded-md p-12 text-center shadow-sm">
                     <MessageSquare className="w-8 h-8 text-[#6E6D68] mx-auto mb-2 opacity-50" />
                     <p className="text-sm font-semibold text-[#111110]">
                         Tidak ada ulasan yang sesuai
@@ -364,7 +358,7 @@ export default function AdminReviewsPage() {
                     </p>
                 </div>
             ) : (
-                <div className="bg-white border border-[#E4E2DD] rounded-md overflow-hidden">
+                <div className="bg-[#FFFFFF] border border-[#E4E2DD] rounded-md overflow-hidden shadow-sm">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                             <thead>
@@ -396,11 +390,10 @@ export default function AdminReviewsPage() {
                                                     {Array.from({ length: 5 }).map((_, i) => (
                                                         <Star
                                                             key={i}
-                                                            className={`w-3.5 h-3.5 ${
-                                                                i < r.rating
+                                                            className={`w-3.5 h-3.5 ${i < r.rating
                                                                     ? "fill-[#C89D7C] text-[#C89D7C]"
                                                                     : "text-[#DCDAD4]"
-                                                            }`}
+                                                                }`}
                                                         />
                                                     ))}
                                                 </div>
@@ -420,29 +413,27 @@ export default function AdminReviewsPage() {
                                         {/* Status */}
                                         <td className="px-4 py-3 whitespace-nowrap">
                                             <span
-                                                className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium border ${
-                                                    r.status === "approved"
+                                                className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium border ${r.status === "approved"
                                                         ? "bg-emerald-50 text-emerald-800 border-emerald-200"
                                                         : r.status === "pending"
-                                                        ? "bg-amber-50 text-amber-800 border-amber-200"
-                                                        : "bg-[#F6F5F2] text-[#6E6D68] border-[#E4E2DD]"
-                                                }`}
+                                                            ? "bg-amber-50 text-amber-800 border-amber-200"
+                                                            : "bg-[#F6F5F2] text-[#6E6D68] border-[#E4E2DD]"
+                                                    }`}
                                             >
                                                 <span
-                                                    className={`w-1.5 h-1.5 rounded-full ${
-                                                        r.status === "approved"
+                                                    className={`w-1.5 h-1.5 rounded-full ${r.status === "approved"
                                                             ? "bg-emerald-500"
                                                             : r.status === "pending"
-                                                            ? "bg-amber-500"
-                                                            : "bg-stone-400"
-                                                    }`}
+                                                                ? "bg-amber-500"
+                                                                : "bg-stone-400"
+                                                        }`}
                                                 />
                                                 <span>
                                                     {r.status === "approved"
                                                         ? "Disetujui"
                                                         : r.status === "pending"
-                                                        ? "Menunggu"
-                                                        : "Disembunyikan"}
+                                                            ? "Menunggu"
+                                                            : "Disembunyikan"}
                                                 </span>
                                             </span>
                                         </td>
@@ -465,7 +456,7 @@ export default function AdminReviewsPage() {
                                                     <button
                                                         type="button"
                                                         onClick={() => handleUpdateStatus(r.id, "hidden")}
-                                                        className="px-2.5 py-1 rounded-md bg-white border border-[#E4E2DD] text-[#6E6D68] text-xs font-medium hover:bg-[#F6F5F2] hover:text-[#111110] transition-colors flex items-center gap-1"
+                                                        className="px-2.5 py-1 rounded-md bg-[#FFFFFF] border border-[#E4E2DD] text-[#6E6D68] text-xs font-medium hover:bg-[#F6F5F2] hover:text-[#111110] transition-colors flex items-center gap-1"
                                                     >
                                                         <EyeOff className="w-3 h-3" />
                                                         <span>Sembunyikan</span>
@@ -497,7 +488,7 @@ export default function AdminReviewsPage() {
                         className="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
                         onClick={() => setDrawerOpen(false)}
                     />
-                    <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white border-l border-[#E4E2DD] p-6 shadow-2xl flex flex-col justify-between overflow-y-auto">
+                    <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-[#FFFFFF] border-l border-[#E4E2DD] p-6 shadow-2xl flex flex-col justify-between overflow-y-auto">
                         <div>
                             {/* Drawer Header */}
                             <div className="flex items-center justify-between pb-4 border-b border-[#E4E2DD]">
@@ -535,10 +526,9 @@ export default function AdminReviewsPage() {
                                                 customer_name: e.target.value,
                                             })
                                         }
-                                        className="w-full px-3 py-2 rounded-md bg-white border border-[#DCDAD4] text-xs sm:text-sm text-[#111110] focus:outline-none focus:border-[#111110]"
+                                        className="w-full px-3 py-2 rounded-md bg-[#FFFFFF] border border-[#DCDAD4] text-xs sm:text-sm text-[#111110] focus:outline-none focus:border-[#111110]"
                                     />
                                 </div>
-
 
                                 <div>
                                     <label className="block text-[11px] font-mono uppercase tracking-wider text-[#6E6D68] mb-1.5">
@@ -555,11 +545,10 @@ export default function AdminReviewsPage() {
                                                 className="p-1 rounded hover:bg-[#F6F5F2] transition-colors"
                                             >
                                                 <Star
-                                                    className={`w-6 h-6 ${
-                                                        star <= manualForm.rating
+                                                    className={`w-6 h-6 ${star <= manualForm.rating
                                                             ? "fill-[#C89D7C] text-[#C89D7C]"
                                                             : "text-[#DCDAD4]"
-                                                    }`}
+                                                        }`}
                                                 />
                                             </button>
                                         ))}
@@ -581,7 +570,7 @@ export default function AdminReviewsPage() {
                                                 status: e.target.value as "pending" | "approved" | "hidden",
                                             })
                                         }
-                                        className="w-full px-3 py-2 rounded-md bg-white border border-[#DCDAD4] text-xs sm:text-sm text-[#111110] focus:outline-none focus:border-[#111110]"
+                                        className="w-full px-3 py-2 rounded-md bg-[#FFFFFF] border border-[#DCDAD4] text-xs sm:text-sm text-[#111110] focus:outline-none focus:border-[#111110]"
                                     >
                                         <option value="approved">Disetujui (Langsung Live)</option>
                                         <option value="pending">Menunggu Moderasi</option>
@@ -604,7 +593,7 @@ export default function AdminReviewsPage() {
                                                 comment: e.target.value,
                                             })
                                         }
-                                        className="w-full px-3 py-2 rounded-md bg-white border border-[#DCDAD4] text-xs sm:text-sm text-[#111110] focus:outline-none focus:border-[#111110] leading-relaxed"
+                                        className="w-full px-3 py-2 rounded-md bg-[#FFFFFF] border border-[#DCDAD4] text-xs sm:text-sm text-[#111110] focus:outline-none focus:border-[#111110] leading-relaxed"
                                     />
                                 </div>
                             </form>
@@ -615,7 +604,7 @@ export default function AdminReviewsPage() {
                             <button
                                 type="button"
                                 onClick={() => setDrawerOpen(false)}
-                                className="px-3.5 py-2 rounded-md bg-white border border-[#E4E2DD] text-[#111110] text-xs font-medium hover:bg-[#F6F5F2] transition-colors"
+                                className="px-3.5 py-2 rounded-md bg-[#FFFFFF] border border-[#E4E2DD] text-[#111110] text-xs font-medium hover:bg-[#F6F5F2] transition-colors"
                             >
                                 Batal
                             </button>
@@ -639,7 +628,7 @@ export default function AdminReviewsPage() {
                     onClick={() => setDeletingReview(null)}
                 >
                     <div
-                        className="rounded-md border border-[#E4E2DD] bg-white p-6 max-w-sm w-full shadow-2xl"
+                        className="rounded-md border border-[#E4E2DD] bg-[#FFFFFF] p-6 max-w-sm w-full shadow-2xl"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <h3 className="text-base font-bold text-[#111110]">
@@ -652,7 +641,7 @@ export default function AdminReviewsPage() {
                             <button
                                 type="button"
                                 onClick={() => setDeletingReview(null)}
-                                className="px-3.5 py-2 rounded-md bg-white border border-[#E4E2DD] text-[#111110] text-xs font-medium hover:bg-[#F6F5F2]"
+                                className="px-3.5 py-2 rounded-md bg-[#FFFFFF] border border-[#E4E2DD] text-[#111110] text-xs font-medium hover:bg-[#F6F5F2]"
                             >
                                 Batal
                             </button>

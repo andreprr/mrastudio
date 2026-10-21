@@ -39,9 +39,9 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     }
 
     return (
-        <div className="min-h-screen bg-[#F6F5F2] text-[#111110] flex flex-col lg:flex-row font-sans">
+        <div className="min-h-screen bg-[#FFFFFF] text-[#111110] flex flex-col lg:flex-row font-sans">
             {/* Sidebar Ramping Swiss Architectural */}
-            <aside className="lg:w-56 bg-[#111110] text-[#F6F5F2] border-b lg:border-b-0 lg:border-r border-white/10 shrink-0 flex flex-col justify-between p-4 lg:p-5">
+            <aside className="lg:w-56 bg-[#111110] text-[#FFFFFF] border-b lg:border-b-0 lg:border-r border-white/10 shrink-0 flex flex-col justify-between p-4 lg:p-5">
                 <div>
                     <div className="flex items-center justify-between lg:block mb-6">
                         <div className="flex items-center gap-2.5">

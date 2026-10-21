@@ -27,6 +27,8 @@ import {
     Ticket,
     MessageCircle,
     Search,
+    Sparkles,
+    Layers,
 } from "lucide-react";
 
 interface SlotItem {
@@ -49,6 +51,23 @@ interface CreatedTicket {
     status: string;
 }
 
+const SATUAN_CATEGORIES = ["Semua", "Braids", "Chemical", "Haircolor", "Treatment"] as const;
+
+// Helper untuk memisahkan tag [Kategori] dari deskripsi asli
+function parseServiceMeta(srv: ServiceItem) {
+    const rawDesc = srv.description || "";
+    const match = rawDesc.match(/^\[([^\]]+)\]\s*([\s\S]*)$/);
+    const explicitCat = (srv as ServiceItem & { category?: string }).category;
+
+    if (explicitCat) {
+        return { category: explicitCat, cleanDescription: rawDesc };
+    }
+    if (match) {
+        return { category: match[1].trim(), cleanDescription: match[2].trim() };
+    }
+    return { category: "Treatment", cleanDescription: rawDesc };
+}
+
 export function BookingWizard({
     services,
     barbers,
@@ -69,6 +88,17 @@ export function BookingWizard({
     const [loadingSlots, setLoadingSlots] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [ticket, setTicket] = useState<CreatedTicket | null>(null);
+
+    // Pembagian 6 Paket Utama vs Layanan Satuan (Urutan ke-7 dst)
+    const packageServices = services.slice(0, 6);
+    const singleServices = services.slice(6);
+
+    // Deteksi apakah initialServiceId berada di grup satuan
+    const isInitialInSingle = singleServices.some((s) => s.id === initialServiceId);
+    const [serviceTab, setServiceTab] = useState<"paket" | "satuan">(
+        isInitialInSingle ? "satuan" : "paket"
+    );
+    const [satuanCategory, setSatuanCategory] = useState<string>("Semua");
 
     const form = useForm<CreateBookingInput>({
         resolver: zodResolver(createBookingSchema),
@@ -104,6 +134,12 @@ export function BookingWizard({
     const selectedService = services.find((s) => s.id === watchedServiceId);
     const selectedBarber = barbers.find((b) => b.id === watchedBarberId);
 
+    const filteredSingleServices = singleServices.filter((srv) => {
+        if (satuanCategory === "Semua") return true;
+        const { category } = parseServiceMeta(srv);
+        return category.toLowerCase() === satuanCategory.toLowerCase();
+    });
+
     // Bangun daftar tanggal sesuai booking_window_days pada zona waktu Asia/Jakarta
     const availableDates = Array.from({
         length: settings.booking_window_days || 14,
@@ -129,7 +165,7 @@ export function BookingWizard({
         };
     });
 
-    // Muat slot dari server saat langkah 4 dibuka atau tanggal/barber berubah
+    // Muat slot dari server saat tanggal/barber berubah
     useEffect(() => {
         if (!watchedDate || !watchedServiceId) return;
 
@@ -172,7 +208,7 @@ export function BookingWizard({
             if (!response.ok) {
                 toast.error(result.error || "Gagal membuat booking.");
                 if (response.status === 409) {
-                    setStep(4); // Kembalikan ke pemilihan waktu jika slot baru saja diambil orang lain
+                    setStep(4);
                 }
                 return;
             }
@@ -198,11 +234,11 @@ export function BookingWizard({
             <div className="max-w-xl mx-auto rounded-2xl bg-brand-beige border border-brand-charcoal/15 p-5 sm:p-6 shadow-xl">
                 <div className="flex items-center justify-between border-b border-brand-charcoal/10 pb-6">
                     <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-full bg-brand-charcoal text-brand-cream flex items-center justify-center">
+                        <div className="w-12 h-12 rounded-full bg-[#dd3e1f] text-white flex items-center justify-center">
                             <Ticket className="w-6 h-6" />
                         </div>
                         <div>
-                            <span className="text-xs font-semibold uppercase tracking-widest text-brand-espresso">
+                            <span className="text-xs font-semibold uppercase tracking-widest text-[#dd3e1f]">
                                 Tiket Reservasi Digital
                             </span>
                             <h2 className="font-display text-2xl font-bold text-brand-charcoal">
@@ -242,7 +278,7 @@ export function BookingWizard({
                     </div>
                     <div className="flex justify-between py-2">
                         <span className="text-brand-gray">Total Biaya</span>
-                        <span className="font-display text-xl font-bold text-brand-charcoal">
+                        <span className="font-display text-xl font-bold text-[#dd3e1f]">
                             {formatRupiah(Number(ticket.price))}
                         </span>
                     </div>
@@ -266,7 +302,7 @@ export function BookingWizard({
                             href={`https://wa.me/${waNumber}?text=${waText}`}
                             target="_blank"
                             rel="noreferrer"
-                            className="flex-1 inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-full bg-[#141413] text-white border-2 border-[#141413] hover:border-[#dd3e1f] text-sm font-bold transition-colors shadow-sm"
+                            className="flex-1 inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-full bg-[#dd3e1f] text-white border-2 border-[#141413] hover:bg-[#141413] text-sm font-bold transition-colors shadow-sm"
                         >
                             <MessageCircle className="w-4 h-4" />
                             <span>Hubungi WhatsApp</span>
@@ -279,11 +315,13 @@ export function BookingWizard({
 
     return (
         <div className="max-w-3xl mx-auto">
-            {/* Progress Bar 6 Langkah */}
+            {/* Progress Bar 6 Langkah dengan Aksen Oranye */}
             <div className="mb-8">
                 <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-brand-gray mb-3">
-                    <span>Langkah {step} dari 6</span>
                     <span>
+                        Langkah <strong className="text-[#dd3e1f]">{step}</strong> dari 6
+                    </span>
+                    <span className="text-[#141413] font-bold">
                         {step === 1 && "Pilih Layanan"}
                         {step === 2 && "Pilih Tanggal"}
                         {step === 3 && "Pilih Barber"}
@@ -294,68 +332,184 @@ export function BookingWizard({
                 </div>
                 <div className="w-full h-2 rounded-full bg-brand-beige overflow-hidden">
                     <div
-                        className="h-full bg-brand-charcoal transition-all duration-300"
+                        className="h-full bg-[#dd3e1f] transition-all duration-300"
                         style={{ width: `${(step / 6) * 100}%` }}
                     />
                 </div>
             </div>
 
-            {/* LANGKAH 1: PILIH LAYANAN */}
+            {/* LANGKAH 1: PILIH LAYANAN (PAKET VS SATUAN - MINIMALIS TANPA KOTAK BESAR) */}
             {step === 1 && (
-                <div className="space-y-4">
-                    <h2 className="font-display text-2xl sm:text-3xl font-bold">
-                        1. Pilih Layanan Grooming
-                    </h2>
-                    <div className="grid grid-cols-1 gap-4">
-                        {services.map((srv) => {
-                            const selected = watchedServiceId === srv.id;
-                            return (
+                <div className="space-y-6">
+                    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                        <div>
+                            <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-[#dd3e1f] block mb-1">
+                                Step 01 • Katalog Layanan
+                            </span>
+                            <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#141413]">
+                                Pilih Layanan Grooming
+                            </h2>
+                        </div>
+
+                        {/* Toggle Switch Paket vs Satuan */}
+                        {singleServices.length > 0 && (
+                            <div className="inline-flex p-1 rounded-xl bg-[#EAE4DC] border border-[#141413]/10 self-start sm:self-auto">
                                 <button
-                                    key={srv.id}
                                     type="button"
-                                    onClick={() => form.setValue("service_id", srv.id)}
-                                    className={`w-full text-left p-5 sm:p-6 rounded-xl border transition-all flex items-center justify-between gap-4 ${selected
-                                        ? "bg-brand-charcoal text-brand-cream border-brand-charcoal shadow-lg"
-                                        : "bg-brand-beige/60 text-brand-charcoal border-brand-charcoal/10 hover:bg-brand-beige"
+                                    onClick={() => setServiceTab("paket")}
+                                    className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${serviceTab === "paket"
+                                            ? "bg-[#dd3e1f] text-white shadow-xs"
+                                            : "text-[#141413]/70 hover:text-[#141413]"
                                         }`}
                                 >
-                                    <div className="space-y-1">
-                                        <h3 className="font-display text-lg sm:text-xl font-bold">
-                                            {srv.name}
-                                        </h3>
-                                        <p
-                                            className={`text-xs sm:text-sm ${selected ? "text-brand-beige/80" : "text-brand-gray"
-                                                }`}
-                                        >
-                                            {srv.description}
-                                        </p>
-                                        <div className="inline-flex items-center gap-2 text-xs pt-1 opacity-80">
-                                            <Clock className="w-3.5 h-3.5" />
-                                            <span>{srv.duration_minutes} menit</span>
-                                            <span>•</span>
-                                            <span className="font-semibold">
+                                    <Sparkles className="w-3.5 h-3.5" />
+                                    <span>Paket ({packageServices.length})</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setServiceTab("satuan")}
+                                    className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${serviceTab === "satuan"
+                                            ? "bg-[#dd3e1f] text-white shadow-xs"
+                                            : "text-[#141413]/70 hover:text-[#141413]"
+                                        }`}
+                                >
+                                    <Layers className="w-3.5 h-3.5" />
+                                    <span>Satuan ({singleServices.length})</span>
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Sub-Filter Kategori Khusus Tab Satuan */}
+                    {serviceTab === "satuan" && singleServices.length > 0 && (
+                        <div
+                            className="flex items-center gap-1.5 overflow-x-auto pb-1"
+                            style={{ scrollbarWidth: "none" }}
+                        >
+                            {SATUAN_CATEGORIES.map((cat) => {
+                                const active = satuanCategory === cat;
+                                return (
+                                    <button
+                                        key={cat}
+                                        type="button"
+                                        onClick={() => setSatuanCategory(cat)}
+                                        className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer shrink-0 ${active
+                                                ? "bg-[#141413] text-white"
+                                                : "bg-[#EAE4DC]/70 text-[#706D65] hover:bg-[#dd3e1f]/15 hover:text-[#dd3e1f]"
+                                            }`}
+                                    >
+                                        {cat}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    )}
+
+                    {/* Daftar Layanan Gaya Baris Tipis Modern (Tanpa Kotak Tebal) */}
+                    <div className="divide-y divide-[#141413]/10 border-t border-b border-[#141413]/15">
+                        {(serviceTab === "paket" ? packageServices : filteredSingleServices).map(
+                            (srv, idx) => {
+                                const selected = watchedServiceId === srv.id;
+                                const { category, cleanDescription } = parseServiceMeta(srv);
+
+                                return (
+                                    <button
+                                        key={srv.id}
+                                        type="button"
+                                        onClick={() => form.setValue("service_id", srv.id)}
+                                        className={`w-full text-left py-3.5 px-3 sm:px-4 transition-all flex items-center justify-between gap-3 cursor-pointer group ${selected
+                                                ? "bg-[#dd3e1f]/10 border-l-4 border-l-[#dd3e1f]"
+                                                : "hover:bg-[#EAE4DC]/50"
+                                            }`}
+                                    >
+                                        {/* Kiri: Nomor/Radio + Nama & Rincian Singkat */}
+                                        <div className="flex items-start gap-3 min-w-0">
+                                            <div
+                                                className={`mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0 border transition-colors ${selected
+                                                        ? "bg-[#dd3e1f] border-[#dd3e1f] text-white"
+                                                        : "border-[#141413]/30 group-hover:border-[#dd3e1f]"
+                                                    }`}
+                                            >
+                                                {selected ? (
+                                                    <Check className="w-3 h-3 stroke-[3]" />
+                                                ) : (
+                                                    <span className="text-[9px] font-mono text-[#706D65]">
+                                                        {String(idx + 1).padStart(2, "0")}
+                                                    </span>
+                                                )}
+                                            </div>
+
+                                            <div className="min-w-0">
+                                                <div className="flex flex-wrap items-center gap-2">
+                                                    <h3
+                                                        className={`font-display text-sm sm:text-base font-extrabold tracking-tight transition-colors ${selected
+                                                                ? "text-[#dd3e1f]"
+                                                                : "text-[#141413] group-hover:text-[#dd3e1f]"
+                                                            }`}
+                                                    >
+                                                        {srv.name}
+                                                    </h3>
+
+                                                    {serviceTab === "satuan" && (
+                                                        <span className="text-[10px] font-mono font-bold uppercase px-1.5 py-0.2 rounded bg-[#dd3e1f]/15 text-[#dd3e1f]">
+                                                            {category}
+                                                        </span>
+                                                    )}
+
+                                                    <span className="inline-flex items-center gap-1 text-[11px] font-mono text-[#706D65]">
+                                                        <Clock className="w-3 h-3 text-[#dd3e1f]" />
+                                                        {srv.duration_minutes}m
+                                                    </span>
+                                                </div>
+
+                                                {cleanDescription && (
+                                                    <p className="text-xs text-[#706D65] mt-0.5 line-clamp-1">
+                                                        {cleanDescription}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {/* Kanan: Garis Titik-Titik Halus + Harga Oranye/Tegas */}
+                                        <div className="flex items-center gap-2 shrink-0">
+                                            <span
+                                                className={`font-display text-sm sm:text-base font-extrabold tabular-nums ${selected ? "text-[#dd3e1f]" : "text-[#141413]"
+                                                    }`}
+                                            >
                                                 {formatRupiah(Number(srv.price))}
                                             </span>
                                         </div>
-                                    </div>
-                                    <div
-                                        className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 border-2 ${selected
-                                            ? "bg-[#dd3e1f] text-white border-[#141413]"
-                                            : "border-[#141413]/30"
-                                            }`}
-                                    >
-                                        {selected && <Check className="w-4 h-4" />}
-                                    </div>
-                                </button>
-                            );
-                        })}
+                                    </button>
+                                );
+                            }
+                        )}
+
+                        {serviceTab === "satuan" && filteredSingleServices.length === 0 && (
+                            <div className="py-8 text-center text-xs text-[#706D65]">
+                                Belum ada layanan pada kategori {satuanCategory}.
+                            </div>
+                        )}
                     </div>
-                    <div className="pt-6 flex justify-end">
+
+                    {/* Bar Konfirmasi Layanan Terpilih & Tombol Lanjut */}
+                    <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        {selectedService ? (
+                            <div className="text-xs text-[#706D65]">
+                                Terpilih:{" "}
+                                <strong className="text-[#141413]">{selectedService.name}</strong>{" "}
+                                <span className="text-[#dd3e1f] font-bold">
+                                    ({formatRupiah(Number(selectedService.price))})
+                                </span>
+                            </div>
+                        ) : (
+                            <div />
+                        )}
+
                         <button
                             type="button"
                             disabled={!watchedServiceId}
                             onClick={() => setStep(2)}
-                            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#141413] text-white border-2 border-[#141413] hover:border-[#dd3e1f] text-xs sm:text-sm font-bold disabled:opacity-40 shadow-sm"
+                            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#dd3e1f] hover:bg-[#141413] text-white border-2 border-[#141413] shadow-[2px_2px_0px_#141413] text-xs sm:text-sm font-bold disabled:opacity-40 transition-colors cursor-pointer"
                         >
                             <span>Lanjut Pilih Tanggal</span>
                             <ChevronRight className="w-4 h-4" />
@@ -388,10 +542,10 @@ export function BookingWizard({
                                         form.setValue("start_time", "");
                                     }}
                                     className={`p-4 rounded-xl border-2 text-center transition-all ${d.isClosed
-                                        ? "opacity-35 cursor-not-allowed bg-brand-beige/20 border-[#141413]/20"
-                                        : isSelected
-                                            ? "bg-[#dd3e1f] text-white border-[#141413] font-bold shadow-[3px_3px_0px_#141413]"
-                                            : "bg-white text-[#141413] font-bold border-[#141413] hover:bg-[#dd3e1f] hover:text-white"
+                                            ? "opacity-35 cursor-not-allowed bg-brand-beige/20 border-[#141413]/20"
+                                            : isSelected
+                                                ? "bg-[#dd3e1f] text-white border-[#141413] font-bold shadow-[3px_3px_0px_#141413]"
+                                                : "bg-white text-[#141413] font-bold border-[#141413] hover:bg-[#dd3e1f] hover:text-white"
                                         }`}
                                 >
                                     <span className="text-xs uppercase block opacity-80">
@@ -434,11 +588,11 @@ export function BookingWizard({
             {step === 3 && (
                 <div className="space-y-6">
                     <h2 className="font-display text-2xl sm:text-3xl font-bold flex items-center gap-2">
-                        <UserCheck className="w-6 h-6" />
+                        <UserCheck className="w-6 h-6 text-[#dd3e1f]" />
                         <span>3. Pilih Barber / Stylist</span>
                     </h2>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="divide-y divide-[#141413]/10 border-t border-b border-[#141413]/15">
                         {/* Opsi Barber Mana Saja */}
                         <button
                             type="button"
@@ -446,23 +600,30 @@ export function BookingWizard({
                                 form.setValue("barber_id", null);
                                 form.setValue("start_time", "");
                             }}
-                            className={`p-5 rounded-xl border text-left transition-all flex items-center justify-between ${watchedBarberId === null
-                                ? "bg-brand-charcoal text-brand-cream border-brand-charcoal"
-                                : "bg-brand-beige/60 text-brand-charcoal border-brand-charcoal/10"
+                            className={`w-full py-4 px-4 text-left transition-all flex items-center justify-between gap-4 cursor-pointer ${watchedBarberId === null
+                                    ? "bg-[#dd3e1f]/10 border-l-4 border-l-[#dd3e1f]"
+                                    : "hover:bg-[#EAE4DC]/50"
                                 }`}
                         >
                             <div>
-                                <span className="text-xs uppercase tracking-wider opacity-75">
+                                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#dd3e1f]">
                                     Rekomendasi Fleksibel
                                 </span>
-                                <h3 className="font-display text-lg font-bold mt-1">
+                                <h3 className="font-display text-base sm:text-lg font-bold text-[#141413] mt-0.5">
                                     Barber mana saja yang tersedia
                                 </h3>
-                                <p className="text-xs opacity-80 mt-1">
+                                <p className="text-xs text-[#706D65] mt-0.5">
                                     Sistem akan mengalokasikan barber yang bebas pada jam pilihan Anda.
                                 </p>
                             </div>
-                            {watchedBarberId === null && <Check className="w-5 h-5 shrink-0" />}
+                            <div
+                                className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 border ${watchedBarberId === null
+                                        ? "bg-[#dd3e1f] border-[#dd3e1f] text-white"
+                                        : "border-[#141413]/30"
+                                    }`}
+                            >
+                                {watchedBarberId === null && <Check className="w-3.5 h-3.5" />}
+                            </div>
                         </button>
 
                         {barbers.map((b) => {
@@ -475,23 +636,35 @@ export function BookingWizard({
                                         form.setValue("barber_id", b.id);
                                         form.setValue("start_time", "");
                                     }}
-                                    className={`p-5 rounded-xl border text-left transition-all flex items-center gap-4 ${selected
-                                        ? "bg-brand-charcoal text-brand-cream border-brand-charcoal"
-                                        : "bg-brand-beige/60 text-brand-charcoal border-brand-charcoal/10"
+                                    className={`w-full py-3.5 px-4 text-left transition-all flex items-center gap-4 cursor-pointer ${selected
+                                            ? "bg-[#dd3e1f]/10 border-l-4 border-l-[#dd3e1f]"
+                                            : "hover:bg-[#EAE4DC]/50"
                                         }`}
                                 >
                                     {b.photo_url && (
                                         <img
                                             src={b.photo_url}
                                             alt={b.name}
-                                            className="w-14 h-14 rounded-lg object-cover shrink-0"
+                                            className="w-12 h-12 rounded-full object-cover shrink-0 border border-[#141413]/15"
                                         />
                                     )}
-                                    <div className="flex-1">
-                                        <h3 className="font-display text-lg font-bold">{b.name}</h3>
-                                        <p className="text-xs opacity-80">{b.specialty}</p>
+                                    <div className="flex-1 min-w-0">
+                                        <h3
+                                            className={`font-display text-base sm:text-lg font-bold truncate ${selected ? "text-[#dd3e1f]" : "text-[#141413]"
+                                                }`}
+                                        >
+                                            {b.name}
+                                        </h3>
+                                        <p className="text-xs text-[#706D65] truncate">{b.specialty}</p>
                                     </div>
-                                    {selected && <Check className="w-5 h-5 shrink-0" />}
+                                    <div
+                                        className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 border ${selected
+                                                ? "bg-[#dd3e1f] border-[#dd3e1f] text-white"
+                                                : "border-[#141413]/30"
+                                            }`}
+                                    >
+                                        {selected && <Check className="w-3.5 h-3.5" />}
+                                    </div>
                                 </button>
                             );
                         })}
@@ -538,8 +711,13 @@ export function BookingWizard({
                         </div>
                     ) : slots.every((s) => !s.available) ? (
                         <div className="p-6 rounded-xl bg-white border-2 border-[#141413] text-center text-sm text-[#141413] space-y-3">
-                            <p className="font-bold text-base">Semua slot waktu untuk hari ini sudah lewat atau penuh.</p>
-                            <p className="text-xs text-[#706D65]">Silakan pilih tanggal <strong>besok</strong> atau hari berikutnya untuk reservasi jadwal dengan leluasa.</p>
+                            <p className="font-bold text-base">
+                                Semua slot waktu untuk hari ini sudah lewat atau penuh.
+                            </p>
+                            <p className="text-xs text-[#706D65]">
+                                Silakan pilih tanggal <strong>besok</strong> atau hari berikutnya
+                                untuk reservasi jadwal dengan leluasa.
+                            </p>
                             <button
                                 type="button"
                                 onClick={() => setStep(2)}
@@ -560,10 +738,10 @@ export function BookingWizard({
                                         disabled={!s.available}
                                         onClick={() => form.setValue("start_time", s.time)}
                                         className={`py-3.5 px-4 rounded-xl border-2 text-center transition-all ${!s.available
-                                            ? "opacity-35 cursor-not-allowed bg-brand-beige/20 border-[#141413]/20 line-through"
-                                            : isSelected
-                                                ? "bg-[#dd3e1f] text-white border-[#141413] font-bold shadow-[3px_3px_0px_#141413]"
-                                                : "bg-white text-[#141413] font-bold border-[#141413] hover:bg-[#dd3e1f] hover:text-white"
+                                                ? "opacity-35 cursor-not-allowed bg-brand-beige/20 border-[#141413]/20 line-through"
+                                                : isSelected
+                                                    ? "bg-[#dd3e1f] text-white border-[#141413] font-bold shadow-[3px_3px_0px_#141413]"
+                                                    : "bg-white text-[#141413] font-bold border-[#141413] hover:bg-[#dd3e1f] hover:text-white"
                                             }`}
                                     >
                                         <span className="text-sm block">{s.time} WIB</span>
@@ -620,7 +798,7 @@ export function BookingWizard({
                                 type="text"
                                 {...form.register("customer_name")}
                                 placeholder="Masukkan nama lengkap Anda"
-                                className="w-full px-4 py-3.5 rounded-lg bg-brand-cream border border-brand-charcoal/15 text-sm focus:outline-none focus:border-brand-charcoal"
+                                className="w-full px-4 py-3.5 rounded-lg bg-brand-cream border border-brand-charcoal/15 text-sm focus:outline-none focus:border-[#dd3e1f]"
                             />
                             {form.formState.errors.customer_name && (
                                 <p className="text-xs text-red-600 mt-1">
@@ -637,7 +815,7 @@ export function BookingWizard({
                                 type="tel"
                                 {...form.register("customer_phone")}
                                 placeholder="Contoh: 081234567890"
-                                className="w-full px-4 py-3.5 rounded-lg bg-brand-cream border border-brand-charcoal/15 text-sm focus:outline-none focus:border-brand-charcoal"
+                                className="w-full px-4 py-3.5 rounded-lg bg-brand-cream border border-brand-charcoal/15 text-sm focus:outline-none focus:border-[#dd3e1f]"
                             />
                             {form.formState.errors.customer_phone && (
                                 <p className="text-xs text-red-600 mt-1">
@@ -654,7 +832,7 @@ export function BookingWizard({
                                 rows={3}
                                 {...form.register("customer_note")}
                                 placeholder="Contoh: Ingin diskusi gaya taper fade yang rapi untuk kerja"
-                                className="w-full px-4 py-3 rounded-lg bg-brand-cream border border-brand-charcoal/15 text-sm focus:outline-none focus:border-brand-charcoal"
+                                className="w-full px-4 py-3 rounded-lg bg-brand-cream border border-brand-charcoal/15 text-sm focus:outline-none focus:border-[#dd3e1f]"
                             />
                         </div>
 
@@ -715,7 +893,9 @@ export function BookingWizard({
                     <div className="rounded-xl bg-brand-beige/70 border border-brand-charcoal/15 p-5 sm:p-6 space-y-4 text-sm">
                         <div className="flex justify-between py-2 border-b border-brand-charcoal/10">
                             <span className="text-brand-gray">Layanan</span>
-                            <span className="font-semibold">{selectedService?.name}</span>
+                            <span className="font-semibold text-[#dd3e1f]">
+                                {selectedService?.name}
+                            </span>
                         </div>
                         <div className="flex justify-between py-2 border-b border-brand-charcoal/10">
                             <span className="text-brand-gray">Barber Pilihan</span>
@@ -754,7 +934,7 @@ export function BookingWizard({
                         )}
                         <div className="flex justify-between pt-3 items-center">
                             <span className="text-brand-gray font-medium">Estimasi Harga</span>
-                            <span className="font-display text-2xl font-bold text-brand-charcoal">
+                            <span className="font-display text-2xl font-bold text-[#dd3e1f]">
                                 {formatRupiah(Number(selectedService?.price || 0))}
                             </span>
                         </div>
