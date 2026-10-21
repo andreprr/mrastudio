@@ -13,6 +13,7 @@ import {
     Clock,
     User,
     Filter,
+    DollarSign,
 } from "lucide-react";
 
 const STATUS_FILTERS: { value: "all" | BookingStatus; label: string }[] = [
@@ -39,6 +40,7 @@ export default function AdminBookingsListPage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [statusFilter, setStatusFilter] = useState<"all" | BookingStatus>("all");
     const [dateFilter, setDateFilter] = useState("");
+    const [monthFilter, setMonthFilter] = useState(""); // Format: "YYYY-MM"
 
     useEffect(() => {
         let ignore = false;
@@ -64,7 +66,11 @@ export default function AdminBookingsListPage() {
     const filteredBookings = bookings.filter((b) => {
         const matchesStatus =
             statusFilter === "all" ? true : b.status === statusFilter;
+
+        // Jika filter tanggal spesifik dipilih, abaikan filter bulan. Jika tidak, cek filter bulan (YYYY-MM)
         const matchesDate = dateFilter ? b.booking_date === dateFilter : true;
+        const matchesMonth = monthFilter && !dateFilter ? b.booking_date.startsWith(monthFilter) : true;
+
         const q = searchQuery.toLowerCase().trim();
         const matchesSearch =
             !q ||
@@ -73,12 +79,17 @@ export default function AdminBookingsListPage() {
             b.customer_phone.toLowerCase().includes(q) ||
             b.service_name_snapshot.toLowerCase().includes(q);
 
-        return matchesStatus && matchesDate && matchesSearch;
+        return matchesStatus && matchesDate && matchesMonth && matchesSearch;
     });
+
+    // Hitung total pendapatan dari reservasi yang sedang tampil (tidak menghitung status cancelled/rejected/expired jika diinginkan, atau hitung semua kecuali batal)
+    const totalRevenue = filteredBookings
+        .filter((b) => b.status !== "cancelled" && b.status !== "rejected" && b.status !== "expired")
+        .reduce((sum, b) => sum + Number(b.price_snapshot || 0), 0);
 
     return (
         <AdminShell>
-            {/* Header */}
+            {/* Header & Statistik Ringkas */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
                 <div>
                     <h1 className="font-display text-xl sm:text-2xl font-bold text-[#111110]">
@@ -88,8 +99,17 @@ export default function AdminBookingsListPage() {
                         Kelola seluruh reservasi, status verifikasi, dan jadwal pelanggan studio.
                     </p>
                 </div>
-                <div className="text-xs font-mono tabular-nums text-[#6E6D68] px-2.5 py-1 rounded-md bg-white border border-[#E4E2DD] self-start sm:self-auto">
-                    {filteredBookings.length} Reservasi
+
+                <div className="flex items-center gap-3 self-start sm:self-auto">
+                    {/* Kotak Total Pendapatan */}
+                    <div className="text-xs font-mono tabular-nums bg-white border border-[#E4E2DD] px-3 py-1.5 rounded-md flex items-center gap-2">
+                        <span className="text-[#6E6D68]">Pendapatan:</span>
+                        <strong className="text-[#111110] font-bold">{formatRupiah(totalRevenue)}</strong>
+                    </div>
+
+                    <div className="text-xs font-mono tabular-nums text-[#6E6D68] px-2.5 py-1.5 rounded-md bg-white border border-[#E4E2DD]">
+                        {filteredBookings.length} Reservasi
+                    </div>
                 </div>
             </div>
 
@@ -106,20 +126,40 @@ export default function AdminBookingsListPage() {
                     />
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                    {/* Filter Bulan (YYYY-MM) */}
+                    <div className="flex items-center gap-1 bg-[#F6F5F2] border border-[#E4E2DD] rounded-md px-2 py-1">
+                        <span className="text-[11px] text-[#6E6D68]">Bulan:</span>
+                        <input
+                            type="month"
+                            value={monthFilter}
+                            disabled={!!dateFilter} // Nonaktifkan jika tanggal spesifik sedang dipilih
+                            onChange={(e) => setMonthFilter(e.target.value)}
+                            className="bg-transparent text-xs text-[#111110] focus:outline-none disabled:opacity-40"
+                        />
+                    </div>
+
+                    {/* Filter Tanggal Spesifik */}
                     <input
                         type="date"
                         value={dateFilter}
-                        onChange={(e) => setDateFilter(e.target.value)}
+                        onChange={(e) => {
+                            setDateFilter(e.target.value);
+                            if (e.target.value) setMonthFilter(""); // Reset filter bulan jika tanggal dipilih
+                        }}
                         className="px-2.5 py-1.5 rounded-md bg-[#F6F5F2] border border-[#E4E2DD] text-xs text-[#111110] focus:outline-none focus:bg-white focus:border-[#111110]"
                     />
-                    {dateFilter && (
+
+                    {(dateFilter || monthFilter) && (
                         <button
                             type="button"
-                            onClick={() => setDateFilter("")}
-                            className="px-2 py-1 rounded-md bg-white border border-[#E4E2DD] text-[11px] text-[#6E6D68] hover:text-[#111110]"
+                            onClick={() => {
+                                setDateFilter("");
+                                setMonthFilter("");
+                            }}
+                            className="px-2.5 py-1.5 rounded-md bg-white border border-[#E4E2DD] text-[11px] text-[#6E6D68] hover:text-[#111110]"
                         >
-                            Reset
+                            Reset Waktu
                         </button>
                     )}
 
@@ -162,7 +202,7 @@ export default function AdminBookingsListPage() {
                                 {filteredBookings.length === 0 ? (
                                     <tr>
                                         <td colSpan={8} className="py-10 text-center text-[#6E6D68]">
-                                            Tidak ada data booking yang cocok.
+                                            Tidak ada data booking yang cocok dengan filter.
                                         </td>
                                     </tr>
                                 ) : (

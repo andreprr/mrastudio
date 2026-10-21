@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { createClient } from "@/lib/supabase/client";
 import {
     ServiceItem,
     BarberItem,
@@ -22,13 +23,13 @@ import {
     ChevronRight,
     Clock,
     Calendar,
-    UserCheck,
     Loader2,
     Ticket,
     MessageCircle,
     Search,
     Sparkles,
     Layers,
+    Ban,
 } from "lucide-react";
 
 interface SlotItem {
@@ -89,11 +90,13 @@ export function BookingWizard({
     const [submitting, setSubmitting] = useState(false);
     const [ticket, setTicket] = useState<CreatedTicket | null>(null);
 
+    // Menyimpan daftar ID barber yang sedang cuti/libur pada tanggal yang dipilih
+    const [offBarberIds, setOffBarberIds] = useState<string[]>([]);
+
     // Pembagian 6 Paket Utama vs Layanan Satuan (Urutan ke-7 dst)
     const packageServices = services.slice(0, 6);
     const singleServices = services.slice(6);
 
-    // Deteksi apakah initialServiceId berada di grup satuan
     const isInitialInSingle = singleServices.some((s) => s.id === initialServiceId);
     const [serviceTab, setServiceTab] = useState<"paket" | "satuan">(
         isInitialInSingle ? "satuan" : "paket"
@@ -139,6 +142,37 @@ export function BookingWizard({
         const { category } = parseServiceMeta(srv);
         return category.toLowerCase() === satuanCategory.toLowerCase();
     });
+
+    // Cek jadwal cuti/libur barber berdasarkan tanggal yang dipilih
+    useEffect(() => {
+        if (!watchedDate) {
+            setOffBarberIds([]);
+            return;
+        }
+
+        let active = true;
+        async function checkBarberSchedules() {
+            try {
+                const supabase = createClient();
+                const { data } = await supabase
+                    .from("barber_schedules")
+                    .select("barber_id")
+                    .eq("schedule_date", watchedDate)
+                    .eq("is_available", false);
+
+                if (active && data) {
+                    setOffBarberIds(data.map((item) => item.barber_id));
+                }
+            } catch {
+                if (active) setOffBarberIds([]);
+            }
+        }
+        checkBarberSchedules();
+
+        return () => {
+            active = false;
+        };
+    }, [watchedDate]);
 
     // Bangun daftar tanggal sesuai booking_window_days pada zona waktu Asia/Jakarta
     const availableDates = Array.from({
@@ -231,8 +265,8 @@ export function BookingWizard({
         );
 
         return (
-            <div className="max-w-xl mx-auto rounded-2xl bg-brand-beige border border-brand-charcoal/15 p-5 sm:p-6 shadow-xl">
-                <div className="flex items-center justify-between border-b border-brand-charcoal/10 pb-6">
+            <div className="max-w-xl mx-auto rounded-2xl bg-[#FFFFFF] border border-[#141413]/15 p-5 sm:p-6 shadow-xl">
+                <div className="flex items-center justify-between border-b border-[#141413]/10 pb-6">
                     <div className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded-full bg-[#dd3e1f] text-white flex items-center justify-center">
                             <Ticket className="w-6 h-6" />
@@ -241,7 +275,7 @@ export function BookingWizard({
                             <span className="text-xs font-semibold uppercase tracking-widest text-[#dd3e1f]">
                                 Tiket Reservasi Digital
                             </span>
-                            <h2 className="font-display text-2xl font-bold text-brand-charcoal">
+                            <h2 className="font-display text-2xl font-bold text-[#141413]">
                                 {ticket.booking_code}
                             </h2>
                         </div>
@@ -252,39 +286,39 @@ export function BookingWizard({
                 </div>
 
                 <div className="py-6 space-y-4 text-sm">
-                    <div className="flex justify-between py-2 border-b border-brand-charcoal/10">
-                        <span className="text-brand-gray">Nama Pelanggan</span>
-                        <span className="font-semibold text-brand-charcoal">
+                    <div className="flex justify-between py-2 border-b border-[#141413]/10">
+                        <span className="text-[#706D65]">Nama Pelanggan</span>
+                        <span className="font-semibold text-[#141413]">
                             {ticket.customer_name}
                         </span>
                     </div>
-                    <div className="flex justify-between py-2 border-b border-brand-charcoal/10">
-                        <span className="text-brand-gray">Layanan</span>
-                        <span className="font-semibold text-brand-charcoal">
+                    <div className="flex justify-between py-2 border-b border-[#141413]/10">
+                        <span className="text-[#706D65]">Layanan</span>
+                        <span className="font-semibold text-[#141413]">
                             {ticket.service_name} ({ticket.duration_minutes} menit)
                         </span>
                     </div>
-                    <div className="flex justify-between py-2 border-b border-brand-charcoal/10">
-                        <span className="text-brand-gray">Barber / Stylist</span>
-                        <span className="font-semibold text-brand-charcoal">
+                    <div className="flex justify-between py-2 border-b border-[#141413]/10">
+                        <span className="text-[#706D65]">Barber / Stylist</span>
+                        <span className="font-semibold text-[#141413]">
                             {ticket.barber_name}
                         </span>
                     </div>
-                    <div className="flex justify-between py-2 border-b border-brand-charcoal/10">
-                        <span className="text-brand-gray">Tanggal & Jam</span>
-                        <span className="font-semibold text-brand-charcoal">
+                    <div className="flex justify-between py-2 border-b border-[#141413]/10">
+                        <span className="text-[#706D65]">Tanggal & Jam</span>
+                        <span className="font-semibold text-[#141413]">
                             {ticket.booking_date} • {ticket.start_time} – {ticket.end_time} WIB
                         </span>
                     </div>
                     <div className="flex justify-between py-2">
-                        <span className="text-brand-gray">Total Biaya</span>
+                        <span className="text-[#706D65]">Total Biaya</span>
                         <span className="font-display text-xl font-bold text-[#dd3e1f]">
                             {formatRupiah(Number(ticket.price))}
                         </span>
                     </div>
                 </div>
 
-                <div className="p-4 rounded-lg bg-brand-cream text-xs text-brand-gray leading-relaxed mb-6">
+                <div className="p-4 rounded-lg bg-[#F8F6F1] text-xs text-[#706D65] leading-relaxed mb-6">
                     Simpan Kode Booking <strong>{ticket.booking_code}</strong> Anda. Slot
                     waktu Anda telah ditahan sementara dan menunggu konfirmasi admin.
                 </div>
@@ -317,7 +351,7 @@ export function BookingWizard({
         <div className="max-w-3xl mx-auto">
             {/* Progress Bar 6 Langkah dengan Aksen Oranye */}
             <div className="mb-8">
-                <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-brand-gray mb-3">
+                <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-[#706D65] mb-3">
                     <span>
                         Langkah <strong className="text-[#dd3e1f]">{step}</strong> dari 6
                     </span>
@@ -330,7 +364,7 @@ export function BookingWizard({
                         {step === 6 && "Konfirmasi Akhir"}
                     </span>
                 </div>
-                <div className="w-full h-2 rounded-full bg-brand-beige overflow-hidden">
+                <div className="w-full h-2 rounded-full bg-[#EAE4DC] overflow-hidden">
                     <div
                         className="h-full bg-[#dd3e1f] transition-all duration-300"
                         style={{ width: `${(step / 6) * 100}%` }}
@@ -422,7 +456,6 @@ export function BookingWizard({
                                                 : "hover:bg-[#EAE4DC]/50"
                                             }`}
                                     >
-                                        {/* Kiri: Nomor/Radio + Nama & Rincian Singkat */}
                                         <div className="flex items-start gap-3 min-w-0">
                                             <div
                                                 className={`mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0 border transition-colors ${selected
@@ -470,7 +503,6 @@ export function BookingWizard({
                                             </div>
                                         </div>
 
-                                        {/* Kanan: Garis Titik-Titik Halus + Harga Oranye/Tegas */}
                                         <div className="flex items-center gap-2 shrink-0">
                                             <span
                                                 className={`font-display text-sm sm:text-base font-extrabold tabular-nums ${selected ? "text-[#dd3e1f]" : "text-[#141413]"
@@ -491,7 +523,6 @@ export function BookingWizard({
                         )}
                     </div>
 
-                    {/* Bar Konfirmasi Layanan Terpilih & Tombol Lanjut */}
                     <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         {selectedService ? (
                             <div className="text-xs text-[#706D65]">
@@ -525,7 +556,7 @@ export function BookingWizard({
                         <Calendar className="w-6 h-6 text-[#dd3e1f]" />
                         <span>2. Pilih Tanggal Kunjungan</span>
                     </h2>
-                    <p className="text-sm text-brand-gray">
+                    <p className="text-sm text-[#706D65]">
                         Zona waktu menggunakan Waktu Indonesia Barat (Asia/Jakarta).
                     </p>
 
@@ -542,10 +573,10 @@ export function BookingWizard({
                                         form.setValue("start_time", "");
                                     }}
                                     className={`p-4 rounded-xl border-2 text-center transition-all ${d.isClosed
-                                            ? "opacity-35 cursor-not-allowed bg-brand-beige/20 border-[#141413]/20"
+                                            ? "opacity-35 cursor-not-allowed bg-[#EAE4DC]/20 border-[#141413]/20"
                                             : isSelected
                                                 ? "bg-[#dd3e1f] text-white border-[#141413] font-bold shadow-[3px_3px_0px_#141413]"
-                                                : "bg-white text-[#141413] font-bold border-[#141413] hover:bg-[#dd3e1f] hover:text-white"
+                                                : "bg-[#FFFFFF] text-[#141413] font-bold border-[#141413] hover:bg-[#dd3e1f] hover:text-white"
                                         }`}
                                 >
                                     <span className="text-xs uppercase block opacity-80">
@@ -584,97 +615,173 @@ export function BookingWizard({
                 </div>
             )}
 
-            {/* LANGKAH 3: PILIH BARBER / STYLIST */}
+            {/* LANGKAH 3: PILIH BARBER / STYLIST (UKURAN PAS h-36 sm:h-40 & MOBILE FRIENDLY) */}
             {step === 3 && (
-                <div className="space-y-6">
-                    <h2 className="font-display text-2xl sm:text-3xl font-bold flex items-center gap-2">
-                        <UserCheck className="w-6 h-6 text-[#dd3e1f]" />
-                        <span>3. Pilih Barber / Stylist</span>
-                    </h2>
+                <div className="space-y-4">
+                    <div>
+                        <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-[#dd3e1f] block mb-1">
+                            Step 03 • Tim Profesional
+                        </span>
+                        <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#141413]">
+                            Pilih Barber / Stylist
+                        </h2>
+                        {watchedDate && (
+                            <p className="text-xs text-[#706D65] mt-1">
+                                Jadwal untuk tanggal: <strong className="text-[#141413]">{watchedDate}</strong>
+                            </p>
+                        )}
+                    </div>
 
-                    <div className="divide-y divide-[#141413]/10 border-t border-b border-[#141413]/15">
-                        {/* Opsi Barber Mana Saja */}
-                        <button
-                            type="button"
-                            onClick={() => {
-                                form.setValue("barber_id", null);
-                                form.setValue("start_time", "");
-                            }}
-                            className={`w-full py-4 px-4 text-left transition-all flex items-center justify-between gap-4 cursor-pointer ${watchedBarberId === null
-                                    ? "bg-[#dd3e1f]/10 border-l-4 border-l-[#dd3e1f]"
-                                    : "hover:bg-[#EAE4DC]/50"
-                                }`}
-                        >
-                            <div>
-                                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#dd3e1f]">
-                                    Rekomendasi Fleksibel
-                                </span>
-                                <h3 className="font-display text-base sm:text-lg font-bold text-[#141413] mt-0.5">
-                                    Barber mana saja yang tersedia
-                                </h3>
-                                <p className="text-xs text-[#706D65] mt-0.5">
-                                    Sistem akan mengalokasikan barber yang bebas pada jam pilihan Anda.
-                                </p>
-                            </div>
+                    {/* Opsi Fleksibel (Rekomendasi Cepat) — Dibuat Horizontal Compact agar Tidak Kegedean & Mobile Friendly */}
+                    <button
+                        type="button"
+                        onClick={() => {
+                            form.setValue("barber_id", null);
+                            form.setValue("start_time", "");
+                        }}
+                        className={`w-full p-3 sm:p-3.5 rounded-xl border-2 text-left transition-all flex items-center justify-between gap-3 cursor-pointer group ${watchedBarberId === null
+                                ? "bg-[#dd3e1f] text-white border-[#141413] shadow-[3px_3px_0px_#141413]"
+                                : "bg-[#FFFFFF] text-[#141413] border-[#141413] hover:border-[#dd3e1f]"
+                            }`}
+                    >
+                        <div className="flex items-center gap-3 min-w-0">
                             <div
-                                className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 border ${watchedBarberId === null
-                                        ? "bg-[#dd3e1f] border-[#dd3e1f] text-white"
-                                        : "border-[#141413]/30"
+                                className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 border transition-colors ${watchedBarberId === null
+                                        ? "bg-white text-[#dd3e1f] border-white"
+                                        : "bg-[#141413] text-white border-[#141413]"
                                     }`}
                             >
-                                {watchedBarberId === null && <Check className="w-3.5 h-3.5" />}
+                                <Sparkles className="w-5 h-5" />
                             </div>
-                        </button>
+                            <div className="min-w-0">
+                                <div className="flex flex-wrap items-center gap-2">
+                                    <h3 className="font-display text-xs sm:text-sm font-extrabold leading-snug">
+                                        Siapa Saja (Barber Tersedia)
+                                    </h3>
+                                    <span
+                                        className={`text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded-full border ${watchedBarberId === null
+                                                ? "bg-white/20 text-white border-white/30"
+                                                : "bg-[#dd3e1f]/10 text-[#dd3e1f] border-[#dd3e1f]/30"
+                                            }`}
+                                    >
+                                        Rekomendasi Cepat
+                                    </span>
+                                </div>
+                                <p
+                                    className={`text-[11px] mt-0.5 truncate ${watchedBarberId === null ? "text-white/85" : "text-[#706D65]"
+                                        }`}
+                                >
+                                    Alokasi barber otomatis sesuai jam pilihanmu
+                                </p>
+                            </div>
+                        </div>
 
+                        <div
+                            className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 ${watchedBarberId === null
+                                    ? "bg-white text-[#dd3e1f] border-[#141413]"
+                                    : "border-[#141413]/30"
+                                }`}
+                        >
+                            {watchedBarberId === null && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                        </div>
+                    </button>
+
+                    {/* Grid Kartu Barber Konsisten (2 Kolom di HP, 3-4 Kolom di Desktop, Tinggi Foto Pas h-36 sm:h-40) */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                         {barbers.map((b) => {
-                            const selected = watchedBarberId === b.id;
+                            const isSelected = watchedBarberId === b.id;
+                            const isOff = offBarberIds.includes(b.id);
+
                             return (
                                 <button
                                     key={b.id}
                                     type="button"
+                                    disabled={isOff}
                                     onClick={() => {
-                                        form.setValue("barber_id", b.id);
-                                        form.setValue("start_time", "");
+                                        if (!isOff) {
+                                            form.setValue("barber_id", b.id);
+                                            form.setValue("start_time", "");
+                                        }
                                     }}
-                                    className={`w-full py-3.5 px-4 text-left transition-all flex items-center gap-4 cursor-pointer ${selected
-                                            ? "bg-[#dd3e1f]/10 border-l-4 border-l-[#dd3e1f]"
-                                            : "hover:bg-[#EAE4DC]/50"
+                                    className={`rounded-xl border-2 overflow-hidden text-left transition-all flex flex-col justify-between group ${isOff
+                                            ? "opacity-45 cursor-not-allowed bg-[#EAE4DC]/40 border-[#141413]/20"
+                                            : isSelected
+                                                ? "bg-[#dd3e1f] text-white border-[#141413] shadow-[3px_3px_0px_#141413] -translate-y-0.5 cursor-pointer"
+                                                : "bg-[#FFFFFF] text-[#141413] border-[#141413] hover:border-[#dd3e1f] cursor-pointer"
                                         }`}
                                 >
-                                    {b.photo_url && (
-                                        <img
-                                            src={b.photo_url}
-                                            alt={b.name}
-                                            className="w-12 h-12 rounded-full object-cover shrink-0 border border-[#141413]/15"
-                                        />
-                                    )}
-                                    <div className="flex-1 min-w-0">
+                                    {/* Area Foto Ukuran Pas & Konsisten (h-36 di HP, sm:h-40 di layar lebih besar) */}
+                                    <div className="relative w-full h-36 sm:h-40 bg-[#141413] overflow-hidden">
+                                        {b.photo_url ? (
+                                            <img
+                                                src={b.photo_url}
+                                                alt={b.name}
+                                                className={`w-full h-full object-cover object-top transition-transform duration-500 ${isOff ? "grayscale" : "group-hover:scale-105"
+                                                    }`}
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center bg-[#141413] text-white font-display font-extrabold text-2xl">
+                                                {b.name.charAt(0)}
+                                            </div>
+                                        )}
+
+                                        {/* Badge Status di Pojok Kanan Atas Foto */}
+                                        <div className="absolute top-2 right-2">
+                                            {isOff ? (
+                                                <span className="inline-flex items-center gap-1 text-[9px] font-mono px-2 py-0.5 rounded-full bg-red-600 text-white font-bold shadow-sm">
+                                                    <Ban className="w-2.5 h-2.5" />
+                                                    LIBUR
+                                                </span>
+                                            ) : (
+                                                <span
+                                                    className={`inline-flex items-center gap-1 text-[9px] font-mono px-2 py-0.5 rounded-full font-bold backdrop-blur-md border shadow-sm ${isSelected
+                                                            ? "bg-[#dd3e1f] text-white border-white/40"
+                                                            : "bg-[#141413]/75 text-white border-white/15"
+                                                        }`}
+                                                >
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                                                    Aktif
+                                                </span>
+                                            )}
+                                        </div>
+
+                                        {/* Tanda Centang jika Terpilih */}
+                                        {isSelected && !isOff && (
+                                            <div className="absolute top-2 left-2 w-6 h-6 rounded-full bg-[#dd3e1f] text-white border-2 border-[#141413] flex items-center justify-center shadow-md">
+                                                <Check className="w-3.5 h-3.5 stroke-[3]" />
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Nama & Spesialisasi di Bawah Foto */}
+                                    <div className="p-2.5 sm:p-3">
                                         <h3
-                                            className={`font-display text-base sm:text-lg font-bold truncate ${selected ? "text-[#dd3e1f]" : "text-[#141413]"
+                                            className={`font-display text-xs sm:text-sm font-extrabold leading-snug truncate ${isOff ? "line-through" : ""
                                                 }`}
                                         >
                                             {b.name}
                                         </h3>
-                                        <p className="text-xs text-[#706D65] truncate">{b.specialty}</p>
-                                    </div>
-                                    <div
-                                        className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 border ${selected
-                                                ? "bg-[#dd3e1f] border-[#dd3e1f] text-white"
-                                                : "border-[#141413]/30"
-                                            }`}
-                                    >
-                                        {selected && <Check className="w-3.5 h-3.5" />}
+                                        <p
+                                            className={`text-[11px] mt-0.5 truncate ${isOff
+                                                    ? "text-red-600 font-semibold"
+                                                    : isSelected
+                                                        ? "text-white/90"
+                                                        : "text-[#706D65]"
+                                                }`}
+                                        >
+                                            {isOff ? "Tidak tersedia" : b.specialty}
+                                        </p>
                                     </div>
                                 </button>
                             );
                         })}
                     </div>
 
-                    <div className="pt-6 flex justify-between">
+                    <div className="pt-4 flex justify-between gap-3">
                         <button
                             type="button"
                             onClick={() => setStep(2)}
-                            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border-2 border-[#141413] text-[#141413] hover:bg-[#141413] hover:text-white text-sm font-bold transition-colors"
+                            className="inline-flex items-center gap-2 px-5 sm:px-6 py-3 rounded-full border-2 border-[#141413] text-[#141413] hover:bg-[#141413] hover:text-white text-xs sm:text-sm font-bold transition-colors"
                         >
                             <ChevronLeft className="w-4 h-4" />
                             <span>Kembali</span>
@@ -682,7 +789,7 @@ export function BookingWizard({
                         <button
                             type="button"
                             onClick={() => setStep(4)}
-                            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#141413] text-white border-2 border-[#141413] hover:border-[#dd3e1f] text-sm font-bold shadow-sm"
+                            className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 rounded-full bg-[#141413] text-white border-2 border-[#141413] hover:border-[#dd3e1f] text-xs sm:text-sm font-bold shadow-sm"
                         >
                             <span>Lanjut Pilih Waktu</span>
                             <ChevronRight className="w-4 h-4" />
@@ -700,7 +807,7 @@ export function BookingWizard({
                     </h2>
 
                     {loadingSlots ? (
-                        <div className="py-16 flex flex-col items-center justify-center text-brand-gray gap-3">
+                        <div className="py-16 flex flex-col items-center justify-center text-[#706D65] gap-3">
                             <Loader2 className="w-7 h-7 animate-spin text-[#dd3e1f]" />
                             <span className="text-sm font-medium">Memeriksa slot yang tersedia...</span>
                         </div>
@@ -738,7 +845,7 @@ export function BookingWizard({
                                         disabled={!s.available}
                                         onClick={() => form.setValue("start_time", s.time)}
                                         className={`py-3.5 px-4 rounded-xl border-2 text-center transition-all ${!s.available
-                                                ? "opacity-35 cursor-not-allowed bg-brand-beige/20 border-[#141413]/20 line-through"
+                                                ? "opacity-35 cursor-not-allowed bg-[#EAE4DC]/20 border-[#141413]/20 line-through"
                                                 : isSelected
                                                     ? "bg-[#dd3e1f] text-white border-[#141413] font-bold shadow-[3px_3px_0px_#141413]"
                                                     : "bg-white text-[#141413] font-bold border-[#141413] hover:bg-[#dd3e1f] hover:text-white"
@@ -784,12 +891,12 @@ export function BookingWizard({
                     <h2 className="font-display text-2xl sm:text-3xl font-bold">
                         5. Informasi Pelanggan
                     </h2>
-                    <p className="text-sm text-brand-gray">
+                    <p className="text-sm text-[#706D65]">
                         Tidak perlu membuat akun atau kata sandi. Nomor WhatsApp digunakan
                         untuk memeriksa status reservasi Anda.
                     </p>
 
-                    <div className="space-y-4 bg-brand-beige/50 p-5 sm:p-6 rounded-xl border border-brand-charcoal/10">
+                    <div className="space-y-4 bg-[#F8F6F1] p-5 sm:p-6 rounded-xl border border-[#141413]/10">
                         <div>
                             <label className="block text-xs font-semibold uppercase tracking-wider mb-2">
                                 Nama Lengkap *
@@ -798,7 +905,7 @@ export function BookingWizard({
                                 type="text"
                                 {...form.register("customer_name")}
                                 placeholder="Masukkan nama lengkap Anda"
-                                className="w-full px-4 py-3.5 rounded-lg bg-brand-cream border border-brand-charcoal/15 text-sm focus:outline-none focus:border-[#dd3e1f]"
+                                className="w-full px-4 py-3.5 rounded-lg bg-[#FFFFFF] border border-[#141413]/15 text-sm focus:outline-none focus:border-[#dd3e1f]"
                             />
                             {form.formState.errors.customer_name && (
                                 <p className="text-xs text-red-600 mt-1">
@@ -815,7 +922,7 @@ export function BookingWizard({
                                 type="tel"
                                 {...form.register("customer_phone")}
                                 placeholder="Contoh: 081234567890"
-                                className="w-full px-4 py-3.5 rounded-lg bg-brand-cream border border-brand-charcoal/15 text-sm focus:outline-none focus:border-[#dd3e1f]"
+                                className="w-full px-4 py-3.5 rounded-lg bg-[#FFFFFF] border border-[#141413]/15 text-sm focus:outline-none focus:border-[#dd3e1f]"
                             />
                             {form.formState.errors.customer_phone && (
                                 <p className="text-xs text-red-600 mt-1">
@@ -832,7 +939,7 @@ export function BookingWizard({
                                 rows={3}
                                 {...form.register("customer_note")}
                                 placeholder="Contoh: Ingin diskusi gaya taper fade yang rapi untuk kerja"
-                                className="w-full px-4 py-3 rounded-lg bg-brand-cream border border-brand-charcoal/15 text-sm focus:outline-none focus:border-[#dd3e1f]"
+                                className="w-full px-4 py-3 rounded-lg bg-[#FFFFFF] border border-[#141413]/15 text-sm focus:outline-none focus:border-[#dd3e1f]"
                             />
                         </div>
 
@@ -842,7 +949,7 @@ export function BookingWizard({
                                 {...form.register("agree_terms")}
                                 className="mt-1 w-4 h-4 accent-[#dd3e1f]"
                             />
-                            <span className="text-xs text-brand-gray leading-relaxed">
+                            <span className="text-xs text-[#706D65] leading-relaxed">
                                 Saya menyetujui aturan booking ({settings.cancellation_policy})
                                 serta kebijakan privasi {settings.brand_name}.
                             </span>
@@ -890,50 +997,50 @@ export function BookingWizard({
                         6. Konfirmasi Reservasi Anda
                     </h2>
 
-                    <div className="rounded-xl bg-brand-beige/70 border border-brand-charcoal/15 p-5 sm:p-6 space-y-4 text-sm">
-                        <div className="flex justify-between py-2 border-b border-brand-charcoal/10">
-                            <span className="text-brand-gray">Layanan</span>
+                    <div className="rounded-xl bg-[#F8F6F1] border border-[#141413]/15 p-5 sm:p-6 space-y-4 text-sm">
+                        <div className="flex justify-between py-2 border-b border-[#141413]/10">
+                            <span className="text-[#706D65]">Layanan</span>
                             <span className="font-semibold text-[#dd3e1f]">
                                 {selectedService?.name}
                             </span>
                         </div>
-                        <div className="flex justify-between py-2 border-b border-brand-charcoal/10">
-                            <span className="text-brand-gray">Barber Pilihan</span>
+                        <div className="flex justify-between py-2 border-b border-[#141413]/10">
+                            <span className="text-[#706D65]">Barber Pilihan</span>
                             <span className="font-semibold">
                                 {selectedBarber
                                     ? selectedBarber.name
                                     : "Barber mana saja yang tersedia"}
                             </span>
                         </div>
-                        <div className="flex justify-between py-2 border-b border-brand-charcoal/10">
-                            <span className="text-brand-gray">Tanggal & Waktu</span>
+                        <div className="flex justify-between py-2 border-b border-[#141413]/10">
+                            <span className="text-[#706D65]">Tanggal & Waktu</span>
                             <span className="font-semibold">
                                 {watchedDate} • {watchedStartTime} WIB
                             </span>
                         </div>
-                        <div className="flex justify-between py-2 border-b border-brand-charcoal/10">
-                            <span className="text-brand-gray">Estimasi Durasi</span>
+                        <div className="flex justify-between py-2 border-b border-[#141413]/10">
+                            <span className="text-[#706D65]">Estimasi Durasi</span>
                             <span className="font-semibold">
                                 {selectedService?.duration_minutes} menit
                             </span>
                         </div>
-                        <div className="flex justify-between py-2 border-b border-brand-charcoal/10">
-                            <span className="text-brand-gray">Nama & WhatsApp</span>
+                        <div className="flex justify-between py-2 border-b border-[#141413]/10">
+                            <span className="text-[#706D65]">Nama & WhatsApp</span>
                             <span className="font-semibold">
                                 {form.getValues("customer_name")} (
                                 {form.getValues("customer_phone")})
                             </span>
                         </div>
                         {form.getValues("customer_note") && (
-                            <div className="flex justify-between py-2 border-b border-brand-charcoal/10">
-                                <span className="text-brand-gray">Catatan</span>
+                            <div className="flex justify-between py-2 border-b border-[#141413]/10">
+                                <span className="text-[#706D65]">Catatan</span>
                                 <span className="font-medium max-w-xs text-right">
                                     {form.getValues("customer_note")}
                                 </span>
                             </div>
                         )}
                         <div className="flex justify-between pt-3 items-center">
-                            <span className="text-brand-gray font-medium">Estimasi Harga</span>
+                            <span className="text-[#706D65] font-medium">Estimasi Harga</span>
                             <span className="font-display text-2xl font-bold text-[#dd3e1f]">
                                 {formatRupiah(Number(selectedService?.price || 0))}
                             </span>
