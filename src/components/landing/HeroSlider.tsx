@@ -32,6 +32,7 @@ export function HeroSlider() {
     useEffect(() => {
         const video = videoRef.current;
         if (!video) return;
+
         if (active === 0 && !paused) {
             video.currentTime = 0;
             void video.play().catch(() => undefined);
@@ -43,7 +44,7 @@ export function HeroSlider() {
     return (
         <>
             <div
-                className="absolute inset-0 z-0 overflow-hidden touch-pan-y"
+                className="absolute inset-0 z-0 overflow-hidden touch-pan-y bg-[#141413]"
                 onTouchStart={(event) => {
                     touchStart.current = event.touches[0]?.clientX ?? null;
                 }}
@@ -52,7 +53,7 @@ export function HeroSlider() {
                     const distance =
                         touchStart.current -
                         (event.changedTouches[0]?.clientX ?? touchStart.current);
-                    if (Math.abs(distance) > 50) {
+                    if (Math.abs(distance) > 40) {
                         goTo(active + (distance > 0 ? 1 : -1));
                     }
                     touchStart.current = null;
@@ -67,7 +68,7 @@ export function HeroSlider() {
                     {slides.map((slide, index) => (
                         <div
                             key={slide.src}
-                            className="h-full min-h-0 w-full min-w-full shrink-0 grow-0 basis-full bg-[#141413]"
+                            className="relative h-full w-full min-w-full shrink-0 grow-0 basis-full overflow-hidden bg-[#141413] flex items-end sm:block"
                         >
                             {slide.type === "video" ? (
                                 <video
@@ -77,7 +78,7 @@ export function HeroSlider() {
                                     preload="metadata"
                                     autoPlay={index === 0 && !paused}
                                     poster="/Banner.png"
-                                    className="block h-full w-full object-cover object-center"
+                                    className="block w-full h-auto max-h-full sm:h-full object-contain object-bottom sm:object-cover sm:object-center mb-9 sm:mb-0"
                                     onEnded={next}
                                     onError={() => {
                                         if (active === index) next();
@@ -90,7 +91,7 @@ export function HeroSlider() {
                                     src={slide.src}
                                     alt="Banner MR A Studio"
                                     draggable={false}
-                                    className="block h-full w-full object-cover object-center"
+                                    className="block w-full h-auto max-h-full sm:h-full object-contain object-bottom sm:object-cover sm:object-center mb-9 sm:mb-0"
                                 />
                             )}
                         </div>
@@ -98,9 +99,9 @@ export function HeroSlider() {
                 </div>
             </div>
 
-            {/* Kontrol Slider: Diletakkan di atas bar Marquee agar tidak bertabrakan */}
+            {/* Kontrol Slider: Lebih ramping di Mobile */}
             <div
-                className="pointer-events-auto absolute bottom-16 sm:bottom-24 left-1/2 z-30 flex -translate-x-1/2 items-center gap-1 rounded-full bg-black/65 border border-white/15 px-2.5 py-1 shadow-lg backdrop-blur-md"
+                className="pointer-events-auto absolute bottom-11 sm:bottom-20 left-1/2 z-30 flex -translate-x-1/2 items-center gap-0.5 sm:gap-1 rounded-full bg-black/75 border border-white/20 px-2 py-0.5 sm:px-2.5 sm:py-1 shadow-lg backdrop-blur-md"
                 role="group"
                 aria-label="Kontrol banner"
             >
@@ -108,7 +109,7 @@ export function HeroSlider() {
                     type="button"
                     onClick={() => goTo(active - 1)}
                     aria-label="Slide sebelumnya"
-                    className="grid h-7 w-7 sm:h-8 sm:w-8 place-items-center rounded-full text-lg sm:text-xl leading-none text-white hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
+                    className="grid h-5 w-5 sm:h-8 sm:w-8 place-items-center rounded-full text-sm sm:text-xl leading-none text-white hover:bg-white/20 cursor-pointer"
                 >
                     ‹
                 </button>
@@ -119,12 +120,12 @@ export function HeroSlider() {
                         onClick={() => goTo(index)}
                         aria-label={`Tampilkan slide ${index + 1}`}
                         aria-pressed={active === index}
-                        className="grid h-7 w-7 sm:h-8 sm:w-8 place-items-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
+                        className="grid h-5 w-5 sm:h-8 sm:w-8 place-items-center rounded-full cursor-pointer"
                     >
                         <span
                             className={`block rounded-full transition-all ${active === index
-                                    ? "h-2 w-5 sm:w-6 bg-[#dd3e1f]"
-                                    : "h-2 w-2 bg-white/70"
+                                    ? "h-1.5 sm:h-2 w-3.5 sm:w-6 bg-[#dd3e1f]"
+                                    : "h-1.5 sm:h-2 w-1.5 sm:w-2 bg-white/70"
                                 }`}
                         />
                     </button>
@@ -133,7 +134,7 @@ export function HeroSlider() {
                     type="button"
                     onClick={next}
                     aria-label="Slide berikutnya"
-                    className="grid h-7 w-7 sm:h-8 sm:w-8 place-items-center rounded-full text-lg sm:text-xl leading-none text-white hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
+                    className="grid h-5 w-5 sm:h-8 sm:w-8 place-items-center rounded-full text-sm sm:text-xl leading-none text-white hover:bg-white/20 cursor-pointer"
                 >
                     ›
                 </button>
@@ -143,7 +144,7 @@ export function HeroSlider() {
                     aria-label={
                         paused ? "Putar slide otomatis" : "Jeda slide otomatis"
                     }
-                    className="h-7 sm:h-8 rounded-full px-2 text-[10px] font-semibold text-white hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white sm:text-xs"
+                    className="h-5 sm:h-8 rounded-full px-1.5 sm:px-2 text-[9px] sm:text-xs font-semibold text-white hover:bg-white/20 cursor-pointer"
                 >
                     {paused ? "Putar" : "Jeda"}
                 </button>

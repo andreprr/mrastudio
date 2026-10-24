@@ -6,6 +6,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { GallerySection } from "@/components/landing/GallerySection";
 import { ServicesShowcase } from "@/components/landing/ServicesShowcase";
 import { TeamShowcase } from "@/components/landing/TeamShowcase";
+import { MapsSection } from "@/components/landing/Maps";
 import {
     ArrowUpRight,
     Star,
@@ -80,7 +81,7 @@ export default async function LandingPage() {
 
     return (
         <div className="min-h-screen flex flex-col bg-[#FFFFFF] text-[#141413]">
-            {/* Animasi Keyframes untuk Border Glow Hitam & Teks Berjalan ke Kanan */}
+            {/* Animasi Keyframes untuk Border Glow Hitam, Shimmer Brand & Teks Berjalan ke Kanan */}
             <style>{`
         @keyframes spinBorderBlack {
           from { transform: translate(-50%, -50%) rotate(0deg); }
@@ -93,7 +94,7 @@ export default async function LandingPage() {
         @keyframes heroTextReveal {
           from {
             opacity: 0;
-            transform: translateY(24px);
+            transform: translateY(20px);
             filter: blur(6px);
           }
           to {
@@ -101,6 +102,36 @@ export default async function LandingPage() {
             transform: translateY(0);
             filter: blur(0);
           }
+        }
+        @keyframes brandShimmerGlow {
+          0% {
+            background-position: 0% 50%;
+            filter: drop-shadow(0 4px 12px rgba(221, 62, 31, 0.35));
+          }
+          50% {
+            background-position: 100% 50%;
+            filter: drop-shadow(0 4px 20px rgba(221, 62, 31, 0.85));
+          }
+          100% {
+            background-position: 0% 50%;
+            filter: drop-shadow(0 4px 12px rgba(221, 62, 31, 0.35));
+          }
+        }
+        .hero-brand-glow {
+          background: linear-gradient(
+            110deg,
+            #FFFFFF 0%,
+            #F8F6F1 25%,
+            #ff9a7b 45%,
+            #dd3e1f 55%,
+            #F8F6F1 75%,
+            #FFFFFF 100%
+          );
+          background-size: 250% auto;
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+          animation: brandShimmerGlow 4.5s ease-in-out infinite;
         }
         .animate-hero-text {
           animation: heroTextReveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -143,25 +174,26 @@ export default async function LandingPage() {
 
             <Navbar brandName={settings.brand_name} />
 
-            {/* HERO SECTION — RESPONSIF DI MOBILE, TABLET & DESKTOP */}
-            <section className="relative min-h-[100svh] sm:min-h-[92vh] w-full flex flex-col justify-between overflow-hidden bg-[#141413]">
+            {/* HERO SECTION — SUDAH DIPERBAIKI AGAR PROPORSIONAL & RESPONSIF DI MOBILE */}
+            {/* HERO SECTION — UTUH TIDAK TERPOTONG DI MOBILE & FULL DI DESKTOP */}
+            <section className="relative h-[430px] sm:h-auto sm:min-h-[86vh] lg:min-h-[92vh] w-full flex flex-col justify-between overflow-hidden bg-[#141413]">
                 <HeroSlider />
 
-                {/* Overlay Gradasi Gelap agar Teks Putih & Navbar Terbaca Jelas */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-[#141413]/50 to-[#141413] pointer-events-none z-[1]" />
+                {/* Overlay Gradasi: Di Mobile gelap di atas (area teks) & bening di bawah agar wajah tim terlihat jelas */}
+                <div className="absolute inset-0 bg-gradient-to-b from-[#141413] via-[#141413]/45 to-[#141413]/80 sm:from-black/75 sm:via-[#141413]/45 sm:to-[#141413]/95 pointer-events-none z-[1]" />
 
-                {/* Konten Tengah di Atas Gambar/Video */}
-                <div className="relative z-10 flex-1 flex flex-col items-center justify-center pt-24 pb-20 sm:pt-32 sm:pb-28 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center w-full">
+                {/* Konten Tengah di Atas Gambar/Video — Diturunkan sedikit lagi */}
+                <div className="relative z-10 flex-1 flex flex-col items-center justify-start sm:justify-center pt-40 pb-12 sm:pt-48 sm:pb-28 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center w-full">
                     <div
-                        className="animate-hero-text inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-white/10 border border-white/20 text-[#FFFFFF] backdrop-blur-md text-[10px] sm:text-xs font-semibold uppercase tracking-widest mb-4 sm:mb-6"
+                        className="animate-hero-text inline-flex items-center gap-1.5 px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-full bg-black/55 border border-white/20 text-[#FFFFFF] backdrop-blur-md text-[9px] sm:text-xs font-semibold uppercase tracking-widest mb-3 sm:mb-6"
                         style={{ animationDelay: "100ms" }}
                     >
-                        <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#dd3e1f]" />
+                        <Sparkles className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-[#dd3e1f] shrink-0" />
                         <span>Premium Grooming Experience</span>
                     </div>
 
                     <h1
-                        className={`${unbounded.className} animate-hero-text relative text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-[1.05] select-none max-w-3xl`}
+                        className={`${unbounded.className} animate-hero-text relative text-2xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-[1.08] select-none max-w-3xl`}
                         style={{ animationDelay: "220ms" }}
                     >
                         <span
@@ -176,51 +208,52 @@ export default async function LandingPage() {
                     </h1>
 
                     <p
-                        className="animate-hero-text mt-3 sm:mt-5 text-sm sm:text-lg lg:text-xl text-[#FFFFFF]/90 max-w-xl font-medium drop-shadow px-2 leading-relaxed"
+                        className="animate-hero-text mt-2 sm:mt-5 text-[11px] sm:text-lg lg:text-xl text-[#FFFFFF]/90 max-w-xs sm:max-w-xl font-medium drop-shadow px-2 leading-snug sm:leading-relaxed"
                         style={{ animationDelay: "340ms" }}
                     >
                         {settings.hero_subheadline}
                     </p>
 
+                    {/* Tombol diturunkan sedikit lagi dengan mt-12 sm:mt-14 */}
                     <div
-                        className="animate-hero-text mt-6 sm:mt-8 w-full max-w-xs sm:max-w-none flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4"
+                        className="animate-hero-text mt-12 sm:mt-14 flex flex-row items-center justify-center gap-2.5 sm:gap-4"
                         style={{ animationDelay: "460ms" }}
                     >
                         <Link
                             href="/booking"
-                            className="booking-glow-btn group w-full sm:w-auto justify-center transition-transform duration-300 hover:scale-[1.03]"
+                            className="booking-glow-btn group justify-center transition-transform duration-300 hover:scale-[1.03]"
                         >
-                            <span className="relative z-10 w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 sm:py-3 rounded-full bg-[#dd3e1f] text-white font-bold text-xs sm:text-sm group-hover:bg-[#141413] transition-colors">
+                            <span className="relative z-10 inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3.5 py-2 sm:px-6 sm:py-3 rounded-full bg-[#dd3e1f] text-white font-bold text-[11px] sm:text-sm group-hover:bg-[#141413] transition-colors whitespace-nowrap">
                                 <span>Booking Sekarang</span>
-                                <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                                <ArrowUpRight className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
                             </span>
                         </Link>
 
                         <a
                             href="#services"
-                            className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 sm:py-3 rounded-full bg-[#FFFFFF] text-[#141413] border-2 border-[#141413] font-bold text-xs sm:text-sm hover:bg-[#141413] hover:text-white hover:border-white transition-all shadow-sm"
+                            className="inline-flex items-center justify-center px-3.5 py-2 sm:px-6 sm:py-3 rounded-full bg-[#FFFFFF] text-[#141413] border-2 border-[#141413] font-bold text-[11px] sm:text-sm hover:bg-[#141413] hover:text-white hover:border-white transition-all shadow-sm whitespace-nowrap"
                         >
                             Lihat Katalog Layanan
                         </a>
                     </div>
                 </div>
 
-                {/* Tipografi Statement Besar Bergerak Otomatis ke Kanan di Bagian Bawah Hero */}
+                {/* Tipografi Statement Bergerak Otomatis ke Kanan di Bagian Bawah Hero */}
                 <div
-                    className="animate-hero-text relative z-10 w-full overflow-hidden py-3.5 sm:py-5 border-t border-white/10 bg-black/30 backdrop-blur-xs"
+                    className="animate-hero-text relative z-10 w-full overflow-hidden py-2 sm:py-4 border-t border-white/10 bg-black/60 backdrop-blur-xs"
                     style={{ animationDelay: "580ms" }}
                 >
-                    <div className="animate-marquee-right flex items-center gap-6 sm:gap-10">
+                    <div className="animate-marquee-right flex items-center gap-4 sm:gap-10">
                         {[0, 1, 2, 3].map((i) => (
                             <p
                                 key={i}
-                                className="font-display text-lg sm:text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight text-[#FFFFFF] whitespace-nowrap flex items-center gap-4 sm:gap-6"
+                                className="font-display text-xs sm:text-2xl lg:text-4xl font-extrabold tracking-tight leading-tight text-[#FFFFFF] whitespace-nowrap flex items-center gap-2.5 sm:gap-6"
                             >
                                 <span className="text-[#dd3e1f]">
                                     {settings.hero_headline}
                                 </span>
                                 <span>Presisi dalam setiap guntingan.</span>
-                                <span className="text-[#dd3e1f] text-base sm:text-2xl">
+                                <span className="text-[#dd3e1f] text-[10px] sm:text-2xl">
                                     ✦
                                 </span>
                             </p>
@@ -242,18 +275,13 @@ export default async function LandingPage() {
             {/* SECTION TENTANG KAMI — RESPONSIF DI MOBILE & DESKTOP */}
             <section
                 id="about"
-                className="relative w-full overflow-hidden bg-[#dd3e1f] pt-10 sm:pt-14 pb-16 sm:pb-16 px-4 sm:px-6 lg:px-8"
+                className="relative w-full overflow-hidden bg-[#dd3e1f] pt-10 sm:pt-14 pb-28 sm:pb-16 px-4 sm:px-6 lg:px-8"
             >
-                {/* 
-                  Di Mobile: Gambar ditempel di bawah (bottom-0) dengan lebar penuh (w-full h-auto object-contain) 
-                  agar tulisan MISTER A STUDIO tidak terpotong ke samping.
-                  Di Desktop (sm ke atas): Kembali menggunakan h-full object-cover seperti referensi.
-                */}
                 <img
                     src="/banner%20Tentang%20MRA.jpg"
                     alt="Banner Tentang MR A Studio"
                     loading="lazy"
-                    className="absolute inset-x-0 bottom-0 w-full h-auto sm:h-full object-contain sm:object-cover object-bottom translate-y-[12%] sm:translate-y-[11%] scale-[1.03] sm:scale-[1.02] pointer-events-none select-none"
+                    className="absolute inset-x-0 bottom-0 w-full h-auto sm:h-full object-contain sm:object-cover object-bottom translate-y-[8%] sm:translate-y-[11%] scale-[1.02] pointer-events-none select-none"
                 />
 
                 {/* Konten Teks & 2 Kartu Putih */}
@@ -312,6 +340,17 @@ export default async function LandingPage() {
                 className="py-14 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full"
             >
                 <TeamShowcase barbers={barbers || []} />
+            </section>
+
+            {/* SECTION MAPS (DISISIPKAN TEPAT DI BAWAH OUR TEAM) */}
+            <section
+                id="location"
+                className="py-10 sm:py-14 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full"
+            >
+                <MapsSection
+                    brandName={settings.brand_name}
+                    address={settings.address}
+                />
             </section>
 
             {/* SECTION GALLERY */}

@@ -38,7 +38,7 @@ export default function AdminLoginPage() {
         <div className="relative min-h-screen w-full flex items-center justify-center p-4 overflow-hidden bg-[#141413]">
             {/* Latar Belakang Editorial Full-Bleed */}
             <img
-                src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&w=2000&q=80"
+                src="/Banner.png"
                 alt="MR A Studio Interior"
                 className="absolute inset-0 w-full h-full object-cover opacity-30 scale-105"
             />
