@@ -392,8 +392,8 @@ export function BookingWizard({
                                     type="button"
                                     onClick={() => setServiceTab("paket")}
                                     className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${serviceTab === "paket"
-                                            ? "bg-[#dd3e1f] text-white shadow-xs"
-                                            : "text-[#141413]/70 hover:text-[#141413]"
+                                        ? "bg-[#dd3e1f] text-white shadow-xs"
+                                        : "text-[#141413]/70 hover:text-[#141413]"
                                         }`}
                                 >
                                     <Sparkles className="w-3.5 h-3.5" />
@@ -403,8 +403,8 @@ export function BookingWizard({
                                     type="button"
                                     onClick={() => setServiceTab("satuan")}
                                     className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${serviceTab === "satuan"
-                                            ? "bg-[#dd3e1f] text-white shadow-xs"
-                                            : "text-[#141413]/70 hover:text-[#141413]"
+                                        ? "bg-[#dd3e1f] text-white shadow-xs"
+                                        : "text-[#141413]/70 hover:text-[#141413]"
                                         }`}
                                 >
                                     <Layers className="w-3.5 h-3.5" />
@@ -428,8 +428,8 @@ export function BookingWizard({
                                         type="button"
                                         onClick={() => setSatuanCategory(cat)}
                                         className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer shrink-0 ${active
-                                                ? "bg-[#141413] text-white"
-                                                : "bg-[#EAE4DC]/70 text-[#706D65] hover:bg-[#dd3e1f]/15 hover:text-[#dd3e1f]"
+                                            ? "bg-[#141413] text-white"
+                                            : "bg-[#EAE4DC]/70 text-[#706D65] hover:bg-[#dd3e1f]/15 hover:text-[#dd3e1f]"
                                             }`}
                                     >
                                         {cat}
@@ -452,15 +452,15 @@ export function BookingWizard({
                                         type="button"
                                         onClick={() => form.setValue("service_id", srv.id)}
                                         className={`w-full text-left py-3.5 px-3 sm:px-4 transition-all flex items-center justify-between gap-3 cursor-pointer group ${selected
-                                                ? "bg-[#dd3e1f]/10 border-l-4 border-l-[#dd3e1f]"
-                                                : "hover:bg-[#EAE4DC]/50"
+                                            ? "bg-[#dd3e1f]/10 border-l-4 border-l-[#dd3e1f]"
+                                            : "hover:bg-[#EAE4DC]/50"
                                             }`}
                                     >
                                         <div className="flex items-start gap-3 min-w-0">
                                             <div
                                                 className={`mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0 border transition-colors ${selected
-                                                        ? "bg-[#dd3e1f] border-[#dd3e1f] text-white"
-                                                        : "border-[#141413]/30 group-hover:border-[#dd3e1f]"
+                                                    ? "bg-[#dd3e1f] border-[#dd3e1f] text-white"
+                                                    : "border-[#141413]/30 group-hover:border-[#dd3e1f]"
                                                     }`}
                                             >
                                                 {selected ? (
@@ -476,8 +476,8 @@ export function BookingWizard({
                                                 <div className="flex flex-wrap items-center gap-2">
                                                     <h3
                                                         className={`font-display text-sm sm:text-base font-extrabold tracking-tight transition-colors ${selected
-                                                                ? "text-[#dd3e1f]"
-                                                                : "text-[#141413] group-hover:text-[#dd3e1f]"
+                                                            ? "text-[#dd3e1f]"
+                                                            : "text-[#141413] group-hover:text-[#dd3e1f]"
                                                             }`}
                                                     >
                                                         {srv.name}
@@ -573,10 +573,10 @@ export function BookingWizard({
                                         form.setValue("start_time", "");
                                     }}
                                     className={`p-4 rounded-xl border-2 text-center transition-all ${d.isClosed
-                                            ? "opacity-35 cursor-not-allowed bg-[#EAE4DC]/20 border-[#141413]/20"
-                                            : isSelected
-                                                ? "bg-[#dd3e1f] text-white border-[#141413] font-bold shadow-[3px_3px_0px_#141413]"
-                                                : "bg-[#FFFFFF] text-[#141413] font-bold border-[#141413] hover:bg-[#dd3e1f] hover:text-white"
+                                        ? "opacity-35 cursor-not-allowed bg-[#EAE4DC]/20 border-[#141413]/20"
+                                        : isSelected
+                                            ? "bg-[#dd3e1f] text-white border-[#141413] font-bold shadow-[3px_3px_0px_#141413]"
+                                            : "bg-[#FFFFFF] text-[#141413] font-bold border-[#141413] hover:bg-[#dd3e1f] hover:text-white"
                                         }`}
                                 >
                                     <span className="text-xs uppercase block opacity-80">
@@ -640,15 +640,15 @@ export function BookingWizard({
                             form.setValue("start_time", "");
                         }}
                         className={`w-full p-3 sm:p-3.5 rounded-xl border-2 text-left transition-all flex items-center justify-between gap-3 cursor-pointer group ${watchedBarberId === null
-                                ? "bg-[#dd3e1f] text-white border-[#141413] shadow-[3px_3px_0px_#141413]"
-                                : "bg-[#FFFFFF] text-[#141413] border-[#141413] hover:border-[#dd3e1f]"
+                            ? "bg-[#dd3e1f] text-white border-[#141413] shadow-[3px_3px_0px_#141413]"
+                            : "bg-[#FFFFFF] text-[#141413] border-[#141413] hover:border-[#dd3e1f]"
                             }`}
                     >
                         <div className="flex items-center gap-3 min-w-0">
                             <div
                                 className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 border transition-colors ${watchedBarberId === null
-                                        ? "bg-white text-[#dd3e1f] border-white"
-                                        : "bg-[#141413] text-white border-[#141413]"
+                                    ? "bg-white text-[#dd3e1f] border-white"
+                                    : "bg-[#141413] text-white border-[#141413]"
                                     }`}
                             >
                                 <Sparkles className="w-5 h-5" />
@@ -660,8 +660,8 @@ export function BookingWizard({
                                     </h3>
                                     <span
                                         className={`text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded-full border ${watchedBarberId === null
-                                                ? "bg-white/20 text-white border-white/30"
-                                                : "bg-[#dd3e1f]/10 text-[#dd3e1f] border-[#dd3e1f]/30"
+                                            ? "bg-white/20 text-white border-white/30"
+                                            : "bg-[#dd3e1f]/10 text-[#dd3e1f] border-[#dd3e1f]/30"
                                             }`}
                                     >
                                         Rekomendasi Cepat
@@ -678,8 +678,8 @@ export function BookingWizard({
 
                         <div
                             className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 ${watchedBarberId === null
-                                    ? "bg-white text-[#dd3e1f] border-[#141413]"
-                                    : "border-[#141413]/30"
+                                ? "bg-white text-[#dd3e1f] border-[#141413]"
+                                : "border-[#141413]/30"
                                 }`}
                         >
                             {watchedBarberId === null && <Check className="w-3.5 h-3.5 stroke-[3]" />}
@@ -704,10 +704,10 @@ export function BookingWizard({
                                         }
                                     }}
                                     className={`rounded-xl border-2 overflow-hidden text-left transition-all flex flex-col justify-between group ${isOff
-                                            ? "opacity-45 cursor-not-allowed bg-[#EAE4DC]/40 border-[#141413]/20"
-                                            : isSelected
-                                                ? "bg-[#dd3e1f] text-white border-[#141413] shadow-[3px_3px_0px_#141413] -translate-y-0.5 cursor-pointer"
-                                                : "bg-[#FFFFFF] text-[#141413] border-[#141413] hover:border-[#dd3e1f] cursor-pointer"
+                                        ? "opacity-45 cursor-not-allowed bg-[#EAE4DC]/40 border-[#141413]/20"
+                                        : isSelected
+                                            ? "bg-[#dd3e1f] text-white border-[#141413] shadow-[3px_3px_0px_#141413] -translate-y-0.5 cursor-pointer"
+                                            : "bg-[#FFFFFF] text-[#141413] border-[#141413] hover:border-[#dd3e1f] cursor-pointer"
                                         }`}
                                 >
                                     {/* Area Foto Ukuran Pas & Konsisten (h-36 di HP, sm:h-40 di layar lebih besar) */}
@@ -735,8 +735,8 @@ export function BookingWizard({
                                             ) : (
                                                 <span
                                                     className={`inline-flex items-center gap-1 text-[9px] font-mono px-2 py-0.5 rounded-full font-bold backdrop-blur-md border shadow-sm ${isSelected
-                                                            ? "bg-[#dd3e1f] text-white border-white/40"
-                                                            : "bg-[#141413]/75 text-white border-white/15"
+                                                        ? "bg-[#dd3e1f] text-white border-white/40"
+                                                        : "bg-[#141413]/75 text-white border-white/15"
                                                         }`}
                                                 >
                                                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
@@ -763,10 +763,10 @@ export function BookingWizard({
                                         </h3>
                                         <p
                                             className={`text-[11px] mt-0.5 truncate ${isOff
-                                                    ? "text-red-600 font-semibold"
-                                                    : isSelected
-                                                        ? "text-white/90"
-                                                        : "text-[#706D65]"
+                                                ? "text-red-600 font-semibold"
+                                                : isSelected
+                                                    ? "text-white/90"
+                                                    : "text-[#706D65]"
                                                 }`}
                                         >
                                             {isOff ? "Tidak tersedia" : b.specialty}
@@ -845,10 +845,10 @@ export function BookingWizard({
                                         disabled={!s.available}
                                         onClick={() => form.setValue("start_time", s.time)}
                                         className={`py-3.5 px-4 rounded-xl border-2 text-center transition-all ${!s.available
-                                                ? "opacity-35 cursor-not-allowed bg-[#EAE4DC]/20 border-[#141413]/20 line-through"
-                                                : isSelected
-                                                    ? "bg-[#dd3e1f] text-white border-[#141413] font-bold shadow-[3px_3px_0px_#141413]"
-                                                    : "bg-white text-[#141413] font-bold border-[#141413] hover:bg-[#dd3e1f] hover:text-white"
+                                            ? "opacity-35 cursor-not-allowed bg-[#EAE4DC]/20 border-[#141413]/20 line-through"
+                                            : isSelected
+                                                ? "bg-[#dd3e1f] text-white border-[#141413] font-bold shadow-[3px_3px_0px_#141413]"
+                                                : "bg-white text-[#141413] font-bold border-[#141413] hover:bg-[#dd3e1f] hover:text-white"
                                             }`}
                                     >
                                         <span className="text-sm block">{s.time} WIB</span>

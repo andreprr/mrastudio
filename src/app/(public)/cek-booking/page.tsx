@@ -63,30 +63,29 @@ const STATUS_LABELS: Record<
 };
 
 export default function CekBookingPage() {
-    const [bookingCode, setBookingCode] = useState("");
     const [customerPhone, setCustomerPhone] = useState("");
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState<CheckedBookingResult | null>(null);
 
-    async function handleLookup(e: React.FormEvent) {
-        e.preventDefault();
+    async function handleLookup(event: React.FormEvent<HTMLFormElement>) {
+        event.preventDefault();
         setLoading(true);
         setResult(null);
 
         try {
-            const res = await fetch("/api/bookings/check", {
+            const response = await fetch("/api/bookings/check", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    booking_code: bookingCode,
-                    customer_phone: customerPhone,
-                }),
+                body: JSON.stringify({ customer_phone: customerPhone.trim() }),
             });
-            const data = await res.json();
-            if (!res.ok) {
+
+            const data = await response.json();
+
+            if (!response.ok) {
                 toast.error(data.error || "Booking tidak ditemukan.");
                 return;
             }
+
             setResult(data.booking as CheckedBookingResult);
         } catch {
             toast.error("Terjadi kesalahan saat memeriksa booking.");
@@ -102,6 +101,7 @@ export default function CekBookingPage() {
     return (
         <div className="min-h-screen bg-brand-cream">
             <Navbar />
+
             <main className="pt-32 pb-14 px-4 sm:px-6 lg:px-8 max-w-xl mx-auto">
                 <div className="text-center mb-8">
                     <span className="text-xs font-semibold uppercase tracking-widest text-brand-espresso">
@@ -111,8 +111,7 @@ export default function CekBookingPage() {
                         Cek Booking Anda
                     </h1>
                     <p className="text-sm text-brand-gray mt-2">
-                        Masukkan Kode Booking dan Nomor WhatsApp yang Anda gunakan saat
-                        melakukan pemesanan.
+                        Masukkan nomor WhatsApp yang Anda gunakan saat melakukan booking.
                     </p>
                 </div>
 
@@ -121,28 +120,20 @@ export default function CekBookingPage() {
                     className="rounded-xl bg-brand-beige/70 border border-brand-charcoal/10 p-5 sm:p-6 space-y-4"
                 >
                     <div>
-                        <label className="block text-xs font-semibold uppercase tracking-wider mb-2">
-                            Kode Booking
-                        </label>
-                        <input
-                            type="text"
-                            required
-                            value={bookingCode}
-                            onChange={(e) => setBookingCode(e.target.value.toUpperCase())}
-                            placeholder="Contoh: MRA-8F92K1L0"
-                            className="w-full px-4 py-3.5 rounded-lg bg-brand-cream border border-brand-charcoal/15 text-sm uppercase font-mono"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-xs font-semibold uppercase tracking-wider mb-2">
+                        <label
+                            htmlFor="customer-phone"
+                            className="block text-xs font-semibold uppercase tracking-wider mb-2"
+                        >
                             Nomor WhatsApp
                         </label>
                         <input
+                            id="customer-phone"
                             type="tel"
                             required
+                            inputMode="tel"
+                            autoComplete="tel"
                             value={customerPhone}
-                            onChange={(e) => setCustomerPhone(e.target.value)}
+                            onChange={(event) => setCustomerPhone(event.target.value)}
                             placeholder="Contoh: 081234567890"
                             className="w-full px-4 py-3.5 rounded-lg bg-brand-cream border border-brand-charcoal/15 text-sm"
                         />
@@ -151,20 +142,20 @@ export default function CekBookingPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full py-4 rounded-full bg-brand-charcoal text-brand-cream text-sm font-medium flex items-center justify-center gap-2 hover:bg-brand-espresso transition-colors"
+                        className="w-full py-4 rounded-full bg-brand-charcoal text-brand-cream text-sm font-medium flex items-center justify-center gap-2 hover:bg-brand-espresso transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
                     >
                         {loading ? (
                             <Loader2 className="w-4 h-4 animate-spin" />
                         ) : (
                             <Search className="w-4 h-4" />
                         )}
-                        <span>Periksa Status Booking</span>
+                        <span>{loading ? "Memeriksa..." : "Periksa Status Booking"}</span>
                     </button>
                 </form>
 
                 {result && statusMeta && (
                     <div className="mt-8 rounded-xl bg-brand-beige border border-brand-charcoal/15 p-5 sm:p-6 space-y-4">
-                        <div className="flex items-center justify-between border-b border-brand-charcoal/10 pb-4">
+                        <div className="flex items-center justify-between gap-4 border-b border-brand-charcoal/10 pb-4">
                             <div>
                                 <span className="text-xs text-brand-gray block">Kode Tiket</span>
                                 <span className="font-display text-xl font-bold">
@@ -172,35 +163,34 @@ export default function CekBookingPage() {
                                 </span>
                             </div>
                             <span
-                                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold ${statusMeta.badgeClass}`}
+                                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold text-right ${statusMeta.badgeClass}`}
                             >
                                 {statusMeta.label}
                             </span>
                         </div>
 
                         <div className="space-y-2.5 text-sm">
-                            <div className="flex justify-between">
+                            <div className="flex justify-between gap-4">
                                 <span className="text-brand-gray">Nama Pelanggan</span>
-                                <span className="font-semibold">{result.customer_name}</span>
+                                <span className="font-semibold text-right">{result.customer_name}</span>
                             </div>
-                            <div className="flex justify-between">
+                            <div className="flex justify-between gap-4">
                                 <span className="text-brand-gray">Layanan</span>
-                                <span className="font-semibold">{result.service_name}</span>
+                                <span className="font-semibold text-right">{result.service_name}</span>
                             </div>
-                            <div className="flex justify-between">
+                            <div className="flex justify-between gap-4">
                                 <span className="text-brand-gray">Barber</span>
-                                <span className="font-semibold">{result.barber_name}</span>
+                                <span className="font-semibold text-right">{result.barber_name}</span>
                             </div>
-                            <div className="flex justify-between">
+                            <div className="flex justify-between gap-4">
                                 <span className="text-brand-gray">Jadwal</span>
-                                <span className="font-semibold">
-                                    {result.booking_date} • {result.start_time} – {result.end_time}{" "}
-                                    WIB
+                                <span className="font-semibold text-right">
+                                    {result.booking_date} • {result.start_time} – {result.end_time} WIB
                                 </span>
                             </div>
-                            <div className="flex justify-between pt-2 border-t border-brand-charcoal/10">
+                            <div className="flex justify-between gap-4 pt-2 border-t border-brand-charcoal/10">
                                 <span className="text-brand-gray">Total Harga</span>
-                                <span className="font-display font-bold text-lg">
+                                <span className="font-display font-bold text-lg text-right">
                                     {formatRupiah(Number(result.price))}
                                 </span>
                             </div>

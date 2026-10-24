@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { HeroSlider } from "@/components/landing/HeroSlider";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { DEFAULT_SITE_SETTINGS } from "@/config/site";
 import { Navbar } from "@/components/layout/Navbar";
@@ -142,30 +143,25 @@ export default async function LandingPage() {
 
             <Navbar brandName={settings.brand_name} />
 
-            {/* HERO SECTION — FULL GAMBAR DENGAN TEKS DI ATAS GAMBAR */}
-            <section className="relative min-h-[92vh] w-full flex flex-col justify-between overflow-hidden bg-[#141413]">
-                {/* Background Full Image */}
-                <img
-                    src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&w=2000&q=85"
-                    alt="Suasana Editorial MR A Studio"
-                    className="absolute inset-0 w-full h-full object-cover object-center scale-105"
-                />
+            {/* HERO SECTION — RESPONSIF DI MOBILE, TABLET & DESKTOP */}
+            <section className="relative min-h-[100svh] sm:min-h-[92vh] w-full flex flex-col justify-between overflow-hidden bg-[#141413]">
+                <HeroSlider />
 
-                {/* Overlay Gradasi Atas & Bawah */}
-                <div className="absolute inset-0 bg-gradient-to-b from-[#FFFFFF]/85 via-[#141413]/45 to-[#141413] pointer-events-none" />
+                {/* Overlay Gradasi Gelap agar Teks Putih & Navbar Terbaca Jelas */}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-[#141413]/50 to-[#141413] pointer-events-none z-[1]" />
 
-                {/* Konten Tengah di Atas Gambar */}
-                <div className="relative z-10 pt-36 sm:pt-44 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center flex flex-col items-center">
+                {/* Konten Tengah di Atas Gambar/Video */}
+                <div className="relative z-10 flex-1 flex flex-col items-center justify-center pt-24 pb-20 sm:pt-32 sm:pb-28 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center w-full">
                     <div
-                        className="animate-hero-text inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[#FFFFFF] backdrop-blur-md text-xs font-semibold uppercase tracking-widest mb-6"
+                        className="animate-hero-text inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-white/10 border border-white/20 text-[#FFFFFF] backdrop-blur-md text-[10px] sm:text-xs font-semibold uppercase tracking-widest mb-4 sm:mb-6"
                         style={{ animationDelay: "100ms" }}
                     >
-                        <Sparkles className="w-3.5 h-3.5" />
+                        <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#dd3e1f]" />
                         <span>Premium Grooming Experience</span>
                     </div>
 
                     <h1
-                        className={`${unbounded.className} animate-hero-text relative text-2xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight leading-[0.98] select-none`}
+                        className={`${unbounded.className} animate-hero-text relative text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-[1.05] select-none max-w-3xl`}
                         style={{ animationDelay: "220ms" }}
                     >
                         <span
@@ -180,49 +176,53 @@ export default async function LandingPage() {
                     </h1>
 
                     <p
-                        className="animate-hero-text mt-5 text-base sm:text-xl text-[#FFFFFF]/90 max-w-xl font-medium drop-shadow"
+                        className="animate-hero-text mt-3 sm:mt-5 text-sm sm:text-lg lg:text-xl text-[#FFFFFF]/90 max-w-xl font-medium drop-shadow px-2 leading-relaxed"
                         style={{ animationDelay: "340ms" }}
                     >
                         {settings.hero_subheadline}
                     </p>
 
                     <div
-                        className="animate-hero-text mt-8 flex flex-wrap items-center justify-center gap-4"
+                        className="animate-hero-text mt-6 sm:mt-8 w-full max-w-xs sm:max-w-none flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4"
                         style={{ animationDelay: "460ms" }}
                     >
                         <Link
                             href="/booking"
-                            className="booking-glow-btn group transition-transform duration-300 hover:scale-[1.03]"
+                            className="booking-glow-btn group w-full sm:w-auto justify-center transition-transform duration-300 hover:scale-[1.03]"
                         >
-                            <span className="relative z-10 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#dd3e1f] text-white font-bold text-xs sm:text-sm group-hover:bg-[#141413] transition-colors">
+                            <span className="relative z-10 w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 sm:py-3 rounded-full bg-[#dd3e1f] text-white font-bold text-xs sm:text-sm group-hover:bg-[#141413] transition-colors">
                                 <span>Booking Sekarang</span>
-                                <ArrowUpRight className="w-5 h-5" />
+                                <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" />
                             </span>
                         </Link>
 
                         <a
                             href="#services"
-                            className="inline-flex items-center px-6 py-3 rounded-full bg-[#FFFFFF] text-[#141413] border-2 border-[#141413] font-bold text-xs sm:text-sm hover:bg-[#141413] hover:text-white transition-all shadow-sm"
+                            className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 sm:py-3 rounded-full bg-[#FFFFFF] text-[#141413] border-2 border-[#141413] font-bold text-xs sm:text-sm hover:bg-[#141413] hover:text-white hover:border-white transition-all shadow-sm"
                         >
                             Lihat Katalog Layanan
                         </a>
                     </div>
                 </div>
 
-                {/* Tipografi Statement Besar Bergerak Otomatis ke Kanan */}
+                {/* Tipografi Statement Besar Bergerak Otomatis ke Kanan di Bagian Bawah Hero */}
                 <div
-                    className="animate-hero-text relative z-10 w-full overflow-hidden pb-10 pt-14 border-t border-white/10"
+                    className="animate-hero-text relative z-10 w-full overflow-hidden py-3.5 sm:py-5 border-t border-white/10 bg-black/30 backdrop-blur-xs"
                     style={{ animationDelay: "580ms" }}
                 >
-                    <div className="animate-marquee-right flex items-center gap-10">
+                    <div className="animate-marquee-right flex items-center gap-6 sm:gap-10">
                         {[0, 1, 2, 3].map((i) => (
                             <p
                                 key={i}
-                                className="font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-[#FFFFFF] whitespace-nowrap flex items-center gap-6"
+                                className="font-display text-lg sm:text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight text-[#FFFFFF] whitespace-nowrap flex items-center gap-4 sm:gap-6"
                             >
-                                <span className="text-[#dd3e1f]">{settings.hero_headline}</span>
+                                <span className="text-[#dd3e1f]">
+                                    {settings.hero_headline}
+                                </span>
                                 <span>Presisi dalam setiap guntingan.</span>
-                                <span className="text-[#dd3e1f] text-xl sm:text-3xl">✦</span>
+                                <span className="text-[#dd3e1f] text-base sm:text-2xl">
+                                    ✦
+                                </span>
                             </p>
                         ))}
                     </div>
@@ -232,57 +232,71 @@ export default async function LandingPage() {
             {/* SECTION LAYANAN & PRICELIST */}
             <section
                 id="services"
-                className="py-14 px-4 sm:px-6 lg:px-8 bg-[#141413] text-[#F8F6F1] rounded-b-2xl"
+                className="py-12 sm:py-14 px-4 sm:px-6 lg:px-8 bg-[#141413] text-[#FFFFFF]"
             >
                 <div className="max-w-6xl mx-auto">
                     <ServicesShowcase services={services || []} />
                 </div>
             </section>
 
-            {/* SECTION TENTANG KAMI */}
+            {/* SECTION TENTANG KAMI — RESPONSIF DI MOBILE & DESKTOP */}
             <section
                 id="about"
-                className="py-14 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full"
+                className="relative w-full overflow-hidden bg-[#dd3e1f] pt-10 sm:pt-14 pb-16 sm:pb-16 px-4 sm:px-6 lg:px-8"
             >
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-                    <div className="lg:col-span-6">
-                        <div className="rounded-2xl overflow-hidden aspect-[4/3] bg-[#3B281E] shadow-xl border-2 border-[#141413]">
-                            <img
-                                src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1000&q=80"
-                                alt="Interior suasana MR A Studio"
-                                loading="lazy"
-                                className="w-full h-full object-cover"
-                            />
+                {/* 
+                  Di Mobile: Gambar ditempel di bawah (bottom-0) dengan lebar penuh (w-full h-auto object-contain) 
+                  agar tulisan MISTER A STUDIO tidak terpotong ke samping.
+                  Di Desktop (sm ke atas): Kembali menggunakan h-full object-cover seperti referensi.
+                */}
+                <img
+                    src="/banner%20Tentang%20MRA.jpg"
+                    alt="Banner Tentang MR A Studio"
+                    loading="lazy"
+                    className="absolute inset-x-0 bottom-0 w-full h-auto sm:h-full object-contain sm:object-cover object-bottom translate-y-[12%] sm:translate-y-[11%] scale-[1.03] sm:scale-[1.02] pointer-events-none select-none"
+                />
+
+                {/* Konten Teks & 2 Kartu Putih */}
+                <div className="relative z-10 max-w-5xl mx-auto w-full">
+                    <div className="max-w-2xl space-y-3.5 sm:space-y-4">
+                        <div>
+                            <span className="text-xs sm:text-sm font-medium text-[#FFFFFF]/90 block">
+                                Tentang {settings.brand_name}
+                            </span>
+                            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-extrabold leading-tight text-[#141413] mt-0.5">
+                                {settings.about_title}
+                            </h2>
                         </div>
-                    </div>
-                    <div className="lg:col-span-6 space-y-6">
-                        <span className="text-xs uppercase tracking-widest text-[#dd3e1f] font-bold">
-                            Tentang MR A Studio
-                        </span>
-                        <h2 className="font-display text-2xl sm:text-3xl font-extrabold leading-tight text-[#141413]">
-                            {settings.about_title}
-                        </h2>
-                        <p className="text-[#706D65] leading-relaxed text-base">
+
+                        <p className="text-[#FFFFFF]/95 leading-relaxed text-xs sm:text-sm">
                             {settings.about_story}
                         </p>
-                        <p className="text-[#706D65] leading-relaxed text-base">
+
+                        <p className="text-[#FFFFFF]/95 leading-relaxed text-xs sm:text-sm">
                             {settings.about_philosophy}
                         </p>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
-                            <div className="p-5 rounded-xl bg-[#FFFFFF] border-2 border-[#141413] flex items-start gap-3 shadow-xs">
-                                <CheckCircle2 className="w-5 h-5 text-[#dd3e1f] shrink-0 mt-0.5" />
+
+                        {/* 2 Kotak Putih */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5 pt-2 max-w-lg">
+                            <div className="p-3.5 sm:p-4 rounded-xl bg-[#FFFFFF] border-2 border-[#141413] flex items-start gap-2.5 shadow-sm">
+                                <CheckCircle2 className="w-4 h-4 text-[#dd3e1f] shrink-0 mt-0.5" />
                                 <div>
-                                    <h4 className="font-bold text-sm text-[#141413]">Konsultasi Personal</h4>
-                                    <p className="text-xs text-[#706D65] mt-1">
+                                    <h4 className="font-bold text-xs text-[#141413]">
+                                        Konsultasi Personal
+                                    </h4>
+                                    <p className="text-[10px] sm:text-[11px] text-[#706D65] mt-0.5 leading-snug">
                                         Analisis bentuk kepala sebelum guntingan pertama.
                                     </p>
                                 </div>
                             </div>
-                            <div className="p-5 rounded-xl bg-[#FFFFFF] border-2 border-[#141413] flex items-start gap-3 shadow-xs">
-                                <CheckCircle2 className="w-5 h-5 text-[#dd3e1f] shrink-0 mt-0.5" />
+
+                            <div className="p-3.5 sm:p-4 rounded-xl bg-[#FFFFFF] border-2 border-[#141413] flex items-start gap-2.5 shadow-sm">
+                                <CheckCircle2 className="w-4 h-4 text-[#dd3e1f] shrink-0 mt-0.5" />
                                 <div>
-                                    <h4 className="font-bold text-sm text-[#141413]">Alat Higienis & Steril</h4>
-                                    <p className="text-xs text-[#706D65] mt-1">
+                                    <h4 className="font-bold text-xs text-[#141413]">
+                                        Alat Higienis & Steril
+                                    </h4>
+                                    <p className="text-[10px] sm:text-[11px] text-[#706D65] mt-0.5 leading-snug">
                                         Standar kebersihan tinggi pada setiap sesi.
                                     </p>
                                 </div>
@@ -295,7 +309,7 @@ export default async function LandingPage() {
             {/* SECTION OUR TEAM */}
             <section
                 id="team"
-                className="py-14 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full"
+                className="py-14 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full"
             >
                 <TeamShowcase barbers={barbers || []} />
             </section>
@@ -348,7 +362,9 @@ export default async function LandingPage() {
                         <div className="flex gap-5 animate-marquee animate-marquee-pause">
                             {(() => {
                                 const baseList =
-                                    reviews.length < 5 ? [...reviews, ...reviews] : reviews;
+                                    reviews.length < 5
+                                        ? [...reviews, ...reviews]
+                                        : reviews;
                                 const marqueeItems = [...baseList, ...baseList];
                                 return marqueeItems.map((rev, idx) => (
                                     <div
@@ -357,13 +373,17 @@ export default async function LandingPage() {
                                     >
                                         <div>
                                             <div className="flex items-center gap-1 text-[#dd3e1f]">
-                                                {Array.from({ length: rev.rating }).map((_, i) => (
-                                                    <Star
-                                                        key={i}
-                                                        className="w-4 h-4 fill-current motion-stagger-item"
-                                                        style={{ "--i": i } as React.CSSProperties}
-                                                    />
-                                                ))}
+                                                {Array.from({ length: rev.rating }).map(
+                                                    (_, i) => (
+                                                        <Star
+                                                            key={i}
+                                                            className="w-4 h-4 fill-current motion-stagger-item"
+                                                            style={
+                                                                { "--i": i } as React.CSSProperties
+                                                            }
+                                                        />
+                                                    )
+                                                )}
                                             </div>
                                             <p className="text-[#141413] mt-4 text-sm sm:text-base leading-relaxed">
                                                 &ldquo;{rev.comment}&rdquo;
@@ -374,7 +394,9 @@ export default async function LandingPage() {
                                                 {rev.customer_name}
                                             </span>
                                             <span>
-                                                {new Date(rev.created_at).toLocaleDateString("id-ID", {
+                                                {new Date(
+                                                    rev.created_at
+                                                ).toLocaleDateString("id-ID", {
                                                     day: "numeric",
                                                     month: "short",
                                                     year: "numeric",
@@ -413,11 +435,14 @@ export default async function LandingPage() {
                                         {rev.customer_name}
                                     </span>
                                     <span>
-                                        {new Date(rev.created_at).toLocaleDateString("id-ID", {
-                                            day: "numeric",
-                                            month: "short",
-                                            year: "numeric",
-                                        })}
+                                        {new Date(rev.created_at).toLocaleDateString(
+                                            "id-ID",
+                                            {
+                                                day: "numeric",
+                                                month: "short",
+                                                year: "numeric",
+                                            }
+                                        )}
                                     </span>
                                 </div>
                             </div>
@@ -486,8 +511,8 @@ export default async function LandingPage() {
                                             <span className="text-red-300">Tutup</span>
                                         ) : (
                                             <span>
-                                                {bh.open_time.slice(0, 5)} – {bh.close_time.slice(0, 5)}{" "}
-                                                WIB
+                                                {bh.open_time.slice(0, 5)} –{" "}
+                                                {bh.close_time.slice(0, 5)} WIB
                                             </span>
                                         )}
                                     </div>
@@ -498,8 +523,8 @@ export default async function LandingPage() {
 
                     <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-[#EAE4DC]/60 gap-4">
                         <p>
-                            &copy; {new Date().getFullYear()} {settings.brand_name}. Hak cipta
-                            dilindungi.
+                            &copy; {new Date().getFullYear()} {settings.brand_name}. Hak
+                            cipta dilindungi.
                         </p>
                         <div className="flex gap-6">
                             <Link href="/cek-booking" className="hover:text-white">

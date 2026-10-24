@@ -34,15 +34,10 @@ export const createBookingSchema = z.object({
 export type CreateBookingInput = z.infer<typeof createBookingSchema>;
 
 export const checkBookingSchema = z.object({
-    booking_code: z
-        .string()
-        .min(6, {
-            message: "Masukkan kode booking yang valid (contoh: MRA-1A2B3C4D).",
-        })
-        .max(20),
     customer_phone: z
         .string()
-        .min(9, {
-            message: "Masukkan nomor WhatsApp yang digunakan saat booking.",
+        .regex(/^(\+62|62|0)8[1-9][0-9]{7,11}$/, {
+            message:
+                "Masukkan nomor WhatsApp Indonesia yang valid. Contoh: 081234567890.",
         }),
 });

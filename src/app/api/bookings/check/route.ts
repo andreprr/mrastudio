@@ -8,6 +8,7 @@ const lookupLimiter = new Map<string, { count: number; resetAt: number }>();
 export async function POST(request: NextRequest) {
     const ip =
         request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+
     const now = Date.now();
     const limitRecord = lookupLimiter.get(ip);
 
@@ -20,8 +21,12 @@ export async function POST(request: NextRequest) {
             { status: 429 }
         );
     }
+
     lookupLimiter.set(ip, {
-        count: limitRecord && now < limitRecord.resetAt ? limitRecord.count + 1 : 1,
+        count:
+            limitRecord && now < limitRecord.resetAt
+                ? limitRecord.count + 1
+                : 1,
         resetAt: now + 60_000,
     });
 
@@ -31,13 +36,18 @@ export async function POST(request: NextRequest) {
 
         if (!parsed.success) {
             return NextResponse.json(
-                { error: "Format Kode Booking atau Nomor WhatsApp tidak sesuai." },
+                {
+                    error:
+                        parsed.error.issues[0]?.message ||
+                        "Nomor WhatsApp tidak valid.",
+                },
                 { status: 400 }
             );
         }
 
-        const code = parsed.data.booking_code.trim().toUpperCase();
-        const normalizedInputPhone = normalizePhone(parsed.data.customer_phone);
+        const normalizedInputPhone = normalizePhone(
+            parsed.data.customer_phone
+        );
 
         const supabase = createServiceRoleClient();
 
@@ -46,35 +56,40 @@ export async function POST(request: NextRequest) {
             .select(
                 "booking_code, customer_name, customer_phone, service_name_snapshot, price_snapshot, duration_snapshot, barber_name_snapshot, booking_date, start_time, end_time, status, expires_at"
             )
-            .eq("booking_code", code)
-            .single();
+            .eq("customer_phone", normalizedInputPhone)
+            .in("status", ["pending", "confirmed"])
+            .order("booking_date", { ascending: false })
+            .order("start_time", { ascending: false })
+            .order("created_at", { ascending: false })
+            .limit(1)
+            .maybeSingle();
 
-        // Gunakan pesan error generik jika tidak cocok agar tidak membocorkan keberadaan kode
-        if (
-            error ||
-            !booking ||
-            normalizePhone(booking.customer_phone) !== normalizedInputPhone
-        ) {
+        if (error || !booking) {
             return NextResponse.json(
                 {
                     error:
-                        "Data booking tidak ditemukan. Pastikan Kode Booking dan Nomor WhatsApp sesuai dengan yang didaftarkan.",
+                        "Booking aktif tidak ditemukan untuk nomor WhatsApp tersebut.",
                 },
                 { status: 404 }
             );
         }
 
-        // Jika masih pending tetapi waktu kedaluwarsa sudah terlewati, mutakhirkan ke expired
         let currentStatus = booking.status;
+
         if (
             currentStatus === "pending" &&
+            booking.expires_at &&
             new Date(booking.expires_at) < new Date()
         ) {
             currentStatus = "expired";
+
             await supabase
                 .from("bookings")
-                .update({ status: "expired", updated_at: new Date().toISOString() })
-                .eq("booking_code", code);
+                .update({
+                    status: "expired",
+                    updated_at: new Date().toISOString(),
+                })
+                .eq("booking_code", booking.booking_code);
         }
 
         return NextResponse.json({

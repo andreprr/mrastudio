@@ -60,7 +60,7 @@ export function ServicesShowcase({ services }: { services: ServiceItem[] }) {
     const selectedMeta = selectedService ? parseServiceMeta(selectedService) : null;
 
     return (
-        <div className="space-y-6 sm:space-y-8">
+        <div className="space-y-5 sm:space-y-6">
             {/* 1. HEADER SECTION */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-white/10 pb-5">
                 <div className="max-w-xl">
@@ -75,7 +75,7 @@ export function ServicesShowcase({ services }: { services: ServiceItem[] }) {
                 <button
                     type="button"
                     onClick={() => setIsFullCatalogOpen(true)}
-                    className="self-start md:self-auto shrink-0 px-4 py-2.5 rounded-xl bg-[#141413] hover:bg-[#dd3e1f] text-white border-2 border-[#141413] hover:border-[#dd3e1f] text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 shadow-sm cursor-pointer"
+                    className="self-start md:self-auto shrink-0 px-4 py-2.5 rounded-xl bg-[#141413] hover:bg-[#dd3e1f] text-white border-2 border-white/20 hover:border-[#dd3e1f] text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 shadow-sm cursor-pointer"
                 >
                     <Layers className="w-3.5 h-3.5" />
                     <span>Semua Pricelist ({services.length})</span>
